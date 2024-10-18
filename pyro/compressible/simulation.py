@@ -290,9 +290,11 @@ class Simulation(NullSimulation):
                                                   self.cc_data, self.rp,
                                                   self.ivars)
 
-        old_dens = dens.copy()
-        old_xmom = xmom.copy()
-        old_ymom = ymom.copy()
+        # save the old state (without ghost cells)
+        U_old = np.stack([dens.v().copy(),
+                          xmom.v().copy(),
+                          ymom.v().copy(),
+                          ener.v().copy()], axis=2)
 
         # Conservative update
 
@@ -308,32 +310,30 @@ class Simulation(NullSimulation):
 
         # Now apply external sources
 
-        # For SphericalPolar (coord_type == 1):
-        # There are gravity (external) sources,
-        # geometric terms due to local unit vectors, and pressure gradient
-        # since we don't include pressure in xmom and ymom fluxes
-        # due to incompatible divergence and gradient in non-Cartesian geometry
+        # For SphericalPolar (coord_type == 1) there are geometric
+        # terms and the pressure gradient since we don't include
+        # pressure in xmom and ymom fluxes
 
         # For Cartesian2d (coord_type == 0):
         # There is only gravity sources.
 
         if myg.coord_type == 1:
             xmom.v()[:, :] += 0.5*self.dt * \
-                ((dens.v() + old_dens.v())*grav +
+                ((dens.v() + U_old[:, :, self.ivars.ixmom])*grav +
                  (ymom.v()**2 / dens.v() +
-                  old_ymom.v()**2 / old_dens.v()) / myg.x2d.v()) - \
+                  U_old[:, :, self.ivars.iymom]**2 / U_old[:. :, self.ivars.idens]) / myg.x2d.v()) - \
                 self.dt * (qx.ip(1, n=self.ivars.ip) - qx.v(n=self.ivars.ip)) / myg.Lx.v()
 
             ymom.v()[:, :] += 0.5*self.dt * \
                 (-xmom.v()*ymom.v() / dens.v() -
-                 old_xmom.v()*old_ymom.v() / old_dens.v()) / myg.x2d.v() - \
+                 U_old[:, :, self.ivars.ixmom] * U_old[:, :, self.ivars.iymom] / U_old[:, :, self.ivars.idens]) / myg.x2d.v() - \
                 self.dt * (qy.jp(1, n=self.ivars.ip) - qy.v(n=self.ivars.ip)) / myg.Ly.v()
 
-            ener.v()[:, :] += 0.5*self.dt*(xmom.v() + old_xmom.v())*grav
+            ener.v()[:, :] += 0.5 * self.dt * (xmom.v() + U_old[:, :, self.ivars.ixmom]) * grav
 
         else:
-            ymom.v()[:, :] += 0.5*self.dt*(dens.v() + old_dens.v())*grav
-            ener.v()[:, :] += 0.5*self.dt*(ymom.v() + old_ymom.v())*grav
+            ymom.v()[:, :] += 0.5 * self.dt * (dens.v() + U_old[:, :, self.ivars.idens]) * grav
+            ener.v()[:, :] += 0.5 * self.dt * (ymom.v() + U_old[:, :, self.ivars.iymom]) * grav
 
         if self.particles is not None:
             self.particles.update_particles(self.dt)
