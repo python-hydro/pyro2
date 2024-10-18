@@ -94,6 +94,8 @@ def prim_to_cons(q, gamma, ivars, myg):
 def get_external_sources(t, U, ivars, rp, myg):
     """compute the external sources, including gravity"""
 
+    _ = t  # maybe unused
+
     U_src = myg.scratch_array(nvar=ivars.nvar)
 
     grav = rp.get_param("compressible.grav")
