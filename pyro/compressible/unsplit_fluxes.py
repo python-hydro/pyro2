@@ -283,9 +283,6 @@ def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
 
     myg = my_data.grid
 
-    dens = my_data.get_var("density")
-    xmom = my_data.get_var("x-momentum")
-    ymom = my_data.get_var("y-momentum")
     pres = my_data.get_var("pressure")
 
     dens_src = my_aux.get_var("dens_src")
