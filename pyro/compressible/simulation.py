@@ -291,10 +291,11 @@ class Simulation(NullSimulation):
                                                   self.ivars)
 
         # save the old state (without ghost cells)
-        U_old = np.stack([dens.v().copy(),
-                          xmom.v().copy(),
-                          ymom.v().copy(),
-                          ener.v().copy()], axis=2)
+        U_old = myg.scratch_array(nvar=self.ivars.nvar)
+        U_old[:, :, self.ivars.idens] = dens[:, :]
+        U_old[:, :, self.ivars.ixmom] = xmom[:, :]
+        U_old[:, :, self.ivars.iymom] = ymom[:, :]
+        U_old[:, :, self.ivars.iener] = ener[:, :]
 
         # Conservative update
 
@@ -319,21 +320,21 @@ class Simulation(NullSimulation):
 
         if myg.coord_type == 1:
             xmom.v()[:, :] += 0.5*self.dt * \
-                ((dens.v() + U_old[:, :, self.ivars.idens])*grav +
+                ((dens.v() + U_old.v(n=self.ivars.idens))*grav +
                  (ymom.v()**2 / dens.v() +
-                  U_old[:, :, self.ivars.iymom]**2 / U_old[:, :, self.ivars.idens]) / myg.x2d.v()) - \
+                  U_old.v(n=self.ivars.iymom)**2 / U_old(n=self.ivars.idens)) / myg.x2d.v()) - \
                 self.dt * (qx.ip(1, n=self.ivars.ip) - qx.v(n=self.ivars.ip)) / myg.Lx.v()
 
             ymom.v()[:, :] += 0.5*self.dt * \
                 (-xmom.v()*ymom.v() / dens.v() -
-                 U_old[:, :, self.ivars.ixmom] * U_old[:, :, self.ivars.iymom] / U_old[:, :, self.ivars.idens]) / myg.x2d.v() - \
+                 U_old.v(n=self.ivars.ixmom) * U_old.v(n=self.ivars.iymom) / U_old.v(n=self.ivars.idens)) / myg.x2d.v() - \
                 self.dt * (qy.jp(1, n=self.ivars.ip) - qy.v(n=self.ivars.ip)) / myg.Ly.v()
 
-            ener.v()[:, :] += 0.5 * self.dt * (xmom.v() + U_old[:, :, self.ivars.ixmom]) * grav
+            ener.v()[:, :] += 0.5 * self.dt * (xmom.v() + U_old.v(n=self.ivars.ixmom)) * grav
 
         else:
-            ymom.v()[:, :] += 0.5 * self.dt * (dens.v() + U_old[:, :, self.ivars.idens]) * grav
-            ener.v()[:, :] += 0.5 * self.dt * (ymom.v() + U_old[:, :, self.ivars.iymom]) * grav
+            ymom.v()[:, :] += 0.5 * self.dt * (dens.v() + U_old.v(n=self.ivars.idens)) * grav
+            ener.v()[:, :] += 0.5 * self.dt * (ymom.v() + U_old.v(n=self.ivars.iymom)) * grav
 
         if self.particles is not None:
             self.particles.update_particles(self.dt)
