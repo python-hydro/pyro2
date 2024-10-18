@@ -1,8 +1,6 @@
 """A test of the energy sources.  This uses a uniform domain and
 slowly adds heat to the center over time."""
 
-import math
-
 import numpy as np
 
 from pyro.util import msg
