@@ -118,13 +118,23 @@ def get_external_sources(t, dt, U, ivars, rp, myg, *, U_old=None):
         # we assume that U is an approximation to U^{n+1}, which includes
         # a full dt * S_old
 
-        S[:, :, ivars.iymom] = U[:, :, ivars.idens] * grav
-        S_old_ymom = U_old[:, :, ivars.idens] * grav
+        if myg.coord_type == 1:
+            S[:, :, ivars.ixmom] = U[:, :, ivars.idens] * grav
+            S_old_xmom = U_old[:, :, ivars.idens] * grav
 
-        # we want the corrected ymom that has a time-centered source
-        ymom_new = U[:, :, ivars.iymom] + 0.5 * dt * (S[:, :, ivars.iymom] - S_old_ymom)
+            # we want the corrected xmom that has a time-centered source
+            xmom_new = U[:, :, ivars.ixmom] + 0.5 * dt * (S[:, :, ivars.ixmom] - S_old_xmom)
 
-        S[:, :, ivars.iener] = ymom_new * grav
+            S[:, :, ivars.iener] = xmom_new * grav
+
+        else:
+            S[:, :, ivars.iymom] = U[:, :, ivars.idens] * grav
+            S_old_ymom = U_old[:, :, ivars.idens] * grav
+
+            # we want the corrected ymom that has a time-centered source
+            ymom_new = U[:, :, ivars.iymom] + 0.5 * dt * (S[:, :, ivars.iymom] - S_old_ymom)
+
+            S[:, :, ivars.iener] = ymom_new * grav
 
     return S
 
