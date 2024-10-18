@@ -100,7 +100,6 @@ def get_external_sources(t, dt, U, ivars, rp, myg, *, U_old=None):
 
     grav = rp.get_param("compressible.grav")
 
-
     if U_old is None:
         # we are just computing the sources from the current state U
 
