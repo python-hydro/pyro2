@@ -100,6 +100,7 @@ def get_external_sources(t, dt, U, ivars, rp, myg, *, U_old=None):
 
     grav = rp.get_param("compressible.grav")
 
+
     if U_old is None:
         # we are just computing the sources from the current state U
 
@@ -107,6 +108,9 @@ def get_external_sources(t, dt, U, ivars, rp, myg, *, U_old=None):
             # gravity points in the radial direction for spherical
             S[:, :, ivars.ixmom] = U[:, :, ivars.idens] * grav
             S[:, :, ivars.iener] = U[:, :, ivars.ixmom] * grav
+
+            S[:, :, ivars.ixmom] += U[:, :, ivars.iymom]**2 / (U[:, :, ivars.idens] * myg.x2d)
+            S[:, :, ivars.iymom] += -U[:, :, ivars.ixmom] * U[:, :, ivars.iymom] / U[:, :, ivars.idens]
 
         else:
             # gravity points in the vertical (y) direction for Cartesian
@@ -126,6 +130,9 @@ def get_external_sources(t, dt, U, ivars, rp, myg, *, U_old=None):
             xmom_new = U[:, :, ivars.ixmom] + 0.5 * dt * (S[:, :, ivars.ixmom] - S_old_xmom)
 
             S[:, :, ivars.iener] = xmom_new * grav
+
+            S[:, :, ivars.ixmom] += U[:, :, ivars.iymom]**2 / (U[:, :, ivars.idens] * myg.x2d)
+            S[:, :, ivars.iymom] += -U[:, :, ivars.ixmom] * U[:, :, ivars.iymom] / U[:, :, ivars.idens]
 
         else:
             S[:, :, ivars.iymom] = U[:, :, ivars.idens] * grav
@@ -336,20 +343,15 @@ class Simulation(NullSimulation):
 
         # Now apply external sources
 
-        # For SphericalPolar (coord_type == 1) there are geometric
-        # terms and the pressure gradient since we don't include
-        # pressure in xmom and ymom fluxes
+        # For SphericalPolar (coord_type == 1) there are pressure
+        # gradients since we don't include pressure in xmom and ymom
+        # fluxes
 
         if myg.coord_type == 1:
-            xmom.v()[:, :] += 0.5*self.dt * \
-                ((ymom.v()**2 / dens.v() +
-                  U_old.v(n=self.ivars.iymom)**2 / U_old(n=self.ivars.idens)) / myg.x2d.v()) - \
-                self.dt * (qx.ip(1, n=self.ivars.ip) - qx.v(n=self.ivars.ip)) / myg.Lx.v()
-
-            ymom.v()[:, :] += 0.5*self.dt * \
-                (-xmom.v()*ymom.v() / dens.v() -
-                 U_old.v(n=self.ivars.ixmom) * U_old.v(n=self.ivars.iymom) / U_old.v(n=self.ivars.idens)) / myg.x2d.v() - \
-                self.dt * (qy.jp(1, n=self.ivars.ip) - qy.v(n=self.ivars.ip)) / myg.Ly.v()
+            xmom.v()[:, :] += self.dt * (qx.ip(1, n=self.ivars.ip) -
+                                         qx.v(n=self.ivars.ip)) / myg.Lx.v()
+            ymom.v()[:, :] += self.dt * (qy.jp(1, n=self.ivars.ip) -
+                                         qy.v(n=self.ivars.ip)) / myg.Ly.v()
 
         # now the external sources (including gravity).  We are going
         # to do a predictor-corrector here:
