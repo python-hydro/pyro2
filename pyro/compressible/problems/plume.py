@@ -1,4 +1,5 @@
-"""A heat source at a point creates a plume that buoynantly rises"""
+"""A heat source at a point creates a plume that buoynantly rises in
+an adiabatically stratified atmosphere."""
 
 import numpy as np
 
