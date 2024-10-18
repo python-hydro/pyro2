@@ -293,25 +293,19 @@ def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
     ymom_src = my_aux.get_var("ymom_src")
     E_src = my_aux.get_var("E_src")
 
-    grav = rp.get_param("compressible.grav")
+    U_src = comp.get_external_sources(my_data.t, my_data.data, ivars, rp, myg)
 
-    # Calculate external source (gravity), geometric, and pressure terms
+    dens_src[:, :] = U_src[:, :, ivars.idens]
+    xmom_src[:, :] = U_src[:, :, ivars.ixmom]
+    ymom_src[:, :] = U_src[:, :, ivars.iymom]
+    E_src[:, :] = U_src[:, :, ivars.iener]
+
+    # add geometric and pressure terms
     if myg.coord_type == 1:
-        # assume gravity points in r-direction in spherical.
-        dens_src.v()[:, :] = 0.0
-        xmom_src.v()[:, :] = dens.v()*grav + \
-            ymom.v()**2 / (dens.v()*myg.x2d.v()) - \
-            (pres.ip(1) - pres.v()) / myg.Lx.v()
-        ymom_src.v()[:, :] = -(pres.jp(1) - pres.v()) / myg.Ly.v() - \
-            xmom.v()*ymom.v() / (dens.v()*myg.x2d.v())
-        E_src.v()[:, :] = xmom.v()*grav
-
-    else:
-        # assume gravity points in y-direction in cartesian
-        dens_src.v()[:, :] = 0.0
-        xmom_src.v()[:, :] = 0.0
-        ymom_src.v()[:, :] = dens.v()*grav
-        E_src.v()[:, :] = ymom.v()*grav
+        xmom_src.v()[:, :] += ymom.v()**2 / (dens.v()*myg.x2d.v()) - \
+                              (pres.ip(1) - pres.v()) / myg.Lx.v()
+        ymom_src.v()[:, :] += -(pres.jp(1) - pres.v()) / myg.Ly.v() - \
+                              xmom.v()*ymom.v() / (dens.v()*myg.x2d.v())
 
     my_aux.fill_BC("dens_src")
     my_aux.fill_BC("xmom_src")

@@ -91,6 +91,26 @@ def prim_to_cons(q, gamma, ivars, myg):
     return U
 
 
+def get_external_sources(t, U, ivars, rp, myg):
+    """compute the external sources, including gravity"""
+
+    U_src = myg.scratch_array(nvar=ivars.nvar)
+
+    grav = rp.get_param("compressible.grav")
+
+    if myg.coord_type == 1:
+        # gravity points in the radial direction for spherical
+        U_src[:, :, ivars.ixmom] = U[:, :, ivars.idens] * grav
+        U_src[:, :, ivars.iener] = U[:, :, ivars.ixmom] * grav
+
+    else:
+        # gravity points in the vertical (y) direction for Cartesian
+        U_src[:, :, ivars.iymom] = U[:, :, ivars.idens] * grav
+        U_src[:, :, ivars.iener] = U[:, :, ivars.iymom] * grav
+
+    return U_src
+
+
 class Simulation(NullSimulation):
     """The main simulation class for the corner transport upwind
     compressible hydrodynamics solver
