@@ -283,9 +283,6 @@ def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
 
     myg = my_data.grid
 
-    dens = my_data.get_var("density")
-    xmom = my_data.get_var("x-momentum")
-    ymom = my_data.get_var("y-momentum")
     pres = my_data.get_var("pressure")
 
     dens_src = my_aux.get_var("dens_src")
@@ -300,12 +297,10 @@ def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
     ymom_src[:, :] = U_src[:, :, ivars.iymom]
     E_src[:, :] = U_src[:, :, ivars.iener]
 
-    # add geometric and pressure terms
+    # apply non-conservative pressure gradient
     if myg.coord_type == 1:
-        xmom_src.v()[:, :] += ymom.v()**2 / (dens.v()*myg.x2d.v()) - \
-                              (pres.ip(1) - pres.v()) / myg.Lx.v()
-        ymom_src.v()[:, :] += -(pres.jp(1) - pres.v()) / myg.Ly.v() - \
-                              xmom.v()*ymom.v() / (dens.v()*myg.x2d.v())
+        xmom_src.v()[:, :] += -(pres.ip(1) - pres.v()) / myg.Lx.v()
+        ymom_src.v()[:, :] += -(pres.jp(1) - pres.v()) / myg.Ly.v()
 
     my_aux.fill_BC("dens_src")
     my_aux.fill_BC("xmom_src")

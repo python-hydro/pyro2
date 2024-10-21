@@ -108,6 +108,9 @@ def get_external_sources(t, dt, U, ivars, rp, myg, *, U_old=None, problem_source
             S[:, :, ivars.ixmom] = U[:, :, ivars.idens] * grav
             S[:, :, ivars.iener] = U[:, :, ivars.ixmom] * grav
 
+            S[:, :, ivars.ixmom] += U[:, :, ivars.iymom]**2 / (U[:, :, ivars.idens] * myg.x2d)
+            S[:, :, ivars.iymom] += -U[:, :, ivars.ixmom] * U[:, :, ivars.iymom] / U[:, :, ivars.idens]
+
         else:
             # gravity points in the vertical (y) direction for Cartesian
             S[:, :, ivars.iymom] = U[:, :, ivars.idens] * grav
@@ -118,13 +121,26 @@ def get_external_sources(t, dt, U, ivars, rp, myg, *, U_old=None, problem_source
         # we assume that U is an approximation to U^{n+1}, which includes
         # a full dt * S_old
 
-        S[:, :, ivars.iymom] = U[:, :, ivars.idens] * grav
-        S_old_ymom = U_old[:, :, ivars.idens] * grav
+        if myg.coord_type == 1:
+            S[:, :, ivars.ixmom] = U[:, :, ivars.idens] * grav
+            S_old_xmom = U_old[:, :, ivars.idens] * grav
 
-        # we want the corrected ymom that has a time-centered source
-        ymom_new = U[:, :, ivars.iymom] + 0.5 * dt * (S[:, :, ivars.iymom] - S_old_ymom)
+            # we want the corrected xmom that has a time-centered source
+            xmom_new = U[:, :, ivars.ixmom] + 0.5 * dt * (S[:, :, ivars.ixmom] - S_old_xmom)
 
-        S[:, :, ivars.iener] = ymom_new * grav
+            S[:, :, ivars.iener] = xmom_new * grav
+
+            S[:, :, ivars.ixmom] += U[:, :, ivars.iymom]**2 / (U[:, :, ivars.idens] * myg.x2d)
+            S[:, :, ivars.iymom] += -U[:, :, ivars.ixmom] * U[:, :, ivars.iymom] / U[:, :, ivars.idens]
+
+        else:
+            S[:, :, ivars.iymom] = U[:, :, ivars.idens] * grav
+            S_old_ymom = U_old[:, :, ivars.idens] * grav
+
+            # we want the corrected ymom that has a time-centered source
+            ymom_new = U[:, :, ivars.iymom] + 0.5 * dt * (S[:, :, ivars.iymom] - S_old_ymom)
+
+            S[:, :, ivars.iener] = ymom_new * grav
 
     # now add the heating
     if problem_source:
@@ -331,20 +347,15 @@ class Simulation(NullSimulation):
 
         # Now apply external sources
 
-        # For SphericalPolar (coord_type == 1) there are geometric
-        # terms and the pressure gradient since we don't include
-        # pressure in xmom and ymom fluxes
+        # For SphericalPolar (coord_type == 1) there are pressure
+        # gradients since we don't include pressure in xmom and ymom
+        # fluxes
 
         if myg.coord_type == 1:
-            xmom.v()[:, :] += 0.5*self.dt * \
-                ((ymom.v()**2 / dens.v() +
-                  U_old.v(n=self.ivars.iymom)**2 / U_old(n=self.ivars.idens)) / myg.x2d.v()) - \
-                self.dt * (qx.ip(1, n=self.ivars.ip) - qx.v(n=self.ivars.ip)) / myg.Lx.v()
-
-            ymom.v()[:, :] += 0.5*self.dt * \
-                (-xmom.v()*ymom.v() / dens.v() -
-                 U_old.v(n=self.ivars.ixmom) * U_old.v(n=self.ivars.iymom) / U_old.v(n=self.ivars.idens)) / myg.x2d.v() - \
-                self.dt * (qy.jp(1, n=self.ivars.ip) - qy.v(n=self.ivars.ip)) / myg.Ly.v()
+            xmom.v()[:, :] -= self.dt * (qx.ip(1, n=self.ivars.ip) -
+                                         qx.v(n=self.ivars.ip)) / myg.Lx.v()
+            ymom.v()[:, :] -= self.dt * (qy.jp(1, n=self.ivars.ip) -
+                                         qy.v(n=self.ivars.ip)) / myg.Ly.v()
 
         # now the external sources (including gravity).  We are going
         # to do a predictor-corrector here:
