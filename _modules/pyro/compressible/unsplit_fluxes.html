@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible.unsplit_fluxes &#8212; pyro 4.4.0 documentation</title>
+    <title>pyro.compressible.unsplit_fluxes &#8212; pyro 4.4.0.post1+gdd2ec063 documentation</title>
   
   
   
@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/myfile.css?v=359afcf4" />
   
@@ -38,8 +38,8 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=e4428b72"></script>
-    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/documentation_options.js?v=5dce149e"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
@@ -741,9 +741,6 @@ document.write(`
 
     <span class="n">myg</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span>
 
-    <span class="n">dens</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
-    <span class="n">xmom</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;x-momentum&quot;</span><span class="p">)</span>
-    <span class="n">ymom</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-momentum&quot;</span><span class="p">)</span>
     <span class="n">pres</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;pressure&quot;</span><span class="p">)</span>
 
     <span class="n">dens_src</span> <span class="o">=</span> <span class="n">my_aux</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;dens_src&quot;</span><span class="p">)</span>
@@ -751,25 +748,17 @@ document.write(`
     <span class="n">ymom_src</span> <span class="o">=</span> <span class="n">my_aux</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;ymom_src&quot;</span><span class="p">)</span>
     <span class="n">E_src</span> <span class="o">=</span> <span class="n">my_aux</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;E_src&quot;</span><span class="p">)</span>
 
-    <span class="n">grav</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;compressible.grav&quot;</span><span class="p">)</span>
+    <span class="n">U_src</span> <span class="o">=</span> <span class="n">comp</span><span class="o">.</span><span class="n">get_external_sources</span><span class="p">(</span><span class="n">my_data</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">my_data</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">myg</span><span class="p">)</span>
 
-    <span class="c1"># Calculate external source (gravity), geometric, and pressure terms</span>
+    <span class="n">dens_src</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">U_src</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">]</span>
+    <span class="n">xmom_src</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">U_src</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">]</span>
+    <span class="n">ymom_src</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">U_src</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">]</span>
+    <span class="n">E_src</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">U_src</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">]</span>
+
+    <span class="c1"># apply non-conservative pressure gradient</span>
     <span class="k">if</span> <span class="n">myg</span><span class="o">.</span><span class="n">coord_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="c1"># assume gravity points in r-direction in spherical.</span>
-        <span class="n">dens_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
-        <span class="n">xmom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">dens</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">grav</span> <span class="o">+</span> \
-            <span class="n">ymom</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">dens</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="o">.</span><span class="n">v</span><span class="p">())</span> <span class="o">-</span> \
-            <span class="p">(</span><span class="n">pres</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">pres</span><span class="o">.</span><span class="n">v</span><span class="p">())</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">Lx</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
-        <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">pres</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">pres</span><span class="o">.</span><span class="n">v</span><span class="p">())</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">Ly</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> \
-            <span class="n">xmom</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">ymom</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="n">dens</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="o">.</span><span class="n">v</span><span class="p">())</span>
-        <span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">xmom</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">grav</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># assume gravity points in y-direction in cartesian</span>
-        <span class="n">dens_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
-        <span class="n">xmom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
-        <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">dens</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">grav</span>
-        <span class="n">E_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">ymom</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">grav</span>
+        <span class="n">xmom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span><span class="p">(</span><span class="n">pres</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">pres</span><span class="o">.</span><span class="n">v</span><span class="p">())</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">Lx</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+        <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span><span class="p">(</span><span class="n">pres</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">pres</span><span class="o">.</span><span class="n">v</span><span class="p">())</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">Ly</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
 
     <span class="n">my_aux</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;dens_src&quot;</span><span class="p">)</span>
     <span class="n">my_aux</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;xmom_src&quot;</span><span class="p">)</span>

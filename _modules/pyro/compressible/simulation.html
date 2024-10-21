@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible.simulation &#8212; pyro 4.4.0 documentation</title>
+    <title>pyro.compressible.simulation &#8212; pyro 4.4.0.post1+gdd2ec063 documentation</title>
   
   
   
@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/myfile.css?v=359afcf4" />
   
@@ -38,8 +38,8 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=e4428b72"></script>
-    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/documentation_options.js?v=5dce149e"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
@@ -553,6 +553,63 @@ document.write(`
 
 
 
+<div class="viewcode-block" id="get_external_sources">
+<a class="viewcode-back" href="../../../pyro.compressible.html#pyro.compressible.simulation.get_external_sources">[docs]</a>
+<span class="k">def</span> <span class="nf">get_external_sources</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">U_old</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;compute the external sources, including gravity&quot;&quot;&quot;</span>
+
+    <span class="n">_</span> <span class="o">=</span> <span class="n">t</span>  <span class="c1"># maybe unused</span>
+
+    <span class="n">S</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">(</span><span class="n">nvar</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">)</span>
+
+    <span class="n">grav</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;compressible.grav&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">U_old</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># we are just computing the sources from the current state U</span>
+
+        <span class="k">if</span> <span class="n">myg</span><span class="o">.</span><span class="n">coord_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># gravity points in the radial direction for spherical</span>
+            <span class="n">S</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">]</span> <span class="o">*</span> <span class="n">grav</span>
+            <span class="n">S</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">*</span> <span class="n">grav</span>
+
+            <span class="n">S</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">+=</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">]</span> <span class="o">*</span> <span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="p">)</span>
+            <span class="n">S</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">]</span> <span class="o">+=</span> <span class="o">-</span><span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">*</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># gravity points in the vertical (y) direction for Cartesian</span>
+            <span class="n">S</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">]</span> <span class="o">*</span> <span class="n">grav</span>
+            <span class="n">S</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">]</span> <span class="o">*</span> <span class="n">grav</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># we want to compute gravity using the time-updated momentum</span>
+        <span class="c1"># we assume that U is an approximation to U^{n+1}, which includes</span>
+        <span class="c1"># a full dt * S_old</span>
+
+        <span class="k">if</span> <span class="n">myg</span><span class="o">.</span><span class="n">coord_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">S</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">]</span> <span class="o">*</span> <span class="n">grav</span>
+            <span class="n">S_old_xmom</span> <span class="o">=</span> <span class="n">U_old</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">]</span> <span class="o">*</span> <span class="n">grav</span>
+
+            <span class="c1"># we want the corrected xmom that has a time-centered source</span>
+            <span class="n">xmom_new</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">S</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">-</span> <span class="n">S_old_xmom</span><span class="p">)</span>
+
+            <span class="n">S</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmom_new</span> <span class="o">*</span> <span class="n">grav</span>
+
+            <span class="n">S</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">+=</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">]</span> <span class="o">*</span> <span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="p">)</span>
+            <span class="n">S</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">]</span> <span class="o">+=</span> <span class="o">-</span><span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">*</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">]</span> <span class="o">/</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">S</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">]</span> <span class="o">*</span> <span class="n">grav</span>
+            <span class="n">S_old_ymom</span> <span class="o">=</span> <span class="n">U_old</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">]</span> <span class="o">*</span> <span class="n">grav</span>
+
+            <span class="c1"># we want the corrected ymom that has a time-centered source</span>
+            <span class="n">ymom_new</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">S</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">]</span> <span class="o">-</span> <span class="n">S_old_ymom</span><span class="p">)</span>
+
+            <span class="n">S</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">]</span> <span class="o">=</span> <span class="n">ymom_new</span> <span class="o">*</span> <span class="n">grav</span>
+
+    <span class="k">return</span> <span class="n">S</span></div>
+
+
+
 <div class="viewcode-block" id="Simulation">
 <a class="viewcode-back" href="../../../pyro.compressible.html#pyro.compressible.simulation.Simulation">[docs]</a>
 <span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">NullSimulation</span><span class="p">):</span>
@@ -679,7 +736,6 @@ document.write(`
         <span class="n">ymom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;y-momentum&quot;</span><span class="p">)</span>
         <span class="n">ener</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;energy&quot;</span><span class="p">)</span>
 
-        <span class="n">grav</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;compressible.grav&quot;</span><span class="p">)</span>
         <span class="n">gamma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;eos.gamma&quot;</span><span class="p">)</span>
 
         <span class="n">myg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span>
@@ -740,9 +796,12 @@ document.write(`
                                                   <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span>
                                                   <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">)</span>
 
-        <span class="n">old_dens</span> <span class="o">=</span> <span class="n">dens</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">old_xmom</span> <span class="o">=</span> <span class="n">xmom</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">old_ymom</span> <span class="o">=</span> <span class="n">ymom</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="c1"># save the old state (without ghost cells)</span>
+        <span class="n">U_old</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">(</span><span class="n">nvar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">)</span>
+        <span class="n">U_old</span><span class="p">[:,</span> <span class="p">:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">]</span> <span class="o">=</span> <span class="n">dens</span><span class="p">[:,</span> <span class="p">:]</span>
+        <span class="n">U_old</span><span class="p">[:,</span> <span class="p">:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">]</span> <span class="o">=</span> <span class="n">xmom</span><span class="p">[:,</span> <span class="p">:]</span>
+        <span class="n">U_old</span><span class="p">[:,</span> <span class="p">:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">]</span> <span class="o">=</span> <span class="n">ymom</span><span class="p">[:,</span> <span class="p">:]</span>
+        <span class="n">U_old</span><span class="p">[:,</span> <span class="p">:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">]</span> <span class="o">=</span> <span class="n">ener</span><span class="p">[:,</span> <span class="p">:]</span>
 
         <span class="c1"># Conservative update</span>
 
@@ -758,32 +817,40 @@ document.write(`
 
         <span class="c1"># Now apply external sources</span>
 
-        <span class="c1"># For SphericalPolar (coord_type == 1):</span>
-        <span class="c1"># There are gravity (external) sources,</span>
-        <span class="c1"># geometric terms due to local unit vectors, and pressure gradient</span>
-        <span class="c1"># since we don&#39;t include pressure in xmom and ymom fluxes</span>
-        <span class="c1"># due to incompatible divergence and gradient in non-Cartesian geometry</span>
-
-        <span class="c1"># For Cartesian2d (coord_type == 0):</span>
-        <span class="c1"># There is only gravity sources.</span>
+        <span class="c1"># For SphericalPolar (coord_type == 1) there are pressure</span>
+        <span class="c1"># gradients since we don&#39;t include pressure in xmom and ymom</span>
+        <span class="c1"># fluxes</span>
 
         <span class="k">if</span> <span class="n">myg</span><span class="o">.</span><span class="n">coord_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">xmom</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">*</span> \
-                <span class="p">((</span><span class="n">dens</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">old_dens</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">*</span><span class="n">grav</span> <span class="o">+</span>
-                 <span class="p">(</span><span class="n">ymom</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">dens</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span>
-                  <span class="n">old_ymom</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">old_dens</span><span class="o">.</span><span class="n">v</span><span class="p">())</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="o">.</span><span class="n">v</span><span class="p">())</span> <span class="o">-</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">qx</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">)</span> <span class="o">-</span> <span class="n">qx</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">))</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">Lx</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+            <span class="n">xmom</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">qx</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">)</span> <span class="o">-</span>
+                                         <span class="n">qx</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">))</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">Lx</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+            <span class="n">ymom</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">qy</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">)</span> <span class="o">-</span>
+                                         <span class="n">qy</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">))</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">Ly</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
 
-            <span class="n">ymom</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">*</span> \
-                <span class="p">(</span><span class="o">-</span><span class="n">xmom</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">ymom</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">/</span> <span class="n">dens</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span>
-                 <span class="n">old_xmom</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">*</span><span class="n">old_ymom</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">/</span> <span class="n">old_dens</span><span class="o">.</span><span class="n">v</span><span class="p">())</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">x2d</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">-</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">qy</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">)</span> <span class="o">-</span> <span class="n">qy</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">))</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">Ly</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
+        <span class="c1"># now the external sources (including gravity).  We are going</span>
+        <span class="c1"># to do a predictor-corrector here:</span>
+        <span class="c1">#</span>
+        <span class="c1"># * compute old sources using old state: S^n = S(U^n)</span>
+        <span class="c1"># * update state full dt using old sources: U^{n+1,*} += dt * S^n</span>
+        <span class="c1"># * compute new sources using this updated state: S^{n+1) = S(U^{n+1,*})</span>
+        <span class="c1"># * correct: U^{n+1} = U^{n+1,*} + dt/2 (S^{n+1} - S^n)</span>
 
-            <span class="n">ener</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="p">(</span><span class="n">xmom</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">old_xmom</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">*</span><span class="n">grav</span>
+        <span class="n">S_old</span> <span class="o">=</span> <span class="n">get_external_sources</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="n">U_old</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="n">myg</span><span class="p">)</span>
 
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ymom</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="p">(</span><span class="n">dens</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">old_dens</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">*</span><span class="n">grav</span>
-            <span class="n">ener</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="p">(</span><span class="n">ymom</span><span class="o">.</span><span class="n">v</span><span class="p">()</span> <span class="o">+</span> <span class="n">old_ymom</span><span class="o">.</span><span class="n">v</span><span class="p">())</span><span class="o">*</span><span class="n">grav</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">):</span>
+            <span class="n">var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var_by_index</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="n">var</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">*</span> <span class="n">S_old</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+
+        <span class="c1"># now get the new time source</span>
+
+        <span class="n">S_new</span> <span class="o">=</span> <span class="n">get_external_sources</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="n">U_old</span><span class="o">=</span><span class="n">U_old</span><span class="p">)</span>
+
+        <span class="c1"># and correct</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">):</span>
+            <span class="n">var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var_by_index</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="n">var</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">S_new</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">S_old</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">update_particles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
