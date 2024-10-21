@@ -36,10 +36,13 @@ class Basestate:
 class Simulation(NullSimulation):
 
     def __init__(self, solver_name, problem_name, problem_func, rp, *,
-                 problem_finalize_func=None, timers=None):
+                 problem_finalize_func=None, problem_source_func=None,
+                 timers=None):
 
         super().__init__(solver_name, problem_name, problem_func, rp,
-                         problem_finalize_func=problem_finalize_func, timers=timers)
+                         problem_finalize_func=problem_finalize_func,
+                         problem_source_func=problem_source_func,
+                         timers=timers)
 
         self.base = {}
         self.aux_data = None
