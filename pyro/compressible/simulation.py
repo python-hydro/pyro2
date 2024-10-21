@@ -347,9 +347,9 @@ class Simulation(NullSimulation):
         # fluxes
 
         if myg.coord_type == 1:
-            xmom.v()[:, :] += self.dt * (qx.ip(1, n=self.ivars.ip) -
+            xmom.v()[:, :] -= self.dt * (qx.ip(1, n=self.ivars.ip) -
                                          qx.v(n=self.ivars.ip)) / myg.Lx.v()
-            ymom.v()[:, :] += self.dt * (qy.jp(1, n=self.ivars.ip) -
+            ymom.v()[:, :] -= self.dt * (qy.jp(1, n=self.ivars.ip) -
                                          qy.v(n=self.ivars.ip)) / myg.Ly.v()
 
         # now the external sources (including gravity).  We are going
