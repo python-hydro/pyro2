@@ -43,8 +43,7 @@ class Simulation(compressible_rk.Simulation):
         for n in range(self.ivars.nvar):
             k.v(n=n)[:, :] = \
                (flux_x.v(n=n) - flux_x.ip(1, n=n))/myg.dx + \
-               (flux_y.v(n=n) - flux_y.jp(1, n=n))/myg.dy + \
-               S.v(n=n)
+               (flux_y.v(n=n) - flux_y.jp(1, n=n))/myg.dy + S.v(n=n)
 
         return k
 
