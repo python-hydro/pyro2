@@ -16,17 +16,10 @@ class Simulation(compressible.Simulation):
         """
 
         myg = myd.grid
-        grav = self.rp.get_param("compressible.grav")
 
-        # compute the source terms
-        dens = myd.get_var("density")
-        ymom = myd.get_var("y-momentum")
-
-        ymom_src = myg.scratch_array()
-        ymom_src.v()[:, :] = dens.v()[:, :]*grav
-
-        E_src = myg.scratch_array()
-        E_src.v()[:, :] = ymom.v()[:, :]*grav
+        # source terms
+        S = compressible.get_external_sources(self.cc_data.t, self.dt, self.cc_data.data,
+                                              self.ivars, self.rp, myg)
 
         k = myg.scratch_array(nvar=self.ivars.nvar)
 
@@ -36,10 +29,8 @@ class Simulation(compressible.Simulation):
         for n in range(self.ivars.nvar):
             k.v(n=n)[:, :] = \
                (flux_x.v(n=n) - flux_x.ip(1, n=n))/myg.dx + \
-               (flux_y.v(n=n) - flux_y.jp(1, n=n))/myg.dy
-
-        k.v(n=self.ivars.iymom)[:, :] += ymom_src.v()[:, :]
-        k.v(n=self.ivars.iener)[:, :] += E_src.v()[:, :]
+               (flux_y.v(n=n) - flux_y.jp(1, n=n))/myg.dy + \
+               S.v(n=n)
 
         return k
 
