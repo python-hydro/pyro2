@@ -279,7 +279,8 @@ class Simulation(NullSimulation):
         # Only gravitional source for Cartesian2d
         U_xl, U_xr, U_yl, U_yr = flx.apply_source_terms(U_xl, U_xr, U_yl, U_yr,
                                                         self.cc_data, self.aux_data, self.rp,
-                                                        self.ivars, self.tc, self.dt)
+                                                        self.ivars, self.tc, self.dt,
+                                                        problem_source=self.problem_source)
 
         # Apply transverse corrections.
         U_xl, U_xr, U_yl, U_yr = flx.apply_transverse_flux(U_xl, U_xr, U_yl, U_yr,
