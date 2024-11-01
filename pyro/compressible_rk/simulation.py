@@ -20,7 +20,8 @@ class Simulation(compressible.Simulation):
         # source terms -- note: this dt is the entire dt, not the
         # stage's dt
         S = compressible.get_external_sources(myd.t, self.dt, myd.data,
-                                              self.ivars, self.rp, myg)
+                                              self.ivars, self.rp, myg,
+                                              problem_source=self.problem_source)
 
         k = myg.scratch_array(nvar=self.ivars.nvar)
 

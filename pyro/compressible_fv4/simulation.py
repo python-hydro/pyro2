@@ -31,7 +31,8 @@ class Simulation(compressible_rk.Simulation):
 
         # cell-centered sources
         S = get_external_sources(myd.t, self.dt, U_cc,
-                                 self.ivars, self.rp, myg)
+                                 self.ivars, self.rp, myg,
+                                 problem_source=self.problem_source)
 
         # bring the sources back to averages -- we only care about
         # the interior (no ghost cells)
