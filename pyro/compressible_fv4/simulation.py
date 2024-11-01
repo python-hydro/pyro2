@@ -25,10 +25,10 @@ class Simulation(compressible_rk.Simulation):
 
         U_cc = myg.scratch_array(nvar=self.ivars.nvar)
         for n in range(self.ivars.nvar):
-            U_cc[:, :, n] = myd.to_centers(self.cc_data.names[n])
+            U_cc[:, :, n] = myd.to_centers(myd.names[n])
 
         # cell-centered sources
-        S = get_external_sources(self.cc_data.t, self.dt, U_cc,
+        S = get_external_sources(myd.t, self.dt, U_cc,
                                  self.ivars, self.rp, myg)
 
         # bring the sources back to averages -- we only care about

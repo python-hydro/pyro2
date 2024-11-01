@@ -17,8 +17,9 @@ class Simulation(compressible.Simulation):
 
         myg = myd.grid
 
-        # source terms
-        S = compressible.get_external_sources(self.cc_data.t, self.dt, self.cc_data.data,
+        # source terms -- note: this dt is the entire dt, not the
+        # stage's dt
+        S = compressible.get_external_sources(myd.t, self.dt, myd.data,
                                               self.ivars, self.rp, myg)
 
         k = myg.scratch_array(nvar=self.ivars.nvar)
