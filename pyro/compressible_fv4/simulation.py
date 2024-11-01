@@ -1,5 +1,6 @@
 import pyro.compressible_fv4.fluxes as flx
 from pyro import compressible_rk
+from pyro.compressible import get_external_sources
 from pyro.mesh import fv, integration
 
 
@@ -19,24 +20,23 @@ class Simulation(compressible_rk.Simulation):
         """
 
         myg = myd.grid
-        grav = self.rp.get_param("compressible.grav")
 
-        # compute the source terms -- we need to do these to 4th
-        # order.  Start by evaluating the sources using the
-        # cell-center quantities (including one ghost cell.
-        dens_cc = myd.to_centers("density")
-        ymom_cc = myd.to_centers("y-momentum")
+        # compute the source terms -- we need to do this first
+        # using the cell-center data and then convert it back to
+        # averages
 
-        ymom_src = myg.scratch_array()
-        ymom_src.v(buf=1)[:, :] = dens_cc.v(buf=1)[:, :]*grav
+        U_cc = myg.scratch_array(nvar=self.ivars.nvar)
+        for n in range(self.ivars.nvar):
+            U_cc[:, :, n] = myd.to_centers(myd.names[n])
 
-        E_src = myg.scratch_array()
-        E_src.v(buf=1)[:, :] = ymom_cc.v(buf=1)[:, :]*grav
+        # cell-centered sources
+        S = get_external_sources(myd.t, self.dt, U_cc,
+                                 self.ivars, self.rp, myg)
 
-        # now bring back to averages -- we only need this in the
-        # interior (no ghost cells)
-        ymom_src.v()[:, :] = ymom_src.v()[:, :] - myg.dx**2*ymom_src.lap()/24.0
-        E_src.v()[:, :] = E_src.v()[:, :] - myg.dx**2*E_src.lap()/24.0
+        # bring the sources back to averages -- we only care about
+        # the interior (no ghost cells)
+        for n in range(self.ivars.nvar):
+            S.v(n=n)[:, :] -= myg.dx**2 * S.lap(n=n) / 24.0
 
         k = myg.scratch_array(nvar=self.ivars.nvar)
 
@@ -45,10 +45,7 @@ class Simulation(compressible_rk.Simulation):
         for n in range(self.ivars.nvar):
             k.v(n=n)[:, :] = \
                (flux_x.v(n=n) - flux_x.ip(1, n=n))/myg.dx + \
-               (flux_y.v(n=n) - flux_y.jp(1, n=n))/myg.dy
-
-        k.v(n=self.ivars.iymom)[:, :] += ymom_src.v()[:, :]
-        k.v(n=self.ivars.iener)[:, :] += E_src.v()[:, :]
+               (flux_y.v(n=n) - flux_y.jp(1, n=n))/myg.dy + S.v(n=n)
 
         return k
 
