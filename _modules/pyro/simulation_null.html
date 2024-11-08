@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.simulation_null &#8212; pyro 4.4.0.post2+g13eb252d documentation</title>
+    <title>pyro.simulation_null &#8212; pyro 4.4.0.post3+g3cda63bc documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../_static/documentation_options.js?v=91a69522"></script>
+    <script src="../../_static/documentation_options.js?v=717c53b0"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -543,7 +543,7 @@
 <span class="k">class</span> <span class="nc">NullSimulation</span><span class="p">:</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">problem_func</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
-                 <span class="n">problem_finalize_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">problem_finalize_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">problem_source_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">timers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data_class</span><span class="o">=</span><span class="n">patch</span><span class="o">.</span><span class="n">CellCenterData2d</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the Simulation object</span>
@@ -561,6 +561,9 @@
 <span class="sd">        problem_finalize_func : function</span>
 <span class="sd">            An (optional) function to call when the simulation is</span>
 <span class="sd">            over.</span>
+<span class="sd">        problem_source_func : function</span>
+<span class="sd">            An (optional) function to call to get source terms</span>
+<span class="sd">            for the state.</span>
 <span class="sd">        timers : TimerCollection object, optional</span>
 <span class="sd">            The timers used for profiling this simulation.</span>
 <span class="sd">        data_class : CellCenterData2d or FV2d</span>
@@ -593,6 +596,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span> <span class="o">=</span> <span class="n">problem_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">problem_func</span> <span class="o">=</span> <span class="n">problem_func</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">problem_finalize</span> <span class="o">=</span> <span class="n">problem_finalize_func</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem_source</span> <span class="o">=</span> <span class="n">problem_source_func</span>
 
         <span class="k">if</span> <span class="n">timers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tc</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">TimerCollection</span><span class="p">()</span>

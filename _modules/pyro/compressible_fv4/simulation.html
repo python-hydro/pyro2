@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible_fv4.simulation &#8212; pyro 4.4.0.post2+g13eb252d documentation</title>
+    <title>pyro.compressible_fv4.simulation &#8212; pyro 4.4.0.post3+g3cda63bc documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../_static/documentation_options.js?v=91a69522"></script>
+    <script src="../../../_static/documentation_options.js?v=717c53b0"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -443,9 +443,11 @@
 <span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="n">compressible_rk</span><span class="o">.</span><span class="n">Simulation</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">problem_func</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
-                 <span class="n">problem_finalize_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data_class</span><span class="o">=</span><span class="n">fv</span><span class="o">.</span><span class="n">FV2d</span><span class="p">):</span>
+                 <span class="n">problem_finalize_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">problem_source_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">timers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data_class</span><span class="o">=</span><span class="n">fv</span><span class="o">.</span><span class="n">FV2d</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">solver_name</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">problem_func</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span>
                          <span class="n">problem_finalize_func</span><span class="o">=</span><span class="n">problem_finalize_func</span><span class="p">,</span>
+                         <span class="n">problem_source_func</span><span class="o">=</span><span class="n">problem_source_func</span><span class="p">,</span>
                          <span class="n">timers</span><span class="o">=</span><span class="n">timers</span><span class="p">,</span> <span class="n">data_class</span><span class="o">=</span><span class="n">data_class</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Simulation.substep">
@@ -467,7 +469,8 @@
 
         <span class="c1"># cell-centered sources</span>
         <span class="n">S</span> <span class="o">=</span> <span class="n">get_external_sources</span><span class="p">(</span><span class="n">myd</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="n">U_cc</span><span class="p">,</span>
-                                 <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="n">myg</span><span class="p">)</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span>
+                                 <span class="n">problem_source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">problem_source</span><span class="p">)</span>
 
         <span class="c1"># bring the sources back to averages -- we only care about</span>
         <span class="c1"># the interior (no ghost cells)</span>

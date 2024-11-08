@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible_rk.simulation &#8212; pyro 4.4.0.post2+g13eb252d documentation</title>
+    <title>pyro.compressible_rk.simulation &#8212; pyro 4.4.0.post3+g3cda63bc documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../_static/documentation_options.js?v=91a69522"></script>
+    <script src="../../../_static/documentation_options.js?v=717c53b0"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -458,7 +458,8 @@
         <span class="c1"># source terms -- note: this dt is the entire dt, not the</span>
         <span class="c1"># stage&#39;s dt</span>
         <span class="n">S</span> <span class="o">=</span> <span class="n">compressible</span><span class="o">.</span><span class="n">get_external_sources</span><span class="p">(</span><span class="n">myd</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="n">myd</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
-                                              <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="n">myg</span><span class="p">)</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span>
+                                              <span class="n">problem_source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">problem_source</span><span class="p">)</span>
 
         <span class="n">k</span> <span class="o">=</span> <span class="n">myg</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">(</span><span class="n">nvar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">)</span>
 

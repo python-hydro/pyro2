@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible.simulation &#8212; pyro 4.4.0.post2+g13eb252d documentation</title>
+    <title>pyro.compressible.simulation &#8212; pyro 4.4.0.post3+g3cda63bc documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../_static/documentation_options.js?v=91a69522"></script>
+    <script src="../../../_static/documentation_options.js?v=717c53b0"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -536,7 +536,7 @@
 
 <div class="viewcode-block" id="get_external_sources">
 <a class="viewcode-back" href="../../../pyro.compressible.html#pyro.compressible.simulation.get_external_sources">[docs]</a>
-<span class="k">def</span> <span class="nf">get_external_sources</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">U_old</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_external_sources</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">U_old</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">problem_source</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;compute the external sources, including gravity&quot;&quot;&quot;</span>
 
     <span class="n">_</span> <span class="o">=</span> <span class="n">t</span>  <span class="c1"># maybe unused</span>
@@ -586,6 +586,11 @@
             <span class="n">ymom_new</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">S</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">]</span> <span class="o">-</span> <span class="n">S_old_ymom</span><span class="p">)</span>
 
             <span class="n">S</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">]</span> <span class="o">=</span> <span class="n">ymom_new</span> <span class="o">*</span> <span class="n">grav</span>
+
+    <span class="c1"># now add the heating</span>
+    <span class="k">if</span> <span class="n">problem_source</span><span class="p">:</span>
+        <span class="n">S_heating</span> <span class="o">=</span> <span class="n">problem_source</span><span class="p">(</span><span class="n">myg</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">rp</span><span class="p">)</span>
+        <span class="n">S</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">+=</span> <span class="n">S_heating</span>
 
     <span class="k">return</span> <span class="n">S</span></div>
 
@@ -730,7 +735,8 @@
         <span class="c1"># Only gravitional source for Cartesian2d</span>
         <span class="n">U_xl</span><span class="p">,</span> <span class="n">U_xr</span><span class="p">,</span> <span class="n">U_yl</span><span class="p">,</span> <span class="n">U_yr</span> <span class="o">=</span> <span class="n">flx</span><span class="o">.</span><span class="n">apply_source_terms</span><span class="p">(</span><span class="n">U_xl</span><span class="p">,</span> <span class="n">U_xr</span><span class="p">,</span> <span class="n">U_yl</span><span class="p">,</span> <span class="n">U_yr</span><span class="p">,</span>
                                                         <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">aux_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span>
-                                                        <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
+                                                        <span class="n">problem_source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">problem_source</span><span class="p">)</span>
 
         <span class="c1"># Apply transverse corrections.</span>
         <span class="n">U_xl</span><span class="p">,</span> <span class="n">U_xr</span><span class="p">,</span> <span class="n">U_yl</span><span class="p">,</span> <span class="n">U_yr</span> <span class="o">=</span> <span class="n">flx</span><span class="o">.</span><span class="n">apply_transverse_flux</span><span class="p">(</span><span class="n">U_xl</span><span class="p">,</span> <span class="n">U_xr</span><span class="p">,</span> <span class="n">U_yl</span><span class="p">,</span> <span class="n">U_yr</span><span class="p">,</span>
@@ -817,7 +823,8 @@
         <span class="c1"># * correct: U^{n+1} = U^{n+1,*} + dt/2 (S^{n+1} - S^n)</span>
 
         <span class="n">S_old</span> <span class="o">=</span> <span class="n">get_external_sources</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="n">U_old</span><span class="p">,</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="n">myg</span><span class="p">)</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span>
+                                     <span class="n">problem_source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">problem_source</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">):</span>
             <span class="n">var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var_by_index</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
@@ -826,7 +833,8 @@
         <span class="c1"># now get the new time source</span>
 
         <span class="n">S_new</span> <span class="o">=</span> <span class="n">get_external_sources</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="n">U_old</span><span class="o">=</span><span class="n">U_old</span><span class="p">)</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">,</span> <span class="n">myg</span><span class="p">,</span> <span class="n">U_old</span><span class="o">=</span><span class="n">U_old</span><span class="p">,</span>
+                                     <span class="n">problem_source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">problem_source</span><span class="p">)</span>
 
         <span class="c1"># and correct</span>
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">):</span>
