@@ -62,11 +62,11 @@ def init_data(my_data, rp):
         elif dens[0, j] <= dens_cutoff + 1.e-30:
             p[:, j] = p[:, j-1]
         else:
-            p[:, j] = p[:, j-1] + 0.5*myg.dy*(dens[:, j] + dens[:, j-1])*grav
+            #p[:, j] = p[:, j-1] + 0.5*myg.dy*(dens[:, j] + dens[:, j-1])*grav
+            p[:, j] = pres_base * (dens[:, j] / dens_base)**gamma
 
-    # set the energy (P = cs2*dens)
-    ener[:, :] = p[:, :]/(gamma - 1.0) + \
-                0.5*(xmom[:, :]**2 + ymom[:, :]**2)/dens[:, :]
+    # set the energy (P = cs2*dens) -- assuming zero velocity
+    ener[:, :] = p[:, :]/(gamma - 1.0)
 
     # pairs of random numbers between [-1, 1]
     vel_pert = 2.0 * np.random.random_sample((myg.qx, myg.qy, 2)) - 1
