@@ -12,24 +12,22 @@ n_out = 100
 
 [mesh]
 nx = 128
-ny = 256
+ny = 384
 xmax = 4.0
-ymax = 8.0
+ymax = 12.0
 
 xlboundary = outflow
 xrboundary = outflow
 
 ylboundary = reflect
-yrboundary = outflow
+yrboundary = ambient
 
 
 [convection]
 scale_height = 2.0
 dens_base = 1000.0
+dens_cutoff = 1.e-3
 
-x_pert = 2.0
-y_pert = 2.0
-r_pert = 0.25
 e_rate = 0.5
 
 

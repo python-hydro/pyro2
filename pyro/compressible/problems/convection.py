@@ -65,6 +65,12 @@ def init_data(my_data, rp):
             #p[:, j] = p[:, j-1] + 0.5*myg.dy*(dens[:, j] + dens[:, j-1])*grav
             p[:, j] = pres_base * (dens[:, j] / dens_base)**gamma
 
+    # set the ambient conditions
+    my_data.set_aux("ambient_rho", dens_cutoff)
+    my_data.set_aux("ambient_u", 0.0)
+    my_data.set_aux("ambient_v", 0.0)
+    my_data.set_aux("ambient_p", p.v().min())
+
     # set the energy (P = cs2*dens) -- assuming zero velocity
     ener[:, :] = p[:, :]/(gamma - 1.0)
 
