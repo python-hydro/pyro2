@@ -69,6 +69,7 @@ class Pyro:
 
         self.problem_name = None
         self.problem_func = None
+        self.problem_source = None
         self.problem_params = None
         self.problem_finalize = None
 
@@ -124,6 +125,7 @@ class Pyro:
             self.problem_name = problem_name
             self.problem_func, self.problem_params = self.custom_problems[problem_name]
             self.problem_finalize = None
+            self.problem_source = None
 
         else:
             problem = importlib.import_module("pyro.{}.problems.{}".format(self.solver_name, problem_name))
@@ -131,6 +133,10 @@ class Pyro:
             self.problem_func = problem.init_data
             self.problem_params = problem.PROBLEM_PARAMS
             self.problem_finalize = problem.finalize
+            try:
+                self.problem_source = problem.source_terms
+            except AttributeError:
+                self.problem_source = None
 
             if inputs_file is None:
                 inputs_file = problem.DEFAULT_INPUTS
@@ -175,7 +181,9 @@ class Pyro:
         # are running
         self.sim = self.solver.Simulation(
             self.solver_name, self.problem_name, self.problem_func, self.rp,
-            problem_finalize_func=self.problem_finalize, timers=self.tc)
+            problem_finalize_func=self.problem_finalize,
+            problem_source_func=self.problem_source,
+            timers=self.tc)
 
         self.sim.initialize()
         self.sim.preevolve()

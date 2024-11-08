@@ -243,7 +243,8 @@ def interface_states(my_data, rp, ivars, tc, dt):
 
 
 def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
-                       my_data, my_aux, rp, ivars, tc, dt):
+                       my_data, my_aux, rp, ivars, tc, dt, *,
+                       problem_source=None):
     """
     This function applies source terms including external (gravity),
     geometric terms, and pressure terms to the left and right
@@ -270,6 +271,8 @@ def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
         The timers we are using to profile
     dt : float
         The timestep we are advancing through.
+    problem_source : function (optional)
+        A problem-specific source function to call
 
     Returns
     -------
@@ -290,7 +293,8 @@ def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
     ymom_src = my_aux.get_var("ymom_src")
     E_src = my_aux.get_var("E_src")
 
-    U_src = comp.get_external_sources(my_data.t, dt, my_data.data, ivars, rp, myg)
+    U_src = comp.get_external_sources(my_data.t, dt, my_data.data, ivars, rp, myg,
+                                      problem_source=problem_source)
 
     dens_src[:, :] = U_src[:, :, ivars.idens]
     xmom_src[:, :] = U_src[:, :, ivars.ixmom]
