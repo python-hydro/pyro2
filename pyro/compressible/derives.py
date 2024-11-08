@@ -24,6 +24,13 @@ def derive_primitives(myd, varnames):
     gamma = myd.get_aux("gamma")
     p = eos.pres(gamma, dens, e)
 
+    myg = myd.grid
+    vort = myg.scratch_array()
+
+    vort.v()[:, :] = \
+        0.5*(v.ip(1) - v.ip(-1))/myg.dx - \
+        0.5*(u.jp(1) - u.jp(-1))/myg.dy
+
     if isinstance(varnames, str):
         wanted = [varnames]
     else:
@@ -49,6 +56,9 @@ def derive_primitives(myd, varnames):
 
         elif var == "soundspeed":
             derived_vars.append(np.sqrt(gamma*p/dens))
+
+        elif var == "vorticity":
+            derived_vars.append(vort)
 
     if len(derived_vars) > 1:
         return derived_vars
