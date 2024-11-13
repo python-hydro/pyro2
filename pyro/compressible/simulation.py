@@ -176,6 +176,7 @@ class Simulation(NullSimulation):
 
         # define solver specific boundary condition routines
         bnd.define_bc("hse", BC.user, is_solid=False)
+        bnd.define_bc("ambient", BC.user, is_solid=False)
         bnd.define_bc("ramp", BC.user, is_solid=False)  # for double mach reflection problem
 
         bc, bc_xodd, bc_yodd = bc_setup(self.rp)
@@ -489,3 +490,4 @@ class Simulation(NullSimulation):
 
         # the value here is the value of "is_solid"
         gb.create_dataset("hse", data=False)
+        gb.create_dataset("ambient", data=False)
