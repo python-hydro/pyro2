@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible.simulation &#8212; pyro 4.4.0.post4+gb0dc9c32 documentation</title>
+    <title>pyro.compressible.simulation &#8212; pyro 4.4.0.post5+gdcbf3fbf documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../_static/documentation_options.js?v=2914dbd4"></script>
+    <script src="../../../_static/documentation_options.js?v=149ddbc7"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -626,6 +626,7 @@
 
         <span class="c1"># define solver specific boundary condition routines</span>
         <span class="n">bnd</span><span class="o">.</span><span class="n">define_bc</span><span class="p">(</span><span class="s2">&quot;hse&quot;</span><span class="p">,</span> <span class="n">BC</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">is_solid</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">bnd</span><span class="o">.</span><span class="n">define_bc</span><span class="p">(</span><span class="s2">&quot;ambient&quot;</span><span class="p">,</span> <span class="n">BC</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">is_solid</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">bnd</span><span class="o">.</span><span class="n">define_bc</span><span class="p">(</span><span class="s2">&quot;ramp&quot;</span><span class="p">,</span> <span class="n">BC</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">is_solid</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># for double mach reflection problem</span>
 
         <span class="n">bc</span><span class="p">,</span> <span class="n">bc_xodd</span><span class="p">,</span> <span class="n">bc_yodd</span> <span class="o">=</span> <span class="n">bc_setup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="p">)</span>
@@ -950,7 +951,8 @@
         <span class="n">gb</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;BC&quot;</span><span class="p">)</span>
 
         <span class="c1"># the value here is the value of &quot;is_solid&quot;</span>
-        <span class="n">gb</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;hse&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+        <span class="n">gb</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;hse&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">gb</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;ambient&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

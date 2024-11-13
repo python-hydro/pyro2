@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible.BC &#8212; pyro 4.4.0.post4+gb0dc9c32 documentation</title>
+    <title>pyro.compressible.BC &#8212; pyro 4.4.0.post5+gdcbf3fbf documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../_static/documentation_options.js?v=2914dbd4"></script>
+    <script src="../../../_static/documentation_options.js?v=149ddbc7"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -576,6 +576,45 @@
 
         <span class="k">else</span><span class="p">:</span>
             <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;error: hse BC not supported for xlb or xrb&quot;</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">bc_name</span> <span class="o">==</span> <span class="s2">&quot;ambient&quot;</span><span class="p">:</span>
+
+        <span class="c1"># we&#39;ll assume that the problem setup defines these</span>
+        <span class="c1"># they will not be available for source terms</span>
+        <span class="n">ambient_rho</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_aux</span><span class="p">(</span><span class="s2">&quot;ambient_rho&quot;</span><span class="p">)</span>
+        <span class="n">ambient_u</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_aux</span><span class="p">(</span><span class="s2">&quot;ambient_u&quot;</span><span class="p">)</span>
+        <span class="n">ambient_v</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_aux</span><span class="p">(</span><span class="s2">&quot;ambient_v&quot;</span><span class="p">)</span>
+        <span class="n">ambient_p</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_aux</span><span class="p">(</span><span class="s2">&quot;ambient_p&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">bc_edge</span> <span class="o">==</span> <span class="s2">&quot;yrb&quot;</span><span class="p">:</span>
+
+            <span class="c1"># upper y boundary</span>
+
+            <span class="c1"># by default, use a zero gradient</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">v</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[:,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="p">]</span>
+
+            <span class="c1"># overwrite with ambient conditions</span>
+            <span class="k">if</span> <span class="n">variable</span> <span class="o">==</span> <span class="s2">&quot;density&quot;</span><span class="p">:</span>
+                <span class="n">v</span><span class="p">[:,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ambient_rho</span>
+
+            <span class="k">elif</span> <span class="n">variable</span> <span class="o">==</span> <span class="s2">&quot;x-momentum&quot;</span><span class="p">:</span>
+                <span class="n">rhou</span> <span class="o">=</span> <span class="n">ambient_rho</span> <span class="o">*</span> <span class="n">ambient_u</span>
+                <span class="n">v</span><span class="p">[:,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rhou</span>
+
+            <span class="k">elif</span> <span class="n">variable</span> <span class="o">==</span> <span class="s2">&quot;y-momentum&quot;</span><span class="p">:</span>
+                <span class="n">rhov</span> <span class="o">=</span> <span class="n">ambient_rho</span> <span class="o">*</span> <span class="n">ambient_v</span>
+                <span class="n">v</span><span class="p">[:,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rhov</span>
+
+            <span class="k">elif</span> <span class="n">variable</span> <span class="o">==</span> <span class="s2">&quot;energy&quot;</span><span class="p">:</span>
+                <span class="n">gamma</span> <span class="o">=</span> <span class="n">ccdata</span><span class="o">.</span><span class="n">get_aux</span><span class="p">(</span><span class="s2">&quot;gamma&quot;</span><span class="p">)</span>
+                <span class="n">ke</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">ambient_rho</span> <span class="o">*</span> <span class="p">(</span><span class="n">ambient_u</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ambient_v</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">rhoE</span> <span class="o">=</span> <span class="n">ambient_p</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">+</span> <span class="n">ke</span>
+                <span class="n">v</span><span class="p">[:,</span> <span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">myg</span><span class="o">.</span><span class="n">jhi</span><span class="o">+</span><span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rhoE</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s2">&quot;error: ambient BC not supported for xlb, xrb, or ylb&quot;</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">bc_name</span> <span class="o">==</span> <span class="s2">&quot;ramp&quot;</span><span class="p">:</span>
         <span class="c1"># Boundary conditions for double Mach reflection problem</span>

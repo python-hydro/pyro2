@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Compressible hydrodynamics &#8212; pyro 4.4.0.post4+gb0dc9c32 documentation</title>
+    <title>Compressible hydrodynamics &#8212; pyro 4.4.0.post5+gdcbf3fbf documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="_static/documentation_options.js?v=2914dbd4"></script>
+    <script src="_static/documentation_options.js?v=149ddbc7"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -519,6 +519,7 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acoustic-pulse"><code class="docutils literal notranslate"><span class="pre">acoustic_pulse</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#advect"><code class="docutils literal notranslate"><span class="pre">advect</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bubble"><code class="docutils literal notranslate"><span class="pre">bubble</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#convection"><code class="docutils literal notranslate"><span class="pre">convection</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gresho"><code class="docutils literal notranslate"><span class="pre">gresho</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#heating"><code class="docutils literal notranslate"><span class="pre">heating</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hse"><code class="docutils literal notranslate"><span class="pre">hse</span></code></a></li>
@@ -768,6 +769,40 @@ parameters:</p>
 <td><p>5.0</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bubble.dens_cutoff</span></code></p></td>
+<td><p>0.01</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="convection">
+<h4><code class="docutils literal notranslate"><span class="pre">convection</span></code><a class="headerlink" href="#convection" title="Link to this heading">#</a></h4>
+<p>A heat source in a layer at some height above the bottom will drive
+convection in an adiabatically stratified atmosphere.
+parameters:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">convection.dens_base</span></code></p></td>
+<td><p>10.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">convection.scale_height</span></code></p></td>
+<td><p>4.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">convection.y_height</span></code></p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">convection.thickness</span></code></p></td>
+<td><p>0.25</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">convection.e_rate</span></code></p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">convection.dens_cutoff</span></code></p></td>
 <td><p>0.01</p></td>
 </tr>
 </tbody>
@@ -1637,6 +1672,7 @@ for this.  Research the Roe Riemann solver and implement it in pyro.</p></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acoustic-pulse"><code class="docutils literal notranslate"><span class="pre">acoustic_pulse</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#advect"><code class="docutils literal notranslate"><span class="pre">advect</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bubble"><code class="docutils literal notranslate"><span class="pre">bubble</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#convection"><code class="docutils literal notranslate"><span class="pre">convection</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gresho"><code class="docutils literal notranslate"><span class="pre">gresho</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#heating"><code class="docutils literal notranslate"><span class="pre">heating</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hse"><code class="docutils literal notranslate"><span class="pre">hse</span></code></a></li>
