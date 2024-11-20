@@ -443,7 +443,8 @@ def apply_transverse_flux(U_xl, U_xr, U_yl, U_yr,
     tm_transverse.begin()
 
     b = (2, 1)
-    hdtV = 0.5*dt / myg.V
+    hdt = 0.5*dt
+    hdtV = hdt / myg.V
 
     for n in range(ivars.nvar):
 
@@ -474,17 +475,17 @@ def apply_transverse_flux(U_xl, U_xr, U_yl, U_yr,
 
     if myg.coord_type == 1:
 
-        U_xl.v(buf=b, n=ivars.iymom)[:, :] += - (qy.ip_jp(-1, 1, buf=b, n=ivars.ip) -
-                                                 qy.ip(-1, buf=b, n=ivars.ip)) / myg.Ly.v(buf=b)
+        U_xl.v(buf=b, n=ivars.iymom)[:, :] += - hdt * (qy.ip_jp(-1, 1, buf=b, n=ivars.ip) -
+                                                       qy.ip(-1, buf=b, n=ivars.ip)) / myg.Ly.v(buf=b)
 
-        U_xr.v(buf=b, n=ivars.iymom)[:, :] += - (qy.jp(1, buf=b, n=ivars.ip) -
-                                                 qy.v(buf=b, n=ivars.ip)) / myg.Ly.v(buf=b)
+        U_xr.v(buf=b, n=ivars.iymom)[:, :] += - hdt * (qy.jp(1, buf=b, n=ivars.ip) -
+                                                       qy.v(buf=b, n=ivars.ip)) / myg.Ly.v(buf=b)
 
-        U_yl.v(buf=b, n=ivars.ixmom)[:, :] += - (qx.ip_jp(1, -1, buf=b, n=ivars.ip) -
-                                                 qx.jp(-1, buf=b, n=ivars.ip)) / myg.Lx.v(buf=b)
+        U_yl.v(buf=b, n=ivars.ixmom)[:, :] += - hdt * (qx.ip_jp(1, -1, buf=b, n=ivars.ip) -
+                                                       qx.jp(-1, buf=b, n=ivars.ip)) / myg.Lx.v(buf=b)
 
-        U_yr.v(buf=b, n=ivars.ixmom)[:, :] += - (qx.ip(1, buf=b, n=ivars.ip) -
-                                                 qx.v(buf=b, n=ivars.ip)) / myg.Lx.v(buf=b)
+        U_yr.v(buf=b, n=ivars.ixmom)[:, :] += - hdt * (qx.ip(1, buf=b, n=ivars.ip) -
+                                                       qx.v(buf=b, n=ivars.ip)) / myg.Lx.v(buf=b)
 
     tm_transverse.end()
 
