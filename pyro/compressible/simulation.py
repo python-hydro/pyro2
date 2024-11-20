@@ -59,7 +59,7 @@ def cons_to_prim(U, gamma, ivars, myg):
                                   out=np.zeros_like(U[:, :, ivars.iymom]),
                                   where=(U[:, :, ivars.idens] != 0.0))
 
-    e = np.divide(U[:, :, ivars.iener] - 0.5*q[:, :, ivars.irho]*
+    e = np.divide(U[:, :, ivars.iener] - 0.5 * q[:, :, ivars.irho] *
                   (q[:, :, ivars.iu]**2 + q[:, :, ivars.iv]**2),
                   q[:, :, ivars.irho],
                   out=np.zeros_like(U[:, :, ivars.iener]),
