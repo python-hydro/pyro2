@@ -322,16 +322,16 @@ def artificial_viscosity(ng, dx, dy, Lx, Ly,
                 # Finite difference to get ux and vy
                 ux = (ur * rr * rr - ul * rl * rl) / (rc * rc * dx)
 
+                # cell-centered sin(theta) of top, bot cell and node-centered sin(theta)
+                sint = np.sin((j + 0.5 - ng) * dy + ymin)
+                sinb = np.sin((j - 0.5 - ng) * dy + ymin)
+                sinc = np.sin((j - ng) * dy + ymin)
+
                 # if sinc = 0, i.e. theta= {0, pi}, then vy goes inf
                 # but due to phi-symmetry, numerator cancel, so zero.
                 if sinc == 0.0:
                     vy = 0.0
                 else:
-                    # cell-centered sin(theta) of top, bot cell and node-centered sin(theta)
-                    sint = np.sin((j + 0.5 - ng) * dy + ymin)
-                    sinb = np.sin((j - 0.5 - ng) * dy + ymin)
-                    sinc = np.sin((j - ng) * dy + ymin)
-
                     # Find the average top and bottom v velocity
                     vt = 0.5 * (v[i, j] + v[i - 1, j])
                     vb = 0.5 * (v[i, j - 1] + v[i - 1, j - 1])
