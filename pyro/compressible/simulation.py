@@ -52,12 +52,18 @@ def cons_to_prim(U, gamma, ivars, myg):
     q = myg.scratch_array(nvar=ivars.nq)
 
     q[:, :, ivars.irho] = U[:, :, ivars.idens]
-    q[:, :, ivars.iu] = U[:, :, ivars.ixmom]/U[:, :, ivars.idens]
-    q[:, :, ivars.iv] = U[:, :, ivars.iymom]/U[:, :, ivars.idens]
+    q[:, :, ivars.iu] = np.divide(U[:, :, ivars.ixmom], U[:, :, ivars.idens],
+                                  out=np.zeros_like(U[:, :, ivars.ixmom]),
+                                  where=(U[:, :, ivars.idens] != 0.0))
+    q[:, :, ivars.iv] = np.divide(U[:, :, ivars.iymom], U[:, :, ivars.idens],
+                                  out=np.zeros_like(U[:, :, ivars.iymom]),
+                                  where=(U[:, :, ivars.idens] != 0.0))
 
-    e = (U[:, :, ivars.iener] -
-         0.5*q[:, :, ivars.irho]*(q[:, :, ivars.iu]**2 +
-                                  q[:, :, ivars.iv]**2))/q[:, :, ivars.irho]
+    e = np.divide(U[:, :, ivars.iener] - 0.5*q[:, :, ivars.irho]*
+                  (q[:, :, ivars.iu]**2 + q[:, :, ivars.iv]**2),
+                  q[:, :, ivars.irho],
+                  out=np.zeros_like(U[:, :, ivars.iener]),
+                  where=(U[:, :, ivars.idens] != 0.0))
 
     q[:, :, ivars.ip] = eos.pres(gamma, q[:, :, ivars.irho], e)
 
