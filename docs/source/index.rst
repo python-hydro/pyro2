@@ -61,7 +61,6 @@ new ideas.
    compressible_basics
    diffusion_basics
    incompressible_basics
-   incompressible_viscous_basics
    lowmach_basics
    swe_basics
    particles_basics

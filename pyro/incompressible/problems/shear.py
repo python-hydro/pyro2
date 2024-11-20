@@ -2,15 +2,18 @@ r"""
 Initialize the doubly periodic shear layer (see, for example, Martin
 and Colella, 2000, JCP, 163, 271).  This is run in a unit square
 domain, with periodic boundary conditions on all sides.  Here, the
-initial velocity is::
+initial velocity is:
 
-                 / tanh(rho_s (y-0.25))   if y <= 0.5
-   u(x,y,t=0) = <
-                 \ tanh(rho_s (0.75-y))   if y > 0.5
+.. math::
 
-   v(x,y,t=0) = delta_s sin(2 pi x)
+   u(x,y,t=0) = \begin{cases}
+                \tanh(\rho_s (y - 1/4)) &  \mbox{if}~ y \le 1/2 \\
+                \tanh(\rho_s (3/4 - y)) &  \mbox{if}~ y > 1/2
+                \end{cases}
 
+.. math::
 
+   v(x,y,t=0) = \delta_s \sin(2 \pi x)
 """
 
 

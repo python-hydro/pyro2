@@ -14,27 +14,29 @@ discussed in the Colella paper).
 
 * delta, z0, z1: flattening parameters (we use Colella 1990 defaults)
 
-The grid indices look like::
+The grid indices look like
 
-   j+3/2--+---------+---------+---------+
-          |         |         |         |
-     j+1 _|         |         |         |
-          |         |         |         |
-          |         |         |         |
-   j+1/2--+---------XXXXXXXXXXX---------+
-          |         X         X         |
-       j _|         X         X         |
-          |         X         X         |
-          |         X         X         |
-   j-1/2--+---------XXXXXXXXXXX---------+
-          |         |         |         |
-     j-1 _|         |         |         |
-          |         |         |         |
-          |         |         |         |
-   j-3/2--+---------+---------+---------+
-          |    |    |    |    |    |    |
-              i-1        i        i+1
-        i-3/2     i-1/2     i+1/2     i+3/2
+::
+
+       j+3/2--+---------+---------+---------+
+              |         |         |         |
+         j+1 _|         |         |         |
+              |         |         |         |
+              |         |         |         |
+       j+1/2--+---------XXXXXXXXXXX---------+
+              |         X         X         |
+           j _|         X         X         |
+              |         X         X         |
+              |         X         X         |
+       j-1/2--+---------XXXXXXXXXXX---------+
+              |         |         |         |
+         j-1 _|         |         |         |
+              |         |         |         |
+              |         |         |         |
+       j-3/2--+---------+---------+---------+
+              |    |    |    |    |    |    |
+                  i-1        i        i+1
+            i-3/2     i-1/2     i+1/2     i+3/2
 
 We wish to solve
 
@@ -241,7 +243,8 @@ def interface_states(my_data, rp, ivars, tc, dt):
 
 
 def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
-                       my_data, my_aux, rp, ivars, tc, dt):
+                       my_data, my_aux, rp, ivars, tc, dt, *,
+                       problem_source=None):
     """
     This function applies source terms including external (gravity),
     geometric terms, and pressure terms to the left and right
@@ -268,6 +271,8 @@ def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
         The timers we are using to profile
     dt : float
         The timestep we are advancing through.
+    problem_source : function (optional)
+        A problem-specific source function to call
 
     Returns
     -------
@@ -281,9 +286,6 @@ def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
 
     myg = my_data.grid
 
-    dens = my_data.get_var("density")
-    xmom = my_data.get_var("x-momentum")
-    ymom = my_data.get_var("y-momentum")
     pres = my_data.get_var("pressure")
 
     dens_src = my_aux.get_var("dens_src")
@@ -291,25 +293,18 @@ def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
     ymom_src = my_aux.get_var("ymom_src")
     E_src = my_aux.get_var("E_src")
 
-    grav = rp.get_param("compressible.grav")
+    U_src = comp.get_external_sources(my_data.t, dt, my_data.data, ivars, rp, myg,
+                                      problem_source=problem_source)
 
-    # Calculate external source (gravity), geometric, and pressure terms
+    dens_src[:, :] = U_src[:, :, ivars.idens]
+    xmom_src[:, :] = U_src[:, :, ivars.ixmom]
+    ymom_src[:, :] = U_src[:, :, ivars.iymom]
+    E_src[:, :] = U_src[:, :, ivars.iener]
+
+    # apply non-conservative pressure gradient
     if myg.coord_type == 1:
-        # assume gravity points in r-direction in spherical.
-        dens_src.v()[:, :] = 0.0
-        xmom_src.v()[:, :] = dens.v()*grav + \
-            ymom.v()**2 / (dens.v()*myg.x2d.v()) - \
-            (pres.ip(1) - pres.v()) / myg.Lx.v()
-        ymom_src.v()[:, :] = -(pres.jp(1) - pres.v()) / myg.Ly.v() - \
-            xmom.v()*ymom.v() / (dens.v()*myg.x2d.v())
-        E_src.v()[:, :] = xmom.v()*grav
-
-    else:
-        # assume gravity points in y-direction in cartesian
-        dens_src.v()[:, :] = 0.0
-        xmom_src.v()[:, :] = 0.0
-        ymom_src.v()[:, :] = dens.v()*grav
-        E_src.v()[:, :] = ymom.v()*grav
+        xmom_src.v()[:, :] += -(pres.ip(1) - pres.v()) / myg.Lx.v()
+        ymom_src.v()[:, :] += -(pres.jp(1) - pres.v()) / myg.Ly.v()
 
     my_aux.fill_BC("dens_src")
     my_aux.fill_BC("xmom_src")
@@ -354,38 +349,39 @@ def apply_transverse_flux(U_xl, U_xr, U_yl, U_yr,
     The states that we represent by indices i,j are shown below
     (1,2,3,4):
 
+    ::
 
-      j+3/2--+----------+----------+----------+
-             |          |          |          |
-             |          |          |          |
-        j+1 -+          |          |          |
-             |          |          |          |
-             |          |          |          |    1: U_xl[i,j,:] = U
-      j+1/2--+----------XXXXXXXXXXXX----------+                      i-1/2,j,L
-             |          X          X          |
-             |          X          X          |
-          j -+        1 X 2        X          |    2: U_xr[i,j,:] = U
-             |          X          X          |                      i-1/2,j,R
-             |          X    4     X          |
-      j-1/2--+----------XXXXXXXXXXXX----------+
-             |          |    3     |          |    3: U_yl[i,j,:] = U
-             |          |          |          |                      i,j-1/2,L
-        j-1 -+          |          |          |
-             |          |          |          |
-             |          |          |          |    4: U_yr[i,j,:] = U
-      j-3/2--+----------+----------+----------+                      i,j-1/2,R
-             |    |     |    |     |    |     |
-                 i-1         i         i+1
-           i-3/2      i-1/2      i+1/2      i+3/2
+        j+3/2--+----------+----------+----------+
+               |          |          |          |
+               |          |          |          |
+          j+1 -+          |          |          |
+               |          |          |          |
+               |          |          |          |    1: U_xl[i,j,:] = U
+        j+1/2--+----------XXXXXXXXXXXX----------+                      i-1/2,j,L
+               |          X          X          |
+               |          X          X          |
+            j -+        1 X 2        X          |    2: U_xr[i,j,:] = U
+               |          X          X          |                      i-1/2,j,R
+               |          X    4     X          |
+        j-1/2--+----------XXXXXXXXXXXX----------+
+               |          |    3     |          |    3: U_yl[i,j,:] = U
+               |          |          |          |                      i,j-1/2,L
+          j-1 -+          |          |          |
+               |          |          |          |
+               |          |          |          |    4: U_yr[i,j,:] = U
+        j-3/2--+----------+----------+----------+                      i,j-1/2,R
+               |    |     |    |     |    |     |
+                   i-1         i         i+1
+             i-3/2      i-1/2      i+1/2      i+3/2
 
 
-    remember that the fluxes are stored on the left edge, so
+    remember that the fluxes are stored on the left edge, so::
 
-    F_x[i,j,:] = F_x
-                    i-1/2, j
+        F_x[i,j,:] = F_x
+                        i-1/2, j
 
-    F_y[i,j,:] = F_y
-                    i, j-1/2
+        F_y[i,j,:] = F_y
+                        i, j-1/2
 
     Parameters
     ----------

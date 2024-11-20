@@ -1,3 +1,5 @@
+"""The classic Sedov problem."""
+
 import math
 
 import numpy as np

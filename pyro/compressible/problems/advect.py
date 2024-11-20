@@ -1,3 +1,10 @@
+"""A simple advection test.  A density perturbation is set with a
+constant pressure in the domain and a velocity field is set to advect
+the profile across the domain.  This is useful for testing
+convergence.
+
+"""
+
 import numpy as np
 
 from pyro.util import msg

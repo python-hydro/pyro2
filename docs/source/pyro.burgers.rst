@@ -1,5 +1,5 @@
 pyro.burgers package
-======================
+====================
 
 .. automodule:: pyro.burgers
    :members:
@@ -18,7 +18,7 @@ Submodules
 ----------
 
 pyro.burgers.burgers\_interface module
----------------------------------------
+--------------------------------------
 
 .. automodule:: pyro.burgers.burgers_interface
    :members:
@@ -26,7 +26,7 @@ pyro.burgers.burgers\_interface module
    :show-inheritance:
 
 pyro.burgers.simulation module
---------------------------------
+------------------------------
 
 .. automodule:: pyro.burgers.simulation
    :members:

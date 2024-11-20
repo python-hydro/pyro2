@@ -289,14 +289,14 @@ class RuntimeParameters:
         # find all the sections
         secs = {q for (q, _) in [k.split(".") for k in all_keys]}
 
-        heading = "  +=" + 32*"=" + "=+=" + 14*"=" + "=+=" + 50*"=" + "=+" + "\n"
-        separator = "  +-" + 32*"-" + "-+-" + 14*"-" + "-+-" + 50*"-" + "-+" + "\n"
-        entry = "  | {:32} | {:14} | {:50} |\n"
+        heading = "  +=" + 36*"=" + "=+=" + 16*"=" + "=+=" + 50*"=" + "=+" + "\n"
+        separator = "  +-" + 36*"-" + "-+-" + 16*"-" + "-+-" + 50*"-" + "-+" + "\n"
+        entry = "  | {:36} | {:16} | {:50} |\n"
 
         for sec in sorted(secs):
             keys = [q for q in all_keys if q.startswith(f"{sec}.")]
 
-            head = f"* section: [{sec.strip()}]"
+            head = f"* section: ``[{sec.strip()}]``"
             f.write(f"{head}\n\n")
             #f.write(len(head)*"^"+"\n\n")
 
@@ -310,7 +310,7 @@ class RuntimeParameters:
                 if len(descr) == 0:
                     descr = [" "]
 
-                f.write(entry.format(option, f"``{str(self.params[key]).strip()}``",
+                f.write(entry.format("``"+option+"``", f"``{str(self.params[key]).strip()}``",
                                      descr[0]))
                 if len(descr) > 1:
                     for line in descr[1:]:

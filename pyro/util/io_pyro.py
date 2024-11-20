@@ -127,6 +127,14 @@ def read(filename):
 
             sim.read_extras(f)
 
+        # check if there are derived variables
+        try:
+            derives = importlib.import_module(f"pyro.{solver_name}.derives")
+            sim.cc_data.add_derived(derives.derive_primitives)
+
+        except ModuleNotFoundError:
+            pass
+
     if solver_name is not None:
         return sim
 

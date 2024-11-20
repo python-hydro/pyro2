@@ -49,6 +49,14 @@ pyro.compressible.interface module
    :undoc-members:
    :show-inheritance:
 
+pyro.compressible.riemann module
+--------------------------------
+
+.. automodule:: pyro.compressible.riemann
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pyro.compressible.simulation module
 -----------------------------------
 

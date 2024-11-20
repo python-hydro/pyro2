@@ -1,3 +1,9 @@
+"""Generate the pyro logo!  The word "pyro" is written in the center
+of the domain and perturbations are placed in the 4 corners to drive
+converging shocks inward to scramble the logo.
+
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 

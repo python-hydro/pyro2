@@ -1,3 +1,5 @@
+"""A setup intended for unit testing."""
+
 DEFAULT_INPUTS = None
 
 PROBLEM_PARAMS = {}

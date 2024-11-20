@@ -141,6 +141,45 @@ def user(bc_name, bc_edge, variable, ccdata):
         else:
             msg.fail("error: hse BC not supported for xlb or xrb")
 
+    elif bc_name == "ambient":
+
+        # we'll assume that the problem setup defines these
+        # they will not be available for source terms
+        ambient_rho = ccdata.get_aux("ambient_rho")
+        ambient_u = ccdata.get_aux("ambient_u")
+        ambient_v = ccdata.get_aux("ambient_v")
+        ambient_p = ccdata.get_aux("ambient_p")
+
+        if bc_edge == "yrb":
+
+            # upper y boundary
+
+            # by default, use a zero gradient
+            v = ccdata.get_var(variable)
+            for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
+                v[:, j] = v[:, myg.jhi]
+
+            # overwrite with ambient conditions
+            if variable == "density":
+                v[:, myg.jhi+1:myg.jhi+myg.ng+1] = ambient_rho
+
+            elif variable == "x-momentum":
+                rhou = ambient_rho * ambient_u
+                v[:, myg.jhi+1:myg.jhi+myg.ng+1] = rhou
+
+            elif variable == "y-momentum":
+                rhov = ambient_rho * ambient_v
+                v[:, myg.jhi+1:myg.jhi+myg.ng+1] = rhov
+
+            elif variable == "energy":
+                gamma = ccdata.get_aux("gamma")
+                ke = 0.5 * ambient_rho * (ambient_u**2 + ambient_v**2)
+                rhoE = ambient_p / (gamma - 1.0) + ke
+                v[:, myg.jhi+1:myg.jhi+myg.ng+1] = rhoE
+
+        else:
+            msg.fail("error: ambient BC not supported for xlb, xrb, or ylb")
+
     elif bc_name == "ramp":
         # Boundary conditions for double Mach reflection problem
 
