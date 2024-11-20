@@ -1131,6 +1131,8 @@ def consFlux(idir, coord_type, gamma,
     F = np.zeros_like(U_state)
 
     if U_state.ndim == 1:
+        u = 0.0
+        v = 0.0
         if U_state[idens] != 0.0:
             u = U_state[ixmom] / U_state[idens]
             v = U_state[iymom] / U_state[idens]
