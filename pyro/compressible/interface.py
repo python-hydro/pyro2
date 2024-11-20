@@ -310,27 +310,33 @@ def artificial_viscosity(ng, dx, dy, Lx, Ly,
 
             # For SphericalPolar:
             else:
-                # cell-centered r-coord of right, left cell and face-centered r
-                rr = (i + 1 - ng) * dx + xmin
-                rl = (i - ng) * dx + xmin
-                rc = 0.5 * (rr + rl)
-
-                # cell-centered sin(theta) of top, bot cell and face-centered
-                sint = np.sin((j + 1 - ng) * dy + ymin)
-                sinb = np.sin((j - ng) * dy + ymin)
-                sinc = np.sin((j + 0.5 - ng) * dy + ymin)
+                # cell-centered r-coord of right, left cell and node-centered r
+                rr = (i + 0.5 - ng) * dx + xmin
+                rl = (i - 0.5 - ng) * dx + xmin
+                rc = (i - ng) * dx + xmin
 
                 # Find the average right and left u velocity
                 ur = 0.5 * (u[i, j] + u[i, j - 1])
                 ul = 0.5 * (u[i - 1, j] + u[i - 1, j - 1])
 
-                # Find the average top and bottom v velocity
-                vt = 0.5 * (v[i, j] + v[i - 1, j])
-                vb = 0.5 * (v[i, j - 1] + v[i - 1, j - 1])
-
                 # Finite difference to get ux and vy
                 ux = (ur * rr * rr - ul * rl * rl) / (rc * rc * dx)
-                vy = (sint * vt - sinb * vb) / (rc * sinc * dy)
+
+                # cell-centered sin(theta) of top, bot cell and node-centered sin(theta)
+                sint = np.sin((j + 0.5 - ng) * dy + ymin)
+                sinb = np.sin((j - 0.5 - ng) * dy + ymin)
+                sinc = np.sin((j - ng) * dy + ymin)
+
+                # if sinc = 0, i.e. theta= {0, pi}, then vy goes inf
+                # but due to phi-symmetry, numerator cancel, so zero.
+                if sinc == 0.0:
+                    vy = 0.0
+                else:
+                    # Find the average top and bottom v velocity
+                    vt = 0.5 * (v[i, j] + v[i - 1, j])
+                    vb = 0.5 * (v[i, j - 1] + v[i - 1, j - 1])
+
+                    vy = (sint * vt - sinb * vb) / (rc * sinc * dy)
 
                 # Find div(U)_{i-1/2, j-1/2}
                 divU[i, j] = ux + vy
@@ -339,7 +345,10 @@ def artificial_viscosity(ng, dx, dy, Lx, Ly,
     for i in range(ilo, ihi):
         for j in range(jlo, jhi):
 
+            # div(U)_{i-1/2, j} = 0.5 (div(U)_{i-1/2, j-1/2} + div(U)_{i-1/2, j+1/2})
             divU_x = 0.5 * (divU[i, j] + divU[i, j + 1])
+
+            # div(U)_{i, j-1/2} = 0.5 (div(U)_{i-1/2, j-1/2} + div(U)_{i+1/2, j-1/2})
             divU_y = 0.5 * (divU[i, j] + divU[i + 1, j])
 
             avisco_x[i, j] = cvisc * max(-divU_x * Lx[i, j], 0.0)
