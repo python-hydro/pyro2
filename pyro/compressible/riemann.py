@@ -1130,8 +1130,21 @@ def consFlux(idir, coord_type, gamma,
 
     F = np.zeros_like(U_state)
 
-    u = U_state[..., ixmom] / U_state[..., idens]
-    v = U_state[..., iymom] / U_state[..., idens]
+    if U_state.ndim == 1:
+        u = 0.0
+        v = 0.0
+        if U_state[idens] != 0.0:
+            u = U_state[ixmom] / U_state[idens]
+            v = U_state[iymom] / U_state[idens]
+
+    else:
+        u = np.zeros_like(U_state[..., ixmom])
+        v = np.zeros_like(U_state[..., iymom])
+        for i in range(U_state.shape[0]):
+            for j in range(U_state.shape[1]):
+                if U_state[i, j, idens] != 0.0:
+                    u[i, j] = U_state[i, j, ixmom] / U_state[i, j, idens]
+                    v[i, j] = U_state[i, j, iymom] / U_state[i, j, idens]
 
     p = (U_state[..., iener] - 0.5 * U_state[..., idens] * (u * u + v * v)) * (gamma - 1.0)
 
