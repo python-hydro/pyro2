@@ -92,6 +92,12 @@ class TestCartesian2d:
     def test_Ay(self):
         assert np.all(self.g.Ay.v() == 0.25)
 
+    def test_dlogAx(self):
+        assert np.all(self.g.dlogAx.v() == 0.0)
+
+    def test_dlogAy(self):
+        assert np.all(self.g.dlogAy.v() == 0.0)
+
     def test_V(self):
         assert np.all(self.g.V.v() == 0.1 * 0.25)
 
@@ -134,6 +140,21 @@ class TestSphericalPolar:
                           np.sin(self.g.yr2d.v()) *
                           (self.g.xr2d.v()**2 - self.g.xl2d.v()**2))
         assert_array_equal(self.g.Ay.jp(1), area_y_r)
+
+    def test_dlogAx(self):
+        i = 4
+        r = self.g.xmin + (i + 0.5 - self.g.ng) * self.g.dx
+        dlogAx = 2.0 / r
+        assert (self.g.dlogAx[i,:] == dlogAx).all()
+
+    def test_dlogAy(self):
+        i = 4
+        j = 6
+        r = self.g.xmin + (i + 0.5 - self.g.ng) * self.g.dx
+        tan = np.tan(self.g.ymin + (j + 0.5 - self.g.ng) * self.g.dy)
+        dlogAy = 1.0 / (r * tan)
+
+        assert self.g.dlogAy[i,j] == dlogAy
 
     def test_V(self):
         volume = np.abs(-2.0 * np.pi / 3.0 *
