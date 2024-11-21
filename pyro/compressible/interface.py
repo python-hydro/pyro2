@@ -212,12 +212,11 @@ def states(idir, ng, dx, dloga, dt,
                     q_l[i, j + 1, m] = q_l[i, j + 1, m] + sum_l
                     q_r[i, j,  m] = q_r[i, j,  m] + sum_r
 
-
             # Geometric Source term from converting conserved-variable to primitive
             # It's only there for non Cartesian coord.
 
             if idir == 1:
-                rho_source = -0.5 * dt * dloga[i,j] * q[irho] * q[iu]
+                rho_source = -0.5 * dt * dloga[i, j] * q[irho] * q[iu]
 
                 q_l[i + 1, j, irho] += rho_source
                 q_r[i, j, irho] += rho_source
@@ -226,7 +225,7 @@ def states(idir, ng, dx, dloga, dt,
                 q_r[i, j, ip] += rho_source * cs * cs
 
             else:
-                rho_source = -0.5 * dt * dloga[i,j] * q[irho] * q[iv]
+                rho_source = -0.5 * dt * dloga[i, j] * q[irho] * q[iv]
 
                 q_l[i, j + 1, irho] += rho_source
                 q_r[i, j, irho] += rho_source
