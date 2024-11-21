@@ -220,7 +220,7 @@ class Cartesian2d(Grid2d):
 
         self.Ay = self.Lx
 
-        # Spatial derivative of log(area). It's zero
+        # Spatial derivative of log(area). It's zero for Cartesian
 
         self.dlogAx = np.zeros_like(self.Ax)
         self.dlogAy = np.zeros_like(self.Ay)
