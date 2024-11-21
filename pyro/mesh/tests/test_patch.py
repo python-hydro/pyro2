@@ -145,7 +145,7 @@ class TestSphericalPolar:
         i = 4
         r = self.g.xmin + (i + 0.5 - self.g.ng) * self.g.dx
         dlogAx = 2.0 / r
-        assert (self.g.dlogAx[i,:] == dlogAx).all()
+        assert (self.g.dlogAx[i, :] == dlogAx).all()
 
     def test_dlogAy(self):
         i = 4
@@ -154,7 +154,7 @@ class TestSphericalPolar:
         tan = np.tan(self.g.ymin + (j + 0.5 - self.g.ng) * self.g.dy)
         dlogAy = 1.0 / (r * tan)
 
-        assert self.g.dlogAy[i,j] == dlogAy
+        assert self.g.dlogAy[i, j] == dlogAy
 
     def test_V(self):
         volume = np.abs(-2.0 * np.pi / 3.0 *
