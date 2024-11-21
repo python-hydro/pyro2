@@ -2,6 +2,7 @@ import h5py
 
 import pyro.mesh.boundary as bnd
 import pyro.util.profile_pyro as profile
+import numpy as np
 from pyro.mesh import patch
 from pyro.util import msg
 
@@ -51,6 +52,19 @@ def grid_setup(rp, ng=1):
                           xmin=xmin, xmax=xmax,
                           ymin=ymin, ymax=ymax,
                           ng=ng)
+
+    # Make sure y-boundary condition is reflect when
+    # ymin = 0 and ymax = pi
+
+    if grid_type == "SphericalPolar":
+        if my_grid.ymin <= 0.1:
+            rp.set_param("mesh.ylboundary", "reflect")
+            msg.warning("With SphericalPolar grid," +
+                        " mesh.ylboundary auto set to reflect when ymin ~ 0")
+        if abs(my_grid.ymax - np.pi) <= 0.1:
+            rp.set_param("mesh.yrboundary", "reflect")
+            msg.warning("With SphericalPolar grid," +
+                        " mesh.yrboundary auto set to reflect when ymax ~ pi")
 
     return my_grid
 
