@@ -217,7 +217,7 @@ def states(idir, ng, dx, dloga, dt,
             # It's only there for non Cartesian coord.
 
             if idir == 1:
-                rho_source = -0.5 * dt * dloga[i,j] * q[iu]
+                rho_source = -0.5 * dt * dloga[i,j] * q[irho] * q[iu]
 
                 q_l[i + 1, j, irho] += rho_source
                 q_r[i, j, irho] += rho_source
@@ -226,7 +226,7 @@ def states(idir, ng, dx, dloga, dt,
                 q_r[i, j, ip] += rho_source * cs * cs
 
             else:
-                rho_source = -0.5 * dt * dloga[i,j] * q[iv]
+                rho_source = -0.5 * dt * dloga[i,j] * q[irho] * q[iv]
 
                 q_l[i, j + 1, irho] += rho_source
                 q_r[i, j, irho] += rho_source
