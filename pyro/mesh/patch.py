@@ -222,8 +222,10 @@ class Cartesian2d(Grid2d):
 
         # Spatial derivative of log(area). It's zero for Cartesian
 
-        self.dlogAx = np.zeros_like(self.Ax)
-        self.dlogAy = np.zeros_like(self.Ay)
+        self.dlogAx = ArrayIndexer(np.zeros_like(self.Ax),
+                                   grid=self)
+        self.dlogAy = ArrayIndexer(np.zeros_like(self.Ay),
+                                   grid=self)
 
         # Volume of the cell.
 
