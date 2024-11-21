@@ -56,15 +56,15 @@ def grid_setup(rp, ng=1):
     # Make sure y-boundary condition is reflect when
     # ymin = 0 and ymax = pi
 
-    if grid_type == "SphericalPolar":
-        if my_grid.ymin <= 0.1:
-            rp.set_param("mesh.ylboundary", "reflect")
-            msg.warning("With SphericalPolar grid," +
-                        " mesh.ylboundary auto set to reflect when ymin ~ 0")
-        if abs(my_grid.ymax - np.pi) <= 0.1:
-            rp.set_param("mesh.yrboundary", "reflect")
-            msg.warning("With SphericalPolar grid," +
-                        " mesh.yrboundary auto set to reflect when ymax ~ pi")
+    # if grid_type == "SphericalPolar":
+    #     if ymin - ng * my_grid.dy <= 0.0:
+    #         rp.set_param("mesh.ylboundary", "reflect")
+    #         msg.warning("With SphericalPolar grid," +
+    #                     " mesh.ylboundary auto set to reflect when ymin ~ 0")
+    #     if ymax + ng * my_grid.dy >= np.pi:
+    #         rp.set_param("mesh.yrboundary", "reflect")
+    #         msg.warning("With SphericalPolar grid," +
+    #                     " mesh.yrboundary auto set to reflect when ymax ~ pi")
 
     return my_grid
 
