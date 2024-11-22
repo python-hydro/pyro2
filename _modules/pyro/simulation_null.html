@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.simulation_null &#8212; pyro 4.4.0.post7+g0af42f61 documentation</title>
+    <title>pyro.simulation_null &#8212; pyro 4.4.0.post8+gfdc1e598 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../_static/documentation_options.js?v=c9b96739"></script>
+    <script src="../../_static/documentation_options.js?v=3d6ffa98"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -433,6 +433,7 @@
                   
   <h1>Source code for pyro.simulation_null</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">import</span> <span class="nn">pyro.mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
 <span class="kn">import</span> <span class="nn">pyro.util.profile_pyro</span> <span class="k">as</span> <span class="nn">profile</span>
@@ -487,6 +488,19 @@
                           <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span>
                           <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">,</span>
                           <span class="n">ng</span><span class="o">=</span><span class="n">ng</span><span class="p">)</span>
+
+    <span class="c1"># Make sure y-boundary condition is reflect when</span>
+    <span class="c1"># ymin = 0 and ymax = pi</span>
+
+    <span class="k">if</span> <span class="n">grid_type</span> <span class="o">==</span> <span class="s2">&quot;SphericalPolar&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ymin</span> <span class="o">&lt;=</span> <span class="mf">0.05</span><span class="p">:</span>
+            <span class="n">rp</span><span class="o">.</span><span class="n">set_param</span><span class="p">(</span><span class="s2">&quot;mesh.ylboundary&quot;</span><span class="p">,</span> <span class="s2">&quot;reflect&quot;</span><span class="p">)</span>
+            <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;With SphericalPolar grid,&quot;</span> <span class="o">+</span>
+                        <span class="s2">&quot; mesh.ylboundary auto set to reflect when ymin ~ 0&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="n">ymax</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">0.05</span><span class="p">:</span>
+            <span class="n">rp</span><span class="o">.</span><span class="n">set_param</span><span class="p">(</span><span class="s2">&quot;mesh.yrboundary&quot;</span><span class="p">,</span> <span class="s2">&quot;reflect&quot;</span><span class="p">)</span>
+            <span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;With SphericalPolar grid,&quot;</span> <span class="o">+</span>
+                        <span class="s2">&quot; mesh.yrboundary auto set to reflect when ymax ~ pi&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">my_grid</span></div>
 
