@@ -254,14 +254,14 @@ class SphericalPolar(Grid2d):
     def __init__(self, nx, ny, *, ng=1,
                  xmin=0.2, xmax=1.0, ymin=0.0, ymax=1.0):
 
+        super().__init__(nx, ny, ng=ng, xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
         # Make sure theta is within [0, PI]
         assert ymin >= 0.0 and ymax <= np.pi, "y or \u03b8 should be within [0, \u03c0]."
 
         # Make sure the ghost cells doesn't extend out negative x(r)
-        assert xmin - ng*(xmax-xmin)/nx >= 0.0, \
+        assert xmin - ng*self.dx >= 0.0, \
             "xmin (r-direction), must be large enough so ghost cell doesn't have negative x."
-
-        super().__init__(nx, ny, ng=ng, xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
 
         self.coord_type = 1
 
