@@ -88,6 +88,8 @@ def fluxes(myd, rp, ivars, solid):
         q_l = myg.scratch_array(nvar=ivars.nq)
         q_r = myg.scratch_array(nvar=ivars.nq)
 
+        lo_bc_symmetry = False
+        hi_bc_symmetry = False
         if idir == 1:
             lo_bc_symmetry = solid.xl
             hi_bc_symmetry = solid.xr
