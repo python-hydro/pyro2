@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.mesh.patch &#8212; pyro 4.4.0.post8+gfdc1e598 documentation</title>
+    <title>pyro.mesh.patch &#8212; pyro 4.4.0.post9+g9f497fa5 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../_static/documentation_options.js?v=3d6ffa98"></script>
+    <script src="../../../_static/documentation_options.js?v=f09049eb"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -668,6 +668,13 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">Ay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span>
 
+        <span class="c1"># Spatial derivative of log(area). It&#39;s zero for Cartesian</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dlogAx</span> <span class="o">=</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ax</span><span class="p">),</span>
+                                   <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dlogAy</span> <span class="o">=</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ay</span><span class="p">),</span>
+                                   <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
         <span class="c1"># Volume of the cell.</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">V</span> <span class="o">=</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">qx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qy</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dy</span><span class="p">),</span>
@@ -686,7 +693,9 @@
 <span class="k">class</span> <span class="nc">SphericalPolar</span><span class="p">(</span><span class="n">Grid2d</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class defines a spherical polar grid.</span>
-<span class="sd">    This is technically a 2D geometry but assumes azimuthal symmetry.</span>
+<span class="sd">    This is technically a 3D geometry but assumes azimuthal symmetry,</span>
+<span class="sd">    and zero velocity in phi-direction.</span>
+<span class="sd">    Hence 2D.</span>
 
 <span class="sd">    Define:</span>
 <span class="sd">    r = x</span>
@@ -729,6 +738,12 @@
         <span class="c1"># dAtheta_l = pi * sin(theta{i-1/2}) * (r{i+1/2}^2 - r{i-1/2}^2)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ay</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">yl2d</span><span class="p">)</span> <span class="o">*</span>
                          <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xr2d</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">xl2d</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+        <span class="c1"># dlogAx = 1 / r^2 d( r^2 ) / dr = 2 / r</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dlogAx</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">x2d</span>
+
+        <span class="c1"># dlogAy = 1 / (r sin(theta)) d( sin(theta) )/dtheta = cot(theta) / r</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dlogAy</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y2d</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">x2d</span><span class="p">)</span>
 
         <span class="c1"># Returns an array of the volume of each cell.</span>
         <span class="c1"># dV = dL_r * dL_theta * dL_phi</span>
