@@ -37,7 +37,7 @@ def flux_cons(ivars, idir, gamma, q):
     return flux
 
 
-def fluxes(myd, rp, ivars):
+def fluxes(myd, rp, ivars, solid):
 
     alpha = 0.3
     beta = 0.3
@@ -88,6 +88,13 @@ def fluxes(myd, rp, ivars):
         q_l = myg.scratch_array(nvar=ivars.nq)
         q_r = myg.scratch_array(nvar=ivars.nq)
 
+        if idir == 1:
+            lo_bc_symmetry = solid.xl
+            hi_bc_symmetry = solid.xr
+        elif idir == 2:
+            lo_bc_symmetry = solid.yl
+            hi_bc_symmetry = solid.yr
+
         if nolimit:
             for n in range(ivars.nq):
 
@@ -103,7 +110,9 @@ def fluxes(myd, rp, ivars):
 
         else:
             for n in range(ivars.nq):
-                q_l[:, :, n], q_r[:, :, n] = fourth_order.states(q_avg[:, :, n], myg.ng, idir)
+                q_l[:, :, n], q_r[:, :, n] = fourth_order.states(q_avg[:, :, n], myg.ng, idir,
+                                                                 lo_bc_symmetry=lo_bc_symmetry,
+                                                                 hi_bc_symmetry=hi_bc_symmetry)
 
             # apply flattening
             for n in range(ivars.nq):
@@ -121,8 +130,8 @@ def fluxes(myd, rp, ivars):
         # solve the Riemann problem to find the face-average q
         _q = riemann.riemann_prim(idir, myg.ng,
                                   ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
-                                   0, 0,
-                                   gamma, q_l, q_r)
+                                  0, 0,
+                                  gamma, q_l, q_r)
 
         q_int_avg = ai.ArrayIndexer(_q, grid=myg)
 
