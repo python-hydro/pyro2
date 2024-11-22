@@ -4,9 +4,8 @@ import numpy as np
 
 import pyro.compressible as comp
 import pyro.mesh.array_indexer as ai
-from pyro.advection_fv4 import interface
 from pyro.compressible import riemann
-from pyro.mesh import reconstruction
+from pyro.mesh import fourth_order, reconstruction
 
 
 def flux_cons(ivars, idir, gamma, q):
@@ -104,7 +103,7 @@ def fluxes(myd, rp, ivars):
 
         else:
             for n in range(ivars.nq):
-                q_l[:, :, n], q_r[:, :, n] = interface.states(q_avg[:, :, n], myg.ng, idir)
+                q_l[:, :, n], q_r[:, :, n] = fourth_order.states(q_avg[:, :, n], myg.ng, idir)
 
             # apply flattening
             for n in range(ivars.nq):

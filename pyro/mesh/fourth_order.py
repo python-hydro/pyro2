@@ -1,3 +1,5 @@
+"""Reconstruction routines for 4th order finite-volume methods"""
+
 import numpy as np
 from numba import njit
 
@@ -84,7 +86,7 @@ def states(a, ng, idir):
                 # this lives on the interface
                 d3a[i, j] = d2ac[i, j] - d2ac[i - 1, j]
 
-        # this is a look over cell centers, affecting
+        # this is a loop over cell centers, affecting
         # i-1/2,R and i+1/2,L
         for i in range(ilo - 1, ihi + 1):
             for j in range(jlo - 1, jhi + 1):
