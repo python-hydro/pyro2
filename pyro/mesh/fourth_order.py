@@ -5,7 +5,9 @@ from numba import njit
 
 
 @njit(cache=True)
-def states(a, ng, idir, lo_bc_symmetry=False, hi_bc_symmetry=False):
+def states(a, ng, idir,
+           lo_bc_symmetry=False, hi_bc_symmetry=False,
+           is_normal_vel=False):
     r"""
     Predict the cell-centered state to the edges in one-dimension using the
     reconstructed, limited slopes. We use a fourth-order Godunov method.
@@ -170,6 +172,18 @@ def states(a, ng, idir, lo_bc_symmetry=False, hi_bc_symmetry=False):
                     if abs(dafp[i, j]) >= 2.0 * abs(dafm[i, j]):
                         al[i + 1, j] = a[i, j] + 2.0 * dafm[i, j]
 
+        if lo_bc_symmetry:
+            if is_normal_vel:
+                al[ilo, :] = -ar[ilo, :]
+            else:
+                al[ilo, :] = ar[ilo, :]
+
+        if hi_bc_symmetry:
+            if is_normal_vel:
+                ar[ihi+1, :] = -al[ihi+1, :]
+            else:
+                ar[ihi+1, :] = al[ihi+1, :]
+
     elif idir == 2:
 
         for i in range(ilo - 1, ihi + 1):
@@ -284,5 +298,17 @@ def states(a, ng, idir, lo_bc_symmetry=False, hi_bc_symmetry=False):
 
                     if abs(dafp[i, j]) >= 2.0 * abs(dafm[i, j]):
                         al[i, j + 1] = a[i, j] + 2.0 * dafm[i, j]
+
+        if lo_bc_symmetry:
+            if is_normal_vel:
+                al[:, jlo] = -ar[:, jlo]
+            else:
+                al[:, jlo] = ar[:, jlo]
+
+        if hi_bc_symmetry:
+            if is_normal_vel:
+                ar[:, jhi+1] = -al[:, jhi+1]
+            else:
+                ar[:, jhi+1] = al[:, jhi+1]
 
     return al, ar

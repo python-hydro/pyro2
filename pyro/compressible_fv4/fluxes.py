@@ -112,9 +112,18 @@ def fluxes(myd, rp, ivars, solid):
 
         else:
             for n in range(ivars.nq):
+
+                # for symmetry BCs, we want to odd-reflect the interface state on velocity
+                is_normal_vel = False
+                if idir == 1 and n == ivars.iu:
+                    is_normal_vel = True
+                elif idir == 2 and n == ivars.iv:
+                    is_normal_vel = True
+
                 q_l[:, :, n], q_r[:, :, n] = fourth_order.states(q_avg[:, :, n], myg.ng, idir,
                                                                  lo_bc_symmetry=lo_bc_symmetry,
-                                                                 hi_bc_symmetry=hi_bc_symmetry)
+                                                                 hi_bc_symmetry=hi_bc_symmetry,
+                                                                 is_normal_vel=is_normal_vel)
 
             # apply flattening
             for n in range(ivars.nq):
