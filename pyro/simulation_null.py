@@ -1,8 +1,8 @@
 import h5py
+import numpy as np
 
 import pyro.mesh.boundary as bnd
 import pyro.util.profile_pyro as profile
-import numpy as np
 from pyro.mesh import patch
 from pyro.util import msg
 
