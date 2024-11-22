@@ -5,7 +5,7 @@ from numba import njit
 
 
 @njit(cache=True)
-def states(a, ng, idir):
+def states(a, ng, idir, *, lo_bc_symmetry=False, hi_bc_symmetry=False):
     r"""
     Predict the cell-centered state to the edges in one-dimension using the
     reconstructed, limited slopes. We use a fourth-order Godunov method.
@@ -61,8 +61,34 @@ def states(a, ng, idir):
             for j in range(jlo - 1, jhi + 1):
 
                 # interpolate to the edges
-                a_int[i, j] = (7.0 / 12.0) * (a[i - 1, j] + a[i, j]) - \
-                    (1.0 / 12.0) * (a[i - 2, j] + a[i + 1, j])
+
+                if i == ilo+1 and lo_bc_symmetry:
+                    # use a stencil for the interface that is one zone
+                    # from the left physical boundary, MC Eq. 22
+                    a_int[i, j] = (1.0 / 12.0) * (3.0 * a[i-1, j] + 13.0 * a[i, j] -
+                                                  5.0 * a[i+1, j] + a[i+2, j])
+
+                elif i == ilo and lo_bc_symmetry:
+                    # use a stencil for when the interface is on the
+                    # left physical boundary MC Eq. 21
+                    a_int[i, j] = (1.0 / 12.0) * (25.0 * a[i, j] - 23.0 * a[i+1, j] +
+                                                  13.0 * a[i+2, j] - 3.0 * a[i+3, j])
+
+                elif i == ihi and hi_bc_symmetry:
+                    # use a stencil for the interface that is one zone
+                    # from the right physical boundary, MC Eq. 22
+                    a_int[i, j] = (1.0 / 12.0) * (3.0 * a[i, j] + 13.0 * a[i-1, j] -
+                                                  5.0 * a[i-2, j] + a[i-3, j])
+
+                elif i == ihi+1 and hi_bc_symmetry:
+                    # use a stencil for when the interface is on the
+                    # right physical boundary MC Eq. 21
+                    a_int[i, j] = (1.0 / 12.0) * (25.0 * a[i-1, j] - 23.0 * a[i-2, j] +
+                                                  13.0 * a[i-3, j] - 3.0 * a[i-4, j])
+
+                else:
+                    a_int[i, j] = (7.0 / 12.0) * (a[i - 1, j] + a[i, j]) - \
+                                  (1.0 / 12.0) * (a[i - 2, j] + a[i + 1, j])
 
                 al[i, j] = a_int[i, j]
                 ar[i, j] = a_int[i, j]
@@ -150,8 +176,34 @@ def states(a, ng, idir):
             for j in range(jlo - 2, jhi + 3):
 
                 # interpolate to the edges
-                a_int[i, j] = (7.0 / 12.0) * (a[i, j - 1] + a[i, j]) - \
-                    (1.0 / 12.0) * (a[i, j - 2] + a[i, j + 1])
+
+                if j == jlo+1 and lo_bc_symmetry:
+                    # use a stencil for the interface that is one zone
+                    # from the left physical boundary, MC Eq. 22
+                    a_int[i, j] = (1.0 / 12.0) * (3.0 * a[i, j-1] + 13.0 * a[i, j] -
+                                                  5.0 * a[i, j+1] + a[i, j+2])
+
+                elif j == jlo and lo_bc_symmetry:
+                    # use a stencil for when the interface is on the
+                    # left physical boundary MC Eq. 21
+                    a_int[i, j] = (1.0 / 12.0) * (25.0 * a[i, j] - 23.0 * a[i, j+1] +
+                                                  13.0 * a[i, j+2] - 3.0 * a[i, j+3])
+
+                elif j == jhi and hi_bc_symmetry:
+                    # use a stencil for the interface that is one zone
+                    # from the right physical boundary, MC Eq. 22
+                    a_int[i, j] = (1.0 / 12.0) * (3.0 * a[i, j] + 13.0 * a[i, j-1] -
+                                                  5.0 * a[i, j-2] + a[i, j-3])
+
+                elif j == jhi+1 and hi_bc_symmetry:
+                    # use a stencil for when the interface is on the
+                    # right physical boundary MC Eq. 21
+                    a_int[i, j] = (1.0 / 12.0) * (25.0 * a[i, j-1] - 23.0 * a[i, j-2] +
+                                                  13.0 * a[i, j-3] - 3.0 * a[i, j-4])
+
+                else:
+                    a_int[i, j] = (7.0 / 12.0) * (a[i, j - 1] + a[i, j]) - \
+                        (1.0 / 12.0) * (a[i, j - 2] + a[i, j + 1])
 
                 al[i, j] = a_int[i, j]
                 ar[i, j] = a_int[i, j]
@@ -232,72 +284,5 @@ def states(a, ng, idir):
 
                     if abs(dafp[i, j]) >= 2.0 * abs(dafm[i, j]):
                         al[i, j + 1] = a[i, j] + 2.0 * dafm[i, j]
-
-    return al, ar
-
-
-@njit(cache=True)
-def states_nolimit(a, qx, qy, ng, idir):
-    r"""
-    Predict the cell-centered state to the edges in one-dimension using the
-    reconstructed slopes (and without slope limiting). We use a fourth-order
-    Godunov method.
-
-    Our convention here is that:
-
-        ``al[i,j]``   will be :math:`al_{i-1/2,j}`,
-
-        ``al[i+1,j]`` will be :math:`al_{i+1/2,j}`.
-
-    Parameters
-    ----------
-    a : ndarray
-        The cell-centered state.
-    ng : int
-        The number of ghost cells
-    idir : int
-        Are we predicting to the edges in the x-direction (1) or y-direction (2)?
-
-    Returns
-    -------
-    out : ndarray, ndarray
-        The state predicted to the left and right edges.
-    """
-
-    a_int = np.zeros((qx, qy))
-    al = np.zeros((qx, qy))
-    ar = np.zeros((qx, qy))
-
-    nx = qx - 2 * ng
-    ny = qy - 2 * ng
-    ilo = ng
-    ihi = ng + nx
-    jlo = ng
-    jhi = ng + ny
-
-    # we need interface values on all faces of the domain
-    if idir == 1:
-
-        for i in range(ilo - 2, ihi + 3):
-            for j in range(jlo - 1, jhi + 1):
-
-                # interpolate to the edges
-                a_int[i, j] = (7.0 / 12.0) * (a[i - 1, j] + a[i, j]) - \
-                    (1.0 / 12.0) * (a[i - 2, j] + a[i + 1, j])
-
-                al[i, j] = a_int[i, j]
-                ar[i, j] = a_int[i, j]
-
-    elif idir == 2:
-
-        for i in range(ilo - 1, ihi + 1):
-            for j in range(jlo - 2, jhi + 3):
-
-                # interpolate to the edges
-                a_int[i, j] = (7.0 / 12.0) * (a[i, j - 1] + a[i, j]) - \
-                    (1.0 / 12.0) * (a[i, j - 2] + a[i, j + 1])
-
-                al[i, j] = a_int[i, j]
-                ar[i, j] = a_int[i, j]
 
     return al, ar
