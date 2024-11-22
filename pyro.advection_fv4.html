@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyro.advection_fv4 package &#8212; pyro 4.4.0.post9+g9f497fa5 documentation</title>
+    <title>pyro.advection_fv4 package &#8212; pyro 4.4.0.post10+gc4a7799a documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="_static/documentation_options.js?v=f09049eb"></script>
+    <script src="_static/documentation_options.js?v=3b76d1ff"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -520,11 +520,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.fluxes.fluxes"><code class="docutils literal notranslate"><span class="pre">fluxes()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.advection_fv4.interface">pyro.advection_fv4.interface module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.interface.states"><code class="docutils literal notranslate"><span class="pre">states()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.interface.states_nolimit"><code class="docutils literal notranslate"><span class="pre">states_nolimit()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro-advection-fv4-interface-module">pyro.advection_fv4.interface module</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.advection_fv4.simulation">pyro.advection_fv4.simulation module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.simulation.Simulation.initialize"><code class="docutils literal notranslate"><span class="pre">Simulation.initialize()</span></code></a></li>
@@ -629,69 +625,8 @@ we are advecting.</p>
 </dd></dl>
 
 </section>
-<section id="module-pyro.advection_fv4.interface">
-<span id="pyro-advection-fv4-interface-module"></span><h2>pyro.advection_fv4.interface module<a class="headerlink" href="#module-pyro.advection_fv4.interface" title="Link to this heading">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="pyro.advection_fv4.interface.states">
-<span class="sig-prename descclassname"><span class="pre">pyro.advection_fv4.interface.</span></span><span class="sig-name descname"><span class="pre">states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_fv4/interface.html#states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_fv4.interface.states" title="Link to this definition">#</a></dt>
-<dd><p>Predict the cell-centered state to the edges in one-dimension using the
-reconstructed, limited slopes. We use a fourth-order Godunov method.</p>
-<p>Our convention here is that:</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">al[i,j]</span></code>   will be <span class="math notranslate nohighlight">\(al_{i-1/2,j}\)</span>,</p>
-<p><code class="docutils literal notranslate"><span class="pre">al[i+1,j]</span></code> will be <span class="math notranslate nohighlight">\(al_{i+1/2,j}\)</span>.</p>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>a</strong><span class="classifier">ndarray</span></dt><dd><p>The cell-centered state.</p>
-</dd>
-<dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
-</dd>
-<dt><strong>idir</strong><span class="classifier">int</span></dt><dd><p>Are we predicting to the edges in the x-direction (1) or y-direction (2)?</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>out</strong><span class="classifier">ndarray, ndarray</span></dt><dd><p>The state predicted to the left and right edges.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyro.advection_fv4.interface.states_nolimit">
-<span class="sig-prename descclassname"><span class="pre">pyro.advection_fv4.interface.</span></span><span class="sig-name descname"><span class="pre">states_nolimit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/advection_fv4/interface.html#states_nolimit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.advection_fv4.interface.states_nolimit" title="Link to this definition">#</a></dt>
-<dd><p>Predict the cell-centered state to the edges in one-dimension using the
-reconstructed slopes (and without slope limiting). We use a fourth-order
-Godunov method.</p>
-<p>Our convention here is that:</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">al[i,j]</span></code>   will be <span class="math notranslate nohighlight">\(al_{i-1/2,j}\)</span>,</p>
-<p><code class="docutils literal notranslate"><span class="pre">al[i+1,j]</span></code> will be <span class="math notranslate nohighlight">\(al_{i+1/2,j}\)</span>.</p>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>a</strong><span class="classifier">ndarray</span></dt><dd><p>The cell-centered state.</p>
-</dd>
-<dt><strong>ng</strong><span class="classifier">int</span></dt><dd><p>The number of ghost cells</p>
-</dd>
-<dt><strong>idir</strong><span class="classifier">int</span></dt><dd><p>Are we predicting to the edges in the x-direction (1) or y-direction (2)?</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>out</strong><span class="classifier">ndarray, ndarray</span></dt><dd><p>The state predicted to the left and right edges.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
+<section id="pyro-advection-fv4-interface-module">
+<h2>pyro.advection_fv4.interface module<a class="headerlink" href="#pyro-advection-fv4-interface-module" title="Link to this heading">#</a></h2>
 </section>
 <section id="module-pyro.advection_fv4.simulation">
 <span id="pyro-advection-fv4-simulation-module"></span><h2>pyro.advection_fv4.simulation module<a class="headerlink" href="#module-pyro.advection_fv4.simulation" title="Link to this heading">#</a></h2>
@@ -779,11 +714,7 @@ conservative state defined as part of myd</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.fluxes.fluxes"><code class="docutils literal notranslate"><span class="pre">fluxes()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.advection_fv4.interface">pyro.advection_fv4.interface module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.interface.states"><code class="docutils literal notranslate"><span class="pre">states()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.interface.states_nolimit"><code class="docutils literal notranslate"><span class="pre">states_nolimit()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro-advection-fv4-interface-module">pyro.advection_fv4.interface module</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.advection_fv4.simulation">pyro.advection_fv4.simulation module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.simulation.Simulation"><code class="docutils literal notranslate"><span class="pre">Simulation</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.advection_fv4.simulation.Simulation.initialize"><code class="docutils literal notranslate"><span class="pre">Simulation.initialize()</span></code></a></li>

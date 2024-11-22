@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.advection_fv4.fluxes &#8212; pyro 4.4.0.post9+g9f497fa5 documentation</title>
+    <title>pyro.advection_fv4.fluxes &#8212; pyro 4.4.0.post10+gc4a7799a documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../_static/documentation_options.js?v=f09049eb"></script>
+    <script src="../../../_static/documentation_options.js?v=3b76d1ff"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -433,7 +433,7 @@
                   
   <h1>Source code for pyro.advection_fv4.fluxes</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">pyro.mesh.array_indexer</span> <span class="k">as</span> <span class="nn">ai</span>
-<span class="kn">from</span> <span class="nn">pyro.advection_fv4</span> <span class="kn">import</span> <span class="n">interface</span>
+<span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">fourth_order</span>
 
 
 <div class="viewcode-block" id="fluxes">
@@ -508,13 +508,13 @@
                              <span class="mf">1.</span><span class="o">/</span><span class="mf">12.</span><span class="o">*</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">a_l</span><span class="p">,</span> <span class="n">a_r</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">states</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">a_l</span><span class="p">,</span> <span class="n">a_r</span> <span class="o">=</span> <span class="n">fourth_order</span><span class="o">.</span><span class="n">states</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">u</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">a_x</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">a_l</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">a_x</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">a_r</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
 
-        <span class="n">a_l</span><span class="p">,</span> <span class="n">a_r</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">states</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">a_l</span><span class="p">,</span> <span class="n">a_r</span> <span class="o">=</span> <span class="n">fourth_order</span><span class="o">.</span><span class="n">states</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">a_y</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">a_l</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">myg</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>

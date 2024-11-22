@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible_fv4.fluxes &#8212; pyro 4.4.0.post9+g9f497fa5 documentation</title>
+    <title>pyro.compressible_fv4.fluxes &#8212; pyro 4.4.0.post10+gc4a7799a documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../_static/documentation_options.js?v=f09049eb"></script>
+    <script src="../../../_static/documentation_options.js?v=3b76d1ff"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -438,9 +438,8 @@
 
 <span class="kn">import</span> <span class="nn">pyro.compressible</span> <span class="k">as</span> <span class="nn">comp</span>
 <span class="kn">import</span> <span class="nn">pyro.mesh.array_indexer</span> <span class="k">as</span> <span class="nn">ai</span>
-<span class="kn">from</span> <span class="nn">pyro.advection_fv4</span> <span class="kn">import</span> <span class="n">interface</span>
 <span class="kn">from</span> <span class="nn">pyro.compressible</span> <span class="kn">import</span> <span class="n">riemann</span>
-<span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">reconstruction</span>
+<span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">fourth_order</span><span class="p">,</span> <span class="n">reconstruction</span>
 
 
 <div class="viewcode-block" id="flux_cons">
@@ -543,7 +542,7 @@
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ivars</span><span class="o">.</span><span class="n">nq</span><span class="p">):</span>
-                <span class="n">q_l</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">q_r</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">states</span><span class="p">(</span><span class="n">q_avg</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="n">idir</span><span class="p">)</span>
+                <span class="n">q_l</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">q_r</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">fourth_order</span><span class="o">.</span><span class="n">states</span><span class="p">(</span><span class="n">q_avg</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">myg</span><span class="o">.</span><span class="n">ng</span><span class="p">,</span> <span class="n">idir</span><span class="p">)</span>
 
             <span class="c1"># apply flattening</span>
             <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ivars</span><span class="o">.</span><span class="n">nq</span><span class="p">):</span>
