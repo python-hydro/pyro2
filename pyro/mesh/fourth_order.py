@@ -5,7 +5,7 @@ from numba import njit
 
 
 @njit(cache=True)
-def states(a, ng, idir, *, lo_bc_symmetry=False, hi_bc_symmetry=False):
+def states(a, ng, idir, lo_bc_symmetry=False, hi_bc_symmetry=False):
     r"""
     Predict the cell-centered state to the edges in one-dimension using the
     reconstructed, limited slopes. We use a fourth-order Godunov method.
