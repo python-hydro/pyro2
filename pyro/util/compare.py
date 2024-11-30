@@ -19,7 +19,7 @@ errors = {"gridbad": "grids don't agree",
           "varerr": "one or more variables don't agree"}
 
 
-def compare(data1, data2, rtol=1.e-12):
+def compare(data1, data2, rtol=1.e-12, atol=1.e-13):
     """
     given two CellCenterData2d objects, compare the data, zone-by-zone
     and output any errors
@@ -59,7 +59,7 @@ def compare(data1, data2, rtol=1.e-12):
         else:
             print(f"{name:20s} absolute error = {abs_err:10.10g}")
 
-        if not np.allclose(d1.v(), d2.v(), rtol=rtol):
+        if not np.allclose(d1.v(), d2.v(), rtol=rtol, atol=atol):
             result = "varerr"
 
     return result
