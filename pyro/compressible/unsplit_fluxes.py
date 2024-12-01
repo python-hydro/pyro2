@@ -206,11 +206,13 @@ def interface_states(my_data, rp, ivars, tc, dt):
     tm_states = tc.timer("interfaceStates")
     tm_states.begin()
 
-    V_l, V_r = ifc.states(1, myg.ng, myg.Lx, dt,
+    _V_l, _V_r = ifc.states(1, myg.ng, myg.Lx, myg.dlogAx, dt,
                           ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
                           ivars.naux,
                           gamma,
                           q, ldx)
+    V_l = ai.ArrayIndexer(d=_V_l, grid=myg)
+    V_r = ai.ArrayIndexer(d=_V_r, grid=myg)
 
     tm_states.end()
 
@@ -225,7 +227,7 @@ def interface_states(my_data, rp, ivars, tc, dt):
     # left and right primitive variable states
     tm_states.begin()
 
-    _V_l, _V_r = ifc.states(2, myg.ng, myg.Ly, dt,
+    _V_l, _V_r = ifc.states(2, myg.ng, myg.Ly, myg.dlogAy, dt,
                             ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix,
                             ivars.naux,
                             gamma,
