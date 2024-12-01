@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible.unsplit_fluxes &#8212; pyro 4.4.0.post10+gc4a7799a documentation</title>
+    <title>pyro.compressible.unsplit_fluxes &#8212; pyro 4.4.0.post11+g89a07d7f documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../_static/documentation_options.js?v=3b76d1ff"></script>
+    <script src="../../../_static/documentation_options.js?v=59b0cd56"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -724,9 +724,6 @@
     <span class="n">tm_source</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
 
     <span class="n">myg</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span>
-
-    <span class="n">pres</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;pressure&quot;</span><span class="p">)</span>
-
     <span class="n">dens_src</span> <span class="o">=</span> <span class="n">my_aux</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;dens_src&quot;</span><span class="p">)</span>
     <span class="n">xmom_src</span> <span class="o">=</span> <span class="n">my_aux</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;xmom_src&quot;</span><span class="p">)</span>
     <span class="n">ymom_src</span> <span class="o">=</span> <span class="n">my_aux</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;ymom_src&quot;</span><span class="p">)</span>
@@ -739,11 +736,6 @@
     <span class="n">xmom_src</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">U_src</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">]</span>
     <span class="n">ymom_src</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">U_src</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">]</span>
     <span class="n">E_src</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">U_src</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">]</span>
-
-    <span class="c1"># apply non-conservative pressure gradient</span>
-    <span class="k">if</span> <span class="n">myg</span><span class="o">.</span><span class="n">coord_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">xmom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span><span class="p">(</span><span class="n">pres</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">pres</span><span class="o">.</span><span class="n">v</span><span class="p">())</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">Lx</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
-        <span class="n">ymom_src</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span><span class="p">(</span><span class="n">pres</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">pres</span><span class="o">.</span><span class="n">v</span><span class="p">())</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">Ly</span><span class="o">.</span><span class="n">v</span><span class="p">()</span>
 
     <span class="n">my_aux</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;dens_src&quot;</span><span class="p">)</span>
     <span class="n">my_aux</span><span class="o">.</span><span class="n">fill_BC</span><span class="p">(</span><span class="s2">&quot;xmom_src&quot;</span><span class="p">)</span>
@@ -852,25 +844,49 @@
 <span class="sd">        with source terms added.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">myg</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span>
+
     <span class="c1"># Use Riemann Solver to get interface flux using the left and right states</span>
 
-    <span class="n">F_x</span> <span class="o">=</span> <span class="n">riemann</span><span class="o">.</span><span class="n">riemann_flux</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">U_xl</span><span class="p">,</span> <span class="n">U_xr</span><span class="p">,</span>
-                               <span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span>
-                               <span class="n">solid</span><span class="o">.</span><span class="n">xl</span><span class="p">,</span> <span class="n">solid</span><span class="o">.</span><span class="n">xr</span><span class="p">,</span> <span class="n">tc</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">myg</span><span class="o">.</span><span class="n">coord_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># We need pressure from interface state for transverse update for</span>
+        <span class="c1"># SphericalPolar geometry. So we need interface conserved states.</span>
+        <span class="n">F_x</span><span class="p">,</span> <span class="n">U_x</span> <span class="o">=</span> <span class="n">riemann</span><span class="o">.</span><span class="n">riemann_flux</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">U_xl</span><span class="p">,</span> <span class="n">U_xr</span><span class="p">,</span>
+                                        <span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span>
+                                        <span class="n">solid</span><span class="o">.</span><span class="n">xl</span><span class="p">,</span> <span class="n">solid</span><span class="o">.</span><span class="n">xr</span><span class="p">,</span> <span class="n">tc</span><span class="p">,</span>
+                                        <span class="n">return_cons</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="n">F_y</span> <span class="o">=</span> <span class="n">riemann</span><span class="o">.</span><span class="n">riemann_flux</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">U_yl</span><span class="p">,</span> <span class="n">U_yr</span><span class="p">,</span>
-                               <span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span>
-                               <span class="n">solid</span><span class="o">.</span><span class="n">yl</span><span class="p">,</span> <span class="n">solid</span><span class="o">.</span><span class="n">yr</span><span class="p">,</span> <span class="n">tc</span><span class="p">)</span>
+        <span class="n">F_y</span><span class="p">,</span> <span class="n">U_y</span> <span class="o">=</span> <span class="n">riemann</span><span class="o">.</span><span class="n">riemann_flux</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">U_yl</span><span class="p">,</span> <span class="n">U_yr</span><span class="p">,</span>
+                                        <span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span>
+                                        <span class="n">solid</span><span class="o">.</span><span class="n">yl</span><span class="p">,</span> <span class="n">solid</span><span class="o">.</span><span class="n">yr</span><span class="p">,</span> <span class="n">tc</span><span class="p">,</span>
+                                        <span class="n">return_cons</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">gamma</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;eos.gamma&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Find primitive variable since we need pressure in transverse update.</span>
+        <span class="n">qx</span> <span class="o">=</span> <span class="n">comp</span><span class="o">.</span><span class="n">cons_to_prim</span><span class="p">(</span><span class="n">U_x</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">myg</span><span class="p">)</span>
+        <span class="n">qy</span> <span class="o">=</span> <span class="n">comp</span><span class="o">.</span><span class="n">cons_to_prim</span><span class="p">(</span><span class="n">U_y</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span> <span class="n">myg</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Directly calculate the interface flux using Riemann Solver</span>
+        <span class="n">F_x</span> <span class="o">=</span> <span class="n">riemann</span><span class="o">.</span><span class="n">riemann_flux</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">U_xl</span><span class="p">,</span> <span class="n">U_xr</span><span class="p">,</span>
+                                   <span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span>
+                                   <span class="n">solid</span><span class="o">.</span><span class="n">xl</span><span class="p">,</span> <span class="n">solid</span><span class="o">.</span><span class="n">xr</span><span class="p">,</span> <span class="n">tc</span><span class="p">,</span>
+                                   <span class="n">return_cons</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">F_y</span> <span class="o">=</span> <span class="n">riemann</span><span class="o">.</span><span class="n">riemann_flux</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">U_yl</span><span class="p">,</span> <span class="n">U_yr</span><span class="p">,</span>
+                                   <span class="n">my_data</span><span class="p">,</span> <span class="n">rp</span><span class="p">,</span> <span class="n">ivars</span><span class="p">,</span>
+                                   <span class="n">solid</span><span class="o">.</span><span class="n">yl</span><span class="p">,</span> <span class="n">solid</span><span class="o">.</span><span class="n">yr</span><span class="p">,</span> <span class="n">tc</span><span class="p">,</span>
+                                   <span class="n">return_cons</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="c1"># Now we update the conserved states using the transverse fluxes.</span>
-
-    <span class="n">myg</span> <span class="o">=</span> <span class="n">my_data</span><span class="o">.</span><span class="n">grid</span>
 
     <span class="n">tm_transverse</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="s2">&quot;transverse flux addition&quot;</span><span class="p">)</span>
     <span class="n">tm_transverse</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
 
     <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">hdtV</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">V</span>
+    <span class="n">hdt</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span>
+    <span class="n">hdtV</span> <span class="o">=</span> <span class="n">hdt</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">V</span>
 
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ivars</span><span class="o">.</span><span class="n">nvar</span><span class="p">):</span>
 
@@ -893,6 +909,25 @@
         <span class="n">U_yr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> \
             <span class="o">-</span> <span class="n">hdtV</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">F_x</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">Ax</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span> <span class="o">-</span>
                              <span class="n">F_x</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span><span class="o">*</span><span class="n">myg</span><span class="o">.</span><span class="n">Ax</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">))</span>
+
+    <span class="c1"># apply non-conservative pressure gradient for momentum in spherical geometry</span>
+    <span class="c1"># Note that we should only apply this pressure gradient</span>
+    <span class="c1"># to the momentum corresponding to the transverse direction.</span>
+    <span class="c1"># The momentum in the normal direction already updated pressure during reconstruction.</span>
+
+    <span class="k">if</span> <span class="n">myg</span><span class="o">.</span><span class="n">coord_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+        <span class="n">U_xl</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span> <span class="n">hdt</span> <span class="o">*</span> <span class="p">(</span><span class="n">qy</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">)</span> <span class="o">-</span>
+                                                       <span class="n">qy</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">))</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">Ly</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span>
+
+        <span class="n">U_xr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">iymom</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span> <span class="n">hdt</span> <span class="o">*</span> <span class="p">(</span><span class="n">qy</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">)</span> <span class="o">-</span>
+                                                       <span class="n">qy</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">))</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">Ly</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span>
+
+        <span class="n">U_yl</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span> <span class="n">hdt</span> <span class="o">*</span> <span class="p">(</span><span class="n">qx</span><span class="o">.</span><span class="n">ip_jp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">)</span> <span class="o">-</span>
+                                                       <span class="n">qx</span><span class="o">.</span><span class="n">jp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">))</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">Lx</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span>
+
+        <span class="n">U_yr</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">ixmom</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="o">-</span> <span class="n">hdt</span> <span class="o">*</span> <span class="p">(</span><span class="n">qx</span><span class="o">.</span><span class="n">ip</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">)</span> <span class="o">-</span>
+                                                       <span class="n">qx</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">))</span> <span class="o">/</span> <span class="n">myg</span><span class="o">.</span><span class="n">Lx</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">b</span><span class="p">)</span>
 
     <span class="n">tm_transverse</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
 
