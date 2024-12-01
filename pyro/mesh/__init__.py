@@ -3,7 +3,7 @@ This is the general mesh module for pyro.  It implements everything
 necessary to work with finite-volume data.
 """
 
-__all__ = ['patch', 'integration', 'reconstruction']
+__all__ = ['patch', 'fourth_order', 'integration', 'reconstruction']
 
 from .array_indexer import ArrayIndexer, ArrayIndexerFC
 from .boundary import BC, bc_is_solid, define_bc
