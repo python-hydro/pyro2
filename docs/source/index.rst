@@ -72,6 +72,7 @@ new ideas.
 
    compressible-rt-compare.ipynb
    adding_a_problem_jupyter.ipynb
+   rt_average.ipynb
    advection-error.ipynb
    compressible-convergence.ipynb
 
