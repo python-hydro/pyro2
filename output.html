@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Working with output &#8212; pyro 4.4.0.post11+g89a07d7f documentation</title>
+    <title>Working with output &#8212; pyro 4.4.0.post12+g8f5723ca documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="_static/documentation_options.js?v=59b0cd56"></script>
+    <script src="_static/documentation_options.js?v=31c99141"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -563,19 +563,38 @@ would do:</p>
 <p>pyro output data can be read using the <a class="reference internal" href="pyro.util.html#pyro.util.io_pyro.read" title="pyro.util.io_pyro.read"><code class="xref py py-func docutils literal notranslate"><span class="pre">util.io_pyro.read</span></code></a> method. The following
 sequence (done in a python session) reads in stored data (from the
 compressible Sedov problem) and plots data falling on a line in the x
-direction through the y-center of the domain (note: this will include
-the ghost cells).</p>
+direction through the y-center of the domain.  The return value of
+<code class="docutils literal notranslate"><span class="pre">read</span></code> is a <code class="docutils literal notranslate"><span class="pre">Simulation</span></code> object.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pyro.util.io_pyro</span> <span class="k">as</span> <span class="nn">io</span>
-<span class="n">sim</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;sedov_unsplit_0000.h5&quot;</span><span class="p">)</span>
+
+<span class="n">sim</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;sedov_unsplit_0290.h5&quot;</span><span class="p">)</span>
 <span class="n">dens</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="s2">&quot;density&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dens</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">dens</span><span class="p">[:,</span><span class="n">dens</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ny</span><span class="o">//</span><span class="mi">2</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dens</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">dens</span><span class="p">[:,</span><span class="n">dens</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">qy</span><span class="o">//</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="_images/manual_plot.png" class="align-center" src="_images/manual_plot.png" />
-<p>Note: this includes the ghost cells, by default, seen as the small
-regions of zeros on the left and right.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This includes the ghost cells, by default, seen as the small
+regions of zeros on the left and right.  The total number of cells,
+including ghost cells in the y-direction is <code class="docutils literal notranslate"><span class="pre">qy</span></code>, which is why
+we use that in our slice.</p>
+</div>
+<p>If we wanted to exclude the ghost cells, then we could use the <code class="docutils literal notranslate"><span class="pre">.v()</span></code> method
+on the density array to exclude the ghost cells, and then manually index <code class="docutils literal notranslate"><span class="pre">g.x</span></code>
+to just include the valid part of the domain:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dens</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">dens</span><span class="o">.</span><span class="n">v</span><span class="p">()[:,</span> <span class="n">dens</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">ny</span><span class="o">//</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this case, we are using <code class="docutils literal notranslate"><span class="pre">ny</span></code> since that is the width of the domain
+excluding ghost cells.</p>
+</div>
 </section>
 </section>
 

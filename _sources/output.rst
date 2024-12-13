@@ -42,20 +42,41 @@ Reading and plotting manually
 pyro output data can be read using the :func:`util.io_pyro.read <pyro.util.io_pyro.read>` method. The following
 sequence (done in a python session) reads in stored data (from the
 compressible Sedov problem) and plots data falling on a line in the x
-direction through the y-center of the domain (note: this will include
-the ghost cells).
+direction through the y-center of the domain.  The return value of
+``read`` is a ``Simulation`` object.
+
 
 .. code-block:: python
 
    import matplotlib.pyplot as plt
    import pyro.util.io_pyro as io
-   sim = io.read("sedov_unsplit_0000.h5")
+
+   sim = io.read("sedov_unsplit_0290.h5")
    dens = sim.cc_data.get_var("density")
-   plt.plot(dens.g.x, dens[:,dens.g.ny//2])
-   plt.show()
+
+   fig, ax = plt.subplots()
+   ax.plot(dens.g.x, dens[:,dens.g.qy//2])
+   ax.grid()
 
 .. image:: manual_plot.png
    :align: center
 
-Note: this includes the ghost cells, by default, seen as the small
-regions of zeros on the left and right.
+.. note::
+
+   This includes the ghost cells, by default, seen as the small
+   regions of zeros on the left and right.  The total number of cells,
+   including ghost cells in the y-direction is ``qy``, which is why
+   we use that in our slice.
+
+If we wanted to exclude the ghost cells, then we could use the ``.v()`` method
+on the density array to exclude the ghost cells, and then manually index ``g.x``
+to just include the valid part of the domain:
+
+.. code:: python
+
+   ax.plot(dens.g.x[g.ilo:g.ihi+1], dens.v()[:, dens.g.ny//2])
+
+.. note::
+
+   In this case, we are using ``ny`` since that is the width of the domain
+   excluding ghost cells.
