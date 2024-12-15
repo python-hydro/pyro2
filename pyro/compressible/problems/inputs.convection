@@ -7,17 +7,18 @@ tmax = 10.0
 
 [io]
 basename = convection_
-n_out = 100
+n_out = 100000
+dt_out = 0.25
 
 
 [mesh]
 nx = 128
-ny = 384
+ny = 512
 xmax = 4.0
-ymax = 12.0
+ymax = 16.0
 
-xlboundary = outflow
-xrboundary = outflow
+xlboundary = periodic
+xrboundary = periodic
 
 ylboundary = reflect
 yrboundary = ambient
@@ -26,7 +27,7 @@ yrboundary = ambient
 [convection]
 scale_height = 2.0
 dens_base = 1000.0
-dens_cutoff = 1.e-3
+dens_cutoff = 1.e-4
 
 e_rate = 0.5
 
