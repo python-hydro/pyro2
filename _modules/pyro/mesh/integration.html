@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.mesh.integration &#8212; pyro 4.4.0.post13+g81873bc4 documentation</title>
+    <title>pyro.mesh.integration &#8212; pyro 4.4.0.post14+gf73c3e04 documentation</title>
   
   
   
@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,22 +26,22 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/myfile.css?v=359afcf4" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=7785025e"></script>
+    <script src="../../../_static/documentation_options.js?v=37a1fb6e"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -299,9 +299,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -457,9 +462,9 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">pyro.mesh</span> <span class="kn">import</span> <span class="n">patch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyro.mesh</span><span class="w"> </span><span class="kn">import</span> <span class="n">patch</span>
 
 <span class="n">a</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">b</span> <span class="o">=</span> <span class="p">{}</span>
@@ -508,11 +513,11 @@
 
 <div class="viewcode-block" id="RKIntegrator">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.integration.RKIntegrator">[docs]</a>
-<span class="k">class</span> <span class="nc">RKIntegrator</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RKIntegrator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;the integration class for CellCenterData2d, supporting RK</span>
 <span class="sd">    integration&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;RK4&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;RK4&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;t is the starting time, dt is the total timestep to advance, method</span>
 <span class="sd">        = {2,4} is the temporal method&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
@@ -527,14 +532,14 @@
 
 <div class="viewcode-block" id="RKIntegrator.nstages">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.integration.RKIntegrator.nstages">[docs]</a>
-    <span class="k">def</span> <span class="nf">nstages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">nstages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;return the number of stages&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="RKIntegrator.set_start">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.integration.RKIntegrator.set_start">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;store the starting conditions (should be a CellCenterData2d</span>
 <span class="sd">        object)&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span></div>
@@ -542,7 +547,7 @@
 
 <div class="viewcode-block" id="RKIntegrator.store_increment">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.integration.RKIntegrator.store_increment">[docs]</a>
-    <span class="k">def</span> <span class="nf">store_increment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">istage</span><span class="p">,</span> <span class="n">k_stage</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">store_increment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">istage</span><span class="p">,</span> <span class="n">k_stage</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;store the increment for stage istage -- this should not have a dt</span>
 <span class="sd">        weighting&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">[</span><span class="n">istage</span><span class="p">]</span> <span class="o">=</span> <span class="n">k_stage</span></div>
@@ -550,7 +555,7 @@
 
 <div class="viewcode-block" id="RKIntegrator.get_stage_start">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.integration.RKIntegrator.get_stage_start">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_stage_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">istage</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_stage_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">istage</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;get the starting conditions (a CellCenterData2d object) for stage</span>
 <span class="sd">        istage&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">istage</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -569,7 +574,7 @@
 
 <div class="viewcode-block" id="RKIntegrator.compute_final_update">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.integration.RKIntegrator.compute_final_update">[docs]</a>
-    <span class="k">def</span> <span class="nf">compute_final_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_final_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;this constructs the final t + dt update, overwriting the initial data&quot;&quot;&quot;</span>
         <span class="n">ytmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span>
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ytmp</span><span class="o">.</span><span class="n">nvar</span><span class="p">):</span>
@@ -580,7 +585,7 @@
         <span class="k">return</span> <span class="n">ytmp</span></div>
 
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;integration method: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2">; number of stages: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">nstages</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 </pre></div>
@@ -645,8 +650,8 @@ By pyro development team
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>

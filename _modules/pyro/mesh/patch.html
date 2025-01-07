@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.mesh.patch &#8212; pyro 4.4.0.post13+g81873bc4 documentation</title>
+    <title>pyro.mesh.patch &#8212; pyro 4.4.0.post14+gf73c3e04 documentation</title>
   
   
   
@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,22 +26,22 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/myfile.css?v=359afcf4" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=7785025e"></script>
+    <script src="../../../_static/documentation_options.js?v=37a1fb6e"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -299,9 +299,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -466,17 +471,17 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">h5py</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">pyro.mesh.boundary</span> <span class="k">as</span> <span class="nn">bnd</span>
-<span class="kn">from</span> <span class="nn">pyro.mesh.array_indexer</span> <span class="kn">import</span> <span class="n">ArrayIndexer</span><span class="p">,</span> <span class="n">ArrayIndexerFC</span>
-<span class="kn">from</span> <span class="nn">pyro.util</span> <span class="kn">import</span> <span class="n">msg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyro.mesh.boundary</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bnd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyro.mesh.array_indexer</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayIndexer</span><span class="p">,</span> <span class="n">ArrayIndexerFC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyro.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">msg</span>
 
 
 <div class="viewcode-block" id="Grid2d">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.Grid2d">[docs]</a>
-<span class="k">class</span> <span class="nc">Grid2d</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Grid2d</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    the 2-d grid class.  The grid object will contain the coordinate</span>
 <span class="sd">    information (at various centerings).</span>
@@ -496,7 +501,7 @@
 
     <span class="c1"># pylint: disable=too-many-instance-attributes</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">xmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a Grid2d object.</span>
@@ -585,7 +590,7 @@
 
 <div class="viewcode-block" id="Grid2d.scratch_array">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.Grid2d.scratch_array">[docs]</a>
-    <span class="k">def</span> <span class="nf">scratch_array</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">nvar</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">scratch_array</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">nvar</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        return a standard numpy array dimensioned to have the size</span>
 <span class="sd">        and number of ghostcells as the parent grid</span>
@@ -599,7 +604,7 @@
 
 <div class="viewcode-block" id="Grid2d.coarse_like">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.Grid2d.coarse_like">[docs]</a>
-    <span class="k">def</span> <span class="nf">coarse_like</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">coarse_like</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        return a new grid object coarsened by a factor n, but with</span>
 <span class="sd">        all the other properties the same</span>
@@ -611,7 +616,7 @@
 
 <div class="viewcode-block" id="Grid2d.fine_like">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.Grid2d.fine_like">[docs]</a>
-    <span class="k">def</span> <span class="nf">fine_like</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fine_like</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        return a new grid object finer by a factor n, but with</span>
 <span class="sd">        all the other properties the same</span>
@@ -621,11 +626,11 @@
                       <span class="n">ymin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; print out some basic information about the grid object &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;2-d grid: nx = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="si">}</span><span class="s2">, ny = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="si">}</span><span class="s2">, ng = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="si">}</span><span class="s2">&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; are two grids equivalent? &quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">nx</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ny</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">ny</span> <span class="ow">and</span>
                   <span class="bp">self</span><span class="o">.</span><span class="n">ng</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">ng</span> <span class="ow">and</span>
@@ -638,7 +643,7 @@
 
 <div class="viewcode-block" id="Cartesian2d">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.Cartesian2d">[docs]</a>
-<span class="k">class</span> <span class="nc">Cartesian2d</span><span class="p">(</span><span class="n">Grid2d</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Cartesian2d</span><span class="p">(</span><span class="n">Grid2d</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class defines a 2D Cartesian Grid.</span>
 
@@ -647,7 +652,7 @@
 <span class="sd">    y = y</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">xmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="n">ng</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">)</span>
@@ -681,7 +686,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">V</span> <span class="o">=</span> <span class="n">ArrayIndexer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">qx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qy</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dy</span><span class="p">),</span>
                               <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; print out some basic information about the grid object &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Cartesian 2D Grid: xmin = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="si">}</span><span class="s2">, xmax = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="si">}</span><span class="s2">, &quot;</span> <span class="o">+</span> \
                <span class="sa">f</span><span class="s2">&quot;ymin = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="si">}</span><span class="s2">, ymax = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ymax</span><span class="si">}</span><span class="s2">, &quot;</span> <span class="o">+</span> \
@@ -691,7 +696,7 @@
 
 <div class="viewcode-block" id="SphericalPolar">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.SphericalPolar">[docs]</a>
-<span class="k">class</span> <span class="nc">SphericalPolar</span><span class="p">(</span><span class="n">Grid2d</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SphericalPolar</span><span class="p">(</span><span class="n">Grid2d</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class defines a spherical polar grid.</span>
 <span class="sd">    This is technically a 3D geometry but assumes azimuthal symmetry,</span>
@@ -703,7 +708,7 @@
 <span class="sd">    theta = y</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">xmin</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="n">ng</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">)</span>
@@ -756,7 +761,7 @@
                         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xr2d</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">xl2d</span><span class="p">)</span> <span class="o">*</span>
                         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xr2d</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">xl2d</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">xr2d</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">xl2d</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; print out some basic information about the grid object &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;Spherical Polar 2D Grid: Define x : r, y : </span><span class="se">\u03b8</span><span class="s2">. &quot;</span> <span class="o">+</span> \
                <span class="sa">f</span><span class="s2">&quot;xmin (r) = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="si">}</span><span class="s2">, xmax= </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="si">}</span><span class="s2">, &quot;</span> <span class="o">+</span> \
@@ -767,7 +772,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d">[docs]</a>
-<span class="k">class</span> <span class="nc">CellCenterData2d</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CellCenterData2d</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class to define cell-centered data that lives on a grid.  A</span>
 <span class="sd">    CellCenterData2d object is built in a multi-step process before</span>
@@ -802,7 +807,7 @@
 
     <span class="c1"># pylint: disable=too-many-instance-attributes</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">):</span>
 
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the CellCenterData2d object.</span>
@@ -840,7 +845,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.register_var">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.register_var">[docs]</a>
-    <span class="k">def</span> <span class="nf">register_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bc</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bc</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Register a variable with CellCenterData2d object.</span>
 
@@ -864,7 +869,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.set_aux">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.set_aux">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_aux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_aux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set any auxiliary (scalar) data.  This data is simply carried</span>
 <span class="sd">        along with the CellCenterData2d object</span>
@@ -881,7 +886,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.add_derived">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.add_derived">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_derived</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_derived</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Register a function to compute derived variable</span>
 
@@ -897,7 +902,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.add_ivars">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.add_ivars">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_ivars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ivars</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_ivars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ivars</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add ivars</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -907,7 +912,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.create">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.create">[docs]</a>
-    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called after all the variables are registered and allocates</span>
 <span class="sd">        the storage for the state data.</span>
@@ -923,7 +928,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span> <span class="o">=</span> <span class="mi">1</span></div>
 
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; print out some basic information about the CellCenterData2d</span>
 <span class="sd">            object &quot;&quot;&quot;</span>
 
@@ -945,7 +950,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.get_var">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.get_var">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a data array for the variable described by name.  Stored</span>
 <span class="sd">        variables will be checked first, and then any derived variables</span>
@@ -976,13 +981,13 @@
                     <span class="n">var</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ivars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">var</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">var</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> is not valid&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> is not valid&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_var_by_index</span><span class="p">(</span><span class="n">n</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="CellCenterData2d.get_var_by_index">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.get_var_by_index">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_var_by_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_var_by_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a data array for the variable with index n in the</span>
 <span class="sd">        data array.  Any changes made to this are automatically</span>
@@ -1004,7 +1009,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.get_vars">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.get_vars">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the entire data array.  Any changes made to this</span>
 <span class="sd">        are automatically reflected in the CellCenterData2d object.</span>
@@ -1020,7 +1025,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.get_aux">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.get_aux">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_aux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_aux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the auxiliary data associated with keyword</span>
 
@@ -1043,7 +1048,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.zero">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.zero">[docs]</a>
-    <span class="k">def</span> <span class="nf">zero</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">zero</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Zero out the data array associated with variable name.</span>
 
@@ -1059,7 +1064,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.fill_BC_all">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.fill_BC_all">[docs]</a>
-    <span class="k">def</span> <span class="nf">fill_BC_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fill_BC_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fill boundary conditions on all variables.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1069,7 +1074,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.fill_BC">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.fill_BC">[docs]</a>
-    <span class="k">def</span> <span class="nf">fill_BC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fill_BC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fill the boundary conditions.  This operates on a single state</span>
 <span class="sd">        variable at a time, to allow for maximum flexibility.</span>
@@ -1116,7 +1121,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.min">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.min">[docs]</a>
-    <span class="k">def</span> <span class="nf">min</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">min</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        return the minimum of the variable name in the domain&#39;s valid region</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1126,7 +1131,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.max">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.max">[docs]</a>
-    <span class="k">def</span> <span class="nf">max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        return the maximum of the variable name in the domain&#39;s valid region</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1136,7 +1141,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.restrict">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.restrict">[docs]</a>
-    <span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">varname</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">varname</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Restrict the variable varname to a coarser grid (factor of 2</span>
 <span class="sd">        coarser) and return an array with the resulting data (and same</span>
@@ -1177,7 +1182,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.prolong">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.prolong">[docs]</a>
-    <span class="k">def</span> <span class="nf">prolong</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">varname</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">prolong</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">varname</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Prolong the data in the current (coarse) grid to a finer</span>
 <span class="sd">        (factor of 2 finer) grid.  Return an array with the resulting</span>
@@ -1240,7 +1245,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.write">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.write">[docs]</a>
-    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        create an output file in HDF5 format and write out our data and</span>
 <span class="sd">        grid.</span>
@@ -1255,7 +1260,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.write_data">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.write_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        write the data out to an hdf5 file -- here, f is an h5py</span>
 <span class="sd">        File pbject</span>
@@ -1298,7 +1303,7 @@
 
 <div class="viewcode-block" id="CellCenterData2d.pretty_print">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.CellCenterData2d.pretty_print">[docs]</a>
-    <span class="k">def</span> <span class="nf">pretty_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pretty_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;print out the contents of the data array with pretty formatting</span>
 <span class="sd">        indicating where ghost cells are.&quot;&quot;&quot;</span>
         <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
@@ -1309,13 +1314,13 @@
 
 <div class="viewcode-block" id="FaceCenterData2d">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d">[docs]</a>
-<span class="k">class</span> <span class="nc">FaceCenterData2d</span><span class="p">(</span><span class="n">CellCenterData2d</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FaceCenterData2d</span><span class="p">(</span><span class="n">CellCenterData2d</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class to define face-centered data that lives on a grid.  Data</span>
 <span class="sd">    can be face-centered in x or y.  This is built in the same multistep</span>
 <span class="sd">    process  as a CellCenterData2d object&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">idir</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">idir</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the FaceCenterData2d object</span>
 
@@ -1335,13 +1340,13 @@
 
 <div class="viewcode-block" id="FaceCenterData2d.add_derived">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d.add_derived">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_derived</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_derived</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;derived variables not yet supported for face-centered data&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="FaceCenterData2d.create">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d.create">[docs]</a>
-    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Called after all the variables are registered and allocates the</span>
 <span class="sd">        storage for the state data.  For face-centered data, we have</span>
 <span class="sd">        one more zone in the face-centered direction.</span>
@@ -1364,7 +1369,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span> <span class="o">=</span> <span class="mi">1</span></div>
 
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; print out some basic information about the FaceCenterData2d</span>
 <span class="sd">            object &quot;&quot;&quot;</span>
 
@@ -1386,7 +1391,7 @@
 
 <div class="viewcode-block" id="FaceCenterData2d.get_var_by_index">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d.get_var_by_index">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_var_by_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_var_by_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a data array for the variable with index n in the</span>
 <span class="sd">        data array.  Any changes made to this are automatically</span>
@@ -1408,7 +1413,7 @@
 
 <div class="viewcode-block" id="FaceCenterData2d.get_vars">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d.get_vars">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the entire data array.  Any changes made to this</span>
 <span class="sd">        are automatically reflected in the CellCenterData2d object.</span>
@@ -1424,7 +1429,7 @@
 
 <div class="viewcode-block" id="FaceCenterData2d.fill_BC">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d.fill_BC">[docs]</a>
-    <span class="k">def</span> <span class="nf">fill_BC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fill_BC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fill the boundary conditions.  This operates on a single state</span>
 <span class="sd">        variable at a time, to allow for maximum flexibility.</span>
@@ -1454,19 +1459,19 @@
 
 <div class="viewcode-block" id="FaceCenterData2d.restrict">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d.restrict">[docs]</a>
-    <span class="k">def</span> <span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">varname</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">restrict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">varname</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;restriction not implemented for FaceCenterData2d&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="FaceCenterData2d.prolong">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d.prolong">[docs]</a>
-    <span class="k">def</span> <span class="nf">prolong</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">varname</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">prolong</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">varname</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;prolongation not implemented for FaceCenterData2d&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="FaceCenterData2d.write_data">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.FaceCenterData2d.write_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        write the data out to an hdf5 file -- here, f is an h5py</span>
 <span class="sd">        File pbject</span>
@@ -1490,7 +1495,7 @@
 
 <div class="viewcode-block" id="cell_center_data_clone">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.cell_center_data_clone">[docs]</a>
-<span class="k">def</span> <span class="nf">cell_center_data_clone</span><span class="p">(</span><span class="n">old</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cell_center_data_clone</span><span class="p">(</span><span class="n">old</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a new CellCenterData2d object that is a copy of an existing</span>
 <span class="sd">    one</span>
@@ -1525,10 +1530,10 @@
 
 <div class="viewcode-block" id="do_demo">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.patch.do_demo">[docs]</a>
-<span class="k">def</span> <span class="nf">do_demo</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">do_demo</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; show examples of the patch methods / classes &quot;&quot;&quot;</span>
     <span class="c1"># pylint: disable-next=import-outside-toplevel  # required to avoid import loops</span>
-    <span class="kn">import</span> <span class="nn">pyro.util.io_pyro</span> <span class="k">as</span> <span class="nn">io</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pyro.util.io_pyro</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">io</span>
 
     <span class="c1"># illustrate basic mesh operations</span>
 
@@ -1622,8 +1627,8 @@ By pyro development team
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.lm_atm.LM_atm_interface &#8212; pyro 4.4.0.post13+g81873bc4 documentation</title>
+    <title>pyro.lm_atm.LM_atm_interface &#8212; pyro 4.4.0.post14+gf73c3e04 documentation</title>
   
   
   
@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,22 +26,22 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/myfile.css?v=359afcf4" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=7785025e"></script>
+    <script src="../../../_static/documentation_options.js?v=37a1fb6e"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -299,9 +299,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -433,14 +438,14 @@
                 <article class="bd-article">
                   
   <h1>Source code for pyro.lm_atm.LM_atm_interface</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">njit</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="kn">import</span> <span class="n">njit</span>
 
 
 <div class="viewcode-block" id="is_symmetric_pair">
 <a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.is_symmetric_pair">[docs]</a>
 <span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">is_symmetric_pair</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">nodal</span><span class="p">,</span> <span class="n">sl</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_symmetric_pair</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">nodal</span><span class="p">,</span> <span class="n">sl</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Are sl and sr symmetric about an axis parallel with the y-axis in the center of domain the x-direction?</span>
 
@@ -507,7 +512,7 @@
 <div class="viewcode-block" id="is_symmetric">
 <a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.is_symmetric">[docs]</a>
 <span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">is_symmetric</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">nodal</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_symmetric</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">nodal</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Is the left half of s the mirror image of the right half?</span>
 
@@ -533,7 +538,7 @@
 <div class="viewcode-block" id="is_asymmetric_pair">
 <a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.is_asymmetric_pair">[docs]</a>
 <span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">is_asymmetric_pair</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">nodal</span><span class="p">,</span> <span class="n">sl</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_asymmetric_pair</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">nodal</span><span class="p">,</span> <span class="n">sl</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Are sl and sr asymmetric about an axis parallel with the y-axis in the center of domain the x-direction?</span>
 
@@ -601,7 +606,7 @@
 <div class="viewcode-block" id="is_asymmetric">
 <a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.is_asymmetric">[docs]</a>
 <span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">is_asymmetric</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">nodal</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_asymmetric</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">nodal</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Is the left half of s asymmetric to the right half?</span>
 
@@ -627,7 +632,7 @@
 <div class="viewcode-block" id="mac_vels">
 <a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.mac_vels">[docs]</a>
 <span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">mac_vels</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mac_vels</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
              <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
              <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
              <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
@@ -721,7 +726,7 @@
 <div class="viewcode-block" id="states">
 <a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.states">[docs]</a>
 <span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">states</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">states</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
            <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
            <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
            <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
@@ -784,7 +789,7 @@
 <div class="viewcode-block" id="rho_states">
 <a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.rho_states">[docs]</a>
 <span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">rho_states</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rho_states</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
                <span class="n">rho</span><span class="p">,</span> <span class="n">u_MAC</span><span class="p">,</span> <span class="n">v_MAC</span><span class="p">,</span>
                <span class="n">ldelta_rx</span><span class="p">,</span> <span class="n">ldelta_ry</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
@@ -884,7 +889,7 @@
 <div class="viewcode-block" id="get_interface_states">
 <a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.get_interface_states">[docs]</a>
 <span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">get_interface_states</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_interface_states</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span>
                          <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
                          <span class="n">ldelta_ux</span><span class="p">,</span> <span class="n">ldelta_vx</span><span class="p">,</span>
                          <span class="n">ldelta_uy</span><span class="p">,</span> <span class="n">ldelta_vy</span><span class="p">,</span>
@@ -1046,7 +1051,7 @@
 <div class="viewcode-block" id="upwind">
 <a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.upwind">[docs]</a>
 <span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    upwind the left and right states based on the specified input</span>
 <span class="sd">    velocity, s.  The resulting interface state is q_int</span>
@@ -1095,7 +1100,7 @@
 <div class="viewcode-block" id="riemann">
 <a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.riemann">[docs]</a>
 <span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">riemann</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">riemann</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Solve the Burger&#39;s Riemann problem given the input left and right</span>
 <span class="sd">    states and return the state on the interface.</span>
@@ -1144,7 +1149,7 @@
 <div class="viewcode-block" id="riemann_and_upwind">
 <a class="viewcode-back" href="../../../pyro.lm_atm.html#pyro.lm_atm.LM_atm_interface.riemann_and_upwind">[docs]</a>
 <span class="nd">@njit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">riemann_and_upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">riemann_and_upwind</span><span class="p">(</span><span class="n">ng</span><span class="p">,</span> <span class="n">q_l</span><span class="p">,</span> <span class="n">q_r</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    First solve the Riemann problem given q_l and q_r to give the</span>
 <span class="sd">    velocity on the interface and: use this velocity to upwind to</span>
@@ -1231,8 +1236,8 @@ By pyro development team
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>

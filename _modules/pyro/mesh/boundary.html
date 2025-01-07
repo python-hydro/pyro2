@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.mesh.boundary &#8212; pyro 4.4.0.post13+g81873bc4 documentation</title>
+    <title>pyro.mesh.boundary &#8212; pyro 4.4.0.post14+gf73c3e04 documentation</title>
   
   
   
@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,22 +26,22 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/myfile.css?v=359afcf4" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=7785025e"></script>
+    <script src="../../../_static/documentation_options.js?v=37a1fb6e"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -299,9 +299,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -438,7 +443,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 
-<span class="kn">from</span> <span class="nn">pyro.util</span> <span class="kn">import</span> <span class="n">msg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyro.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">msg</span>
 
 <span class="c1"># keep track of whether the BCs are solid walls (passed into the</span>
 <span class="c1"># Riemann solver).</span>
@@ -456,7 +461,7 @@
 
 <div class="viewcode-block" id="define_bc">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.boundary.define_bc">[docs]</a>
-<span class="k">def</span> <span class="nf">define_bc</span><span class="p">(</span><span class="n">bc_type</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">is_solid</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">define_bc</span><span class="p">(</span><span class="n">bc_type</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">is_solid</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    use this to extend the types of boundary conditions supported</span>
 <span class="sd">    on a solver-by-solver basis.  Here we pass in the reference to</span>
@@ -470,7 +475,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_set_reflect</span><span class="p">(</span><span class="n">odd_reflect_dir</span><span class="p">,</span> <span class="n">dir_string</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_set_reflect</span><span class="p">(</span><span class="n">odd_reflect_dir</span><span class="p">,</span> <span class="n">dir_string</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">odd_reflect_dir</span> <span class="o">==</span> <span class="n">dir_string</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;reflect-odd&quot;</span>
     <span class="k">return</span> <span class="s2">&quot;reflect-even&quot;</span>
@@ -478,12 +483,12 @@
 
 <div class="viewcode-block" id="BCProp">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.boundary.BCProp">[docs]</a>
-<span class="k">class</span> <span class="nc">BCProp</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BCProp</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A simple container to hold properties of the boundary conditions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xl_prop</span><span class="p">,</span> <span class="n">xr_prop</span><span class="p">,</span> <span class="n">yl_prop</span><span class="p">,</span> <span class="n">yr_prop</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xl_prop</span><span class="p">,</span> <span class="n">xr_prop</span><span class="p">,</span> <span class="n">yl_prop</span><span class="p">,</span> <span class="n">yr_prop</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xl</span> <span class="o">=</span> <span class="n">xl_prop</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xr</span> <span class="o">=</span> <span class="n">xr_prop</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">yl</span> <span class="o">=</span> <span class="n">yl_prop</span>
@@ -493,7 +498,7 @@
 
 <div class="viewcode-block" id="bc_is_solid">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.boundary.bc_is_solid">[docs]</a>
-<span class="k">def</span> <span class="nf">bc_is_solid</span><span class="p">(</span><span class="n">bc</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">bc_is_solid</span><span class="p">(</span><span class="n">bc</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    return a container class indicating which boundaries are solid walls</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -507,7 +512,7 @@
 
 <div class="viewcode-block" id="BC">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.boundary.BC">[docs]</a>
-<span class="k">class</span> <span class="nc">BC</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BC</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Boundary condition container -- hold the BCs on each boundary</span>
 <span class="sd">    for a single variable.</span>
 
@@ -521,7 +526,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
                  <span class="n">xlb</span><span class="o">=</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="n">xrb</span><span class="o">=</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span>
                  <span class="n">ylb</span><span class="o">=</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span> <span class="n">yrb</span><span class="o">=</span><span class="s2">&quot;outflow&quot;</span><span class="p">,</span>
                  <span class="n">xl_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xr_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -649,7 +654,7 @@
         <span class="k">if</span> <span class="n">yr_func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">yr_value</span> <span class="o">=</span> <span class="n">yr_func</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; print out some basic information about the BC object &quot;&quot;&quot;</span>
 
         <span class="n">string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;BCs: -x: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">xlb</span><span class="si">}</span><span class="s2">  +x: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">xrb</span><span class="si">}</span><span class="s2">  -y: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ylb</span><span class="si">}</span><span class="s2">  +y: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">yrb</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -718,8 +723,8 @@ By pyro development team
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>
