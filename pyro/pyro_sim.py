@@ -30,6 +30,8 @@ valid_solvers = ["advection",
                  "lm_atm",
                  "swe"]
 
+import warnings
+warnings.filterwarnings("error")
 
 class Pyro:
     """

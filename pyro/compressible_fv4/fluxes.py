@@ -52,10 +52,10 @@ def fluxes(myd, rp, ivars):
     # convert U from cell-averages to cell-centers
     U_cc = np.zeros_like(U_avg)
 
-    U_cc[:, :, ivars.idens] = myd.to_centers("density")
+    U_cc[:, :, ivars.idens] = myd.to_centers("density", is_positive=True)
     U_cc[:, :, ivars.ixmom] = myd.to_centers("x-momentum")
     U_cc[:, :, ivars.iymom] = myd.to_centers("y-momentum")
-    U_cc[:, :, ivars.iener] = myd.to_centers("energy")
+    U_cc[:, :, ivars.iener] = myd.to_centers("energy", is_positive=True)
 
     # compute the primitive variables of both the cell-center and averages
     q_bar = comp.cons_to_prim(U_avg, gamma, ivars, myd.grid)
@@ -65,6 +65,15 @@ def fluxes(myd, rp, ivars):
     q_avg = myg.scratch_array(nvar=ivars.nq)
     for n in range(ivars.nq):
         q_avg.v(n=n, buf=3)[:, :] = q_cc.v(n=n, buf=3) + myg.dx**2/24.0 * q_bar.lap(n=n, buf=3)
+
+    # enforce positivity
+    q_avg.v(n=ivars.irho, buf=3)[:, :] = np.where(q_avg.v(n=ivars.irho, buf=3) > 0,
+                                                  q_avg.v(n=ivars.irho, buf=3),
+                                                  q_cc.v(n=ivars.irho, buf=3))
+
+    q_avg.v(n=ivars.ip, buf=3)[:, :] = np.where(q_avg.v(n=ivars.ip, buf=3) > 0,
+                                                q_avg.v(n=ivars.ip, buf=3),
+                                                q_cc.v(n=ivars.ip, buf=3))
 
     # flattening -- there is a single flattening coefficient (xi) for all directions
     use_flattening = rp.get_param("compressible.use_flattening")
