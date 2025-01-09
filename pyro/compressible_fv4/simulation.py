@@ -1,6 +1,6 @@
 import pyro.compressible_fv4.fluxes as flx
 from pyro import compressible_rk
-from pyro.compressible import get_external_sources
+from pyro.compressible import get_external_sources, get_sponge_factor
 from pyro.mesh import fv, integration
 
 
@@ -47,6 +47,13 @@ class Simulation(compressible_rk.Simulation):
             k.v(n=n)[:, :] = \
                (flux_x.v(n=n) - flux_x.ip(1, n=n))/myg.dx + \
                (flux_y.v(n=n) - flux_y.jp(1, n=n))/myg.dy + S.v(n=n)
+
+        # finally, add the sponge source, if desired
+        if self.rp.get_param("sponge.do_sponge"):
+            kappa_f = get_sponge_factor(myd.data, self.ivars, self.rp, myg)
+
+            k.v(n=self.ivars.ixmom)[:, :] -= kappa_f.v() * myd.data.v(n=self.ivars.ixmom)
+            k.v(n=self.ivars.iymom)[:, :] -= kappa_f.v() * myd.data.v(n=self.ivars.iymom)
 
         return k
 
