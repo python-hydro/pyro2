@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyro.compressible package &#8212; pyro 4.4.0.post16+gc1b0584a documentation</title>
+    <title>pyro.compressible package &#8212; pyro 4.4.0.post17+g6cc75515 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=b9df446b"></script>
+    <script src="_static/documentation_options.js?v=e19473d7"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -565,6 +565,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.simulation.Variables"><code class="docutils literal notranslate"><span class="pre">Variables</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.simulation.cons_to_prim"><code class="docutils literal notranslate"><span class="pre">cons_to_prim()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.simulation.get_external_sources"><code class="docutils literal notranslate"><span class="pre">get_external_sources()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.simulation.get_sponge_factor"><code class="docutils literal notranslate"><span class="pre">get_sponge_factor()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.simulation.prim_to_cons"><code class="docutils literal notranslate"><span class="pre">prim_to_cons()</span></code></a></li>
 </ul>
 </li>
@@ -1269,6 +1270,13 @@ variable by an integer key</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="pyro.compressible.simulation.get_sponge_factor">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible.simulation.</span></span><span class="sig-name descname"><span class="pre">get_sponge_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">U</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">myg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible/simulation.html#get_sponge_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible.simulation.get_sponge_factor" title="Link to this definition">#</a></dt>
+<dd><p>compute the sponge factor, f / tau, that goes into a
+sponge damping term of the form S = - (f / tau) (rho U)</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible.simulation.prim_to_cons">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible.simulation.</span></span><span class="sig-name descname"><span class="pre">prim_to_cons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">myg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible/simulation.html#prim_to_cons"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible.simulation.prim_to_cons" title="Link to this definition">#</a></dt>
 <dd><p>convert an input vector of primitive variables to conserved variables</p>
@@ -1665,6 +1673,7 @@ variables</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.simulation.Variables"><code class="docutils literal notranslate"><span class="pre">Variables</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.simulation.cons_to_prim"><code class="docutils literal notranslate"><span class="pre">cons_to_prim()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.simulation.get_external_sources"><code class="docutils literal notranslate"><span class="pre">get_external_sources()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.simulation.get_sponge_factor"><code class="docutils literal notranslate"><span class="pre">get_sponge_factor()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible.simulation.prim_to_cons"><code class="docutils literal notranslate"><span class="pre">prim_to_cons()</span></code></a></li>
 </ul>
 </li>

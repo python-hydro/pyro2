@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Comparing the Compressible Solvers &#8212; pyro 4.4.0.post16+gc1b0584a documentation</title>
+    <title>Comparing the Compressible Solvers &#8212; pyro 4.4.0.post17+g6cc75515 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=b9df446b"></script>
+    <script src="_static/documentation_options.js?v=e19473d7"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -614,6 +614,10 @@ rt.dens1 = 1.0
 rt.dens2 = 2.0
 rt.p0 = 10.0
 rt.sigma = 0.1
+sponge.do_sponge = 0
+sponge.sponge_rho_begin = 0.01
+sponge.sponge_rho_full = 0.001
+sponge.sponge_timescale = 0.01
 vis.dovis = 0
 vis.store_images = 0
 
@@ -740,7 +744,7 @@ vis.store_images = 0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.colorbar.Colorbar at 0x7fcd04f36150&gt;
+&lt;matplotlib.colorbar.Colorbar at 0x7f76f50225d0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -819,6 +823,10 @@ mesh.yrboundary = periodic
 particles.do_particles = 0
 particles.n_particles = 100
 particles.particle_generator = grid
+sponge.do_sponge = 0
+sponge.sponge_rho_begin = 0.01
+sponge.sponge_rho_full = 0.001
+sponge.sponge_timescale = 0.01
 vis.dovis = 0
 vis.store_images = 0
 
@@ -873,7 +881,7 @@ vis.store_images = 0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.colorbar.Colorbar at 0x7fcd02a930d0&gt;
+&lt;matplotlib.colorbar.Colorbar at 0x7f76f50aec50&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
