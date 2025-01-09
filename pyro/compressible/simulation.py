@@ -159,6 +159,29 @@ def get_external_sources(t, dt, U, ivars, rp, myg, *, U_old=None, problem_source
     return S
 
 
+def get_sponge_factor(U, ivars, rp, myg):
+    """compute the sponge factor, f / tau, that goes into a
+    sponge damping term of the form S = - (f / tau) (rho U)"""
+
+    rho = U[:, :, ivars.idens]
+    rho_begin = rp.get_param("sponge.sponge_rho_begin")
+    rho_full = rp.get_param("sponge.sponge_rho_full")
+
+    assert rho_begin > rho_full
+
+    f = myg.scratch_array()
+
+    f[:, :] = np.where(rho > rho_begin,
+                       0.0,
+                       np.where(rho < rho_full,
+                                1.0,
+                                0.5 * (1.0 - np.cos(np.pi * (rho - rho_begin) /
+                                                    (rho_full - rho_begin)))))
+
+    tau = rp.get_param("sponge.sponge_timescale")
+    return f / tau
+
+
 class Simulation(NullSimulation):
     """The main simulation class for the corner transport upwind
     compressible hydrodynamics solver
@@ -394,6 +417,14 @@ class Simulation(NullSimulation):
         for n in range(self.ivars.nvar):
             var = self.cc_data.get_var_by_index(n)
             var.v()[:, :] += 0.5 * self.dt * (S_new.v(n=n) - S_old.v(n=n))
+
+        # finally, do the sponge, if desired -- this is formulated as an
+        # implicit update to the velocity
+        if self.rp.get_param("sponge.do_sponge"):
+            kappa_f = get_sponge_factor(self.cc_data.data, self.ivars, self.rp, myg)
+
+            self.cc_data.data[:, :, self.ivars.ixmom] /= (1.0 + self.dt * kappa_f)
+            self.cc_data.data[:, :, self.ivars.iymom] /= (1.0 + self.dt * kappa_f)
 
         if self.particles is not None:
             self.particles.update_particles(self.dt)
