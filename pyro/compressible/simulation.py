@@ -65,6 +65,9 @@ def cons_to_prim(U, gamma, ivars, myg):
                   out=np.zeros_like(U[:, :, ivars.iener]),
                   where=(U[:, :, ivars.idens] != 0.0))
 
+    assert e.v().min() > 0.0
+    assert q.v(n=ivars.irho).min() > 0.0
+
     q[:, :, ivars.ip] = eos.pres(gamma, q[:, :, ivars.irho], e)
 
     if ivars.naux > 0:
