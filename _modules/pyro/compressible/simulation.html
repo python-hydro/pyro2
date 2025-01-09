@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible.simulation &#8212; pyro 4.4.0.post15+g12898790 documentation</title>
+    <title>pyro.compressible.simulation &#8212; pyro 4.4.0.post16+gc1b0584a documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=eace6a54"></script>
+    <script src="../../../_static/documentation_options.js?v=b9df446b"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -509,6 +509,9 @@
                   <span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">irho</span><span class="p">],</span>
                   <span class="n">out</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">iener</span><span class="p">]),</span>
                   <span class="n">where</span><span class="o">=</span><span class="p">(</span><span class="n">U</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">idens</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">))</span>
+
+    <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">v</span><span class="p">()</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.0</span>
+    <span class="k">assert</span> <span class="n">q</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">ivars</span><span class="o">.</span><span class="n">irho</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.0</span>
 
     <span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">ip</span><span class="p">]</span> <span class="o">=</span> <span class="n">eos</span><span class="o">.</span><span class="n">pres</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">q</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ivars</span><span class="o">.</span><span class="n">irho</span><span class="p">],</span> <span class="n">e</span><span class="p">)</span>
 
