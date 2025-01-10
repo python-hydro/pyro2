@@ -31,6 +31,9 @@ dens_cutoff = 1.e-3
 e_rate = 0.5
 
 
+[sponge]
+do_sponge = 1
+
 [compressible]
 grav = -2.0
 
