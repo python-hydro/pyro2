@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyro.compressible_fv4 package &#8212; pyro 4.4.0.post18+g7351d085 documentation</title>
+    <title>pyro.compressible_fv4 package &#8212; pyro 4.4.0.post19+ga78743ee documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=51958be0"></script>
+    <script src="_static/documentation_options.js?v=6ff65ddf"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -570,9 +570,21 @@ implementing the algorithm from McCorquodale &amp; Colella (2011).</p>
 <li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.bubble.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_fv4.problems.html#module-pyro.compressible_fv4.problems.convection">pyro.compressible_fv4.problems.convection module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.convection.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.convection.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.convection.source_terms"><code class="docutils literal notranslate"><span class="pre">source_terms()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.compressible_fv4.problems.html#module-pyro.compressible_fv4.problems.gresho">pyro.compressible_fv4.problems.gresho module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.gresho.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.gresho.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_fv4.problems.html#module-pyro.compressible_fv4.problems.heating">pyro.compressible_fv4.problems.heating module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.heating.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.heating.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.heating.source_terms"><code class="docutils literal notranslate"><span class="pre">source_terms()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.compressible_fv4.problems.html#module-pyro.compressible_fv4.problems.hse">pyro.compressible_fv4.problems.hse module</a><ul>
@@ -588,6 +600,12 @@ implementing the algorithm from McCorquodale &amp; Colella (2011).</p>
 <li class="toctree-l2"><a class="reference internal" href="pyro.compressible_fv4.problems.html#module-pyro.compressible_fv4.problems.logo">pyro.compressible_fv4.problems.logo module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.logo.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.logo.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_fv4.problems.html#module-pyro.compressible_fv4.problems.plume">pyro.compressible_fv4.problems.plume module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.plume.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.plume.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.plume.source_terms"><code class="docutils literal notranslate"><span class="pre">source_terms()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.compressible_fv4.problems.html#module-pyro.compressible_fv4.problems.quad">pyro.compressible_fv4.problems.quad module</a><ul>
@@ -608,6 +626,11 @@ implementing the algorithm from McCorquodale &amp; Colella (2011).</p>
 <li class="toctree-l2"><a class="reference internal" href="pyro.compressible_fv4.problems.html#module-pyro.compressible_fv4.problems.rt2">pyro.compressible_fv4.problems.rt2 module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.rt2.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.rt2.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyro.compressible_fv4.problems.html#module-pyro.compressible_fv4.problems.rt_multimode">pyro.compressible_fv4.problems.rt_multimode module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.rt_multimode.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyro.compressible_fv4.problems.html#pyro.compressible_fv4.problems.rt_multimode.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pyro.compressible_fv4.problems.html#module-pyro.compressible_fv4.problems.sedov">pyro.compressible_fv4.problems.sedov module</a><ul>

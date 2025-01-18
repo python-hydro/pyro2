@@ -25,14 +25,6 @@ pyro.advection\_fv4.fluxes module
    :undoc-members:
    :show-inheritance:
 
-pyro.advection\_fv4.interface module
-------------------------------------
-
-.. automodule:: pyro.advection_fv4.interface
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 pyro.advection\_fv4.simulation module
 -------------------------------------
 

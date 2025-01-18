@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyro.compressible_fv4.problems package &#8212; pyro 4.4.0.post18+g7351d085 documentation</title>
+    <title>pyro.compressible_fv4.problems package &#8212; pyro 4.4.0.post19+ga78743ee documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=51958be0"></script>
+    <script src="_static/documentation_options.js?v=6ff65ddf"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -534,9 +534,21 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.bubble.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.convection">pyro.compressible_fv4.problems.convection module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.convection.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.convection.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.convection.source_terms"><code class="docutils literal notranslate"><span class="pre">source_terms()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.gresho">pyro.compressible_fv4.problems.gresho module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.gresho.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.gresho.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.heating">pyro.compressible_fv4.problems.heating module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.heating.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.heating.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.heating.source_terms"><code class="docutils literal notranslate"><span class="pre">source_terms()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.hse">pyro.compressible_fv4.problems.hse module</a><ul class="nav section-nav flex-column">
@@ -552,6 +564,12 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.logo">pyro.compressible_fv4.problems.logo module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.logo.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.logo.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.plume">pyro.compressible_fv4.problems.plume module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.plume.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.plume.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.plume.source_terms"><code class="docutils literal notranslate"><span class="pre">source_terms()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.quad">pyro.compressible_fv4.problems.quad module</a><ul class="nav section-nav flex-column">
@@ -572,6 +590,11 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.rt2">pyro.compressible_fv4.problems.rt2 module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.rt2.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.rt2.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.rt_multimode">pyro.compressible_fv4.problems.rt_multimode module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.rt_multimode.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.rt_multimode.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.sedov">pyro.compressible_fv4.problems.sedov module</a><ul class="nav section-nav flex-column">
@@ -662,6 +685,29 @@ to shear)</p>
 </dd></dl>
 
 </section>
+<section id="module-pyro.compressible_fv4.problems.convection">
+<span id="pyro-compressible-fv4-problems-convection-module"></span><h2>pyro.compressible_fv4.problems.convection module<a class="headerlink" href="#module-pyro.compressible_fv4.problems.convection" title="Link to this heading">#</a></h2>
+<p>A heat source in a layer at some height above the bottom will drive
+convection in an adiabatically stratified atmosphere.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.compressible_fv4.problems.convection.finalize">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.problems.convection.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/problems/convection.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.problems.convection.finalize" title="Link to this definition">#</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.compressible_fv4.problems.convection.init_data">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.problems.convection.</span></span><span class="sig-name descname"><span class="pre">init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/problems/convection.html#init_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.problems.convection.init_data" title="Link to this definition">#</a></dt>
+<dd><p>initialize the bubble problem</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.compressible_fv4.problems.convection.source_terms">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.problems.convection.</span></span><span class="sig-name descname"><span class="pre">source_terms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">myg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/problems/convection.html#source_terms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.problems.convection.source_terms" title="Link to this definition">#</a></dt>
+<dd><p>source terms to be added to the evolution</p>
+</dd></dl>
+
+</section>
 <section id="module-pyro.compressible_fv4.problems.gresho">
 <span id="pyro-compressible-fv4-problems-gresho-module"></span><h2>pyro.compressible_fv4.problems.gresho module<a class="headerlink" href="#module-pyro.compressible_fv4.problems.gresho" title="Link to this heading">#</a></h2>
 <p>The Gresho vortex problem sets up a toroidal velocity field that is
@@ -678,6 +724,29 @@ is based on Miczek, Roepke, and Edelmann 2014.</p>
 <dt class="sig sig-object py" id="pyro.compressible_fv4.problems.gresho.init_data">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.problems.gresho.</span></span><span class="sig-name descname"><span class="pre">init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/problems/gresho.html#init_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.problems.gresho.init_data" title="Link to this definition">#</a></dt>
 <dd><p>initialize the Gresho vortex problem</p>
+</dd></dl>
+
+</section>
+<section id="module-pyro.compressible_fv4.problems.heating">
+<span id="pyro-compressible-fv4-problems-heating-module"></span><h2>pyro.compressible_fv4.problems.heating module<a class="headerlink" href="#module-pyro.compressible_fv4.problems.heating" title="Link to this heading">#</a></h2>
+<p>A test of the energy sources.  This uses a uniform domain and
+slowly adds heat to the center over time.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.compressible_fv4.problems.heating.finalize">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.problems.heating.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/problems/heating.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.problems.heating.finalize" title="Link to this definition">#</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.compressible_fv4.problems.heating.init_data">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.problems.heating.</span></span><span class="sig-name descname"><span class="pre">init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/problems/heating.html#init_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.problems.heating.init_data" title="Link to this definition">#</a></dt>
+<dd><p>initialize the heating problem</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.compressible_fv4.problems.heating.source_terms">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.problems.heating.</span></span><span class="sig-name descname"><span class="pre">source_terms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">myg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/problems/heating.html#source_terms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.problems.heating.source_terms" title="Link to this definition">#</a></dt>
+<dd><p>source terms to be added to the evolution</p>
 </dd></dl>
 
 </section>
@@ -732,6 +801,29 @@ converging shocks inward to scramble the logo.</p>
 <dt class="sig sig-object py" id="pyro.compressible_fv4.problems.logo.init_data">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.problems.logo.</span></span><span class="sig-name descname"><span class="pre">init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/problems/logo.html#init_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.problems.logo.init_data" title="Link to this definition">#</a></dt>
 <dd><p>initialize the logo problem</p>
+</dd></dl>
+
+</section>
+<section id="module-pyro.compressible_fv4.problems.plume">
+<span id="pyro-compressible-fv4-problems-plume-module"></span><h2>pyro.compressible_fv4.problems.plume module<a class="headerlink" href="#module-pyro.compressible_fv4.problems.plume" title="Link to this heading">#</a></h2>
+<p>A heat source at a point creates a plume that buoynantly rises in
+an adiabatically stratified atmosphere.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.compressible_fv4.problems.plume.finalize">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.problems.plume.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/problems/plume.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.problems.plume.finalize" title="Link to this definition">#</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.compressible_fv4.problems.plume.init_data">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.problems.plume.</span></span><span class="sig-name descname"><span class="pre">init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/problems/plume.html#init_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.problems.plume.init_data" title="Link to this definition">#</a></dt>
+<dd><p>initialize the bubble problem</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.compressible_fv4.problems.plume.source_terms">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.problems.plume.</span></span><span class="sig-name descname"><span class="pre">source_terms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">myg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/problems/plume.html#source_terms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.problems.plume.source_terms" title="Link to this definition">#</a></dt>
+<dd><p>source terms to be added to the evolution</p>
 </dd></dl>
 
 </section>
@@ -801,6 +893,22 @@ how the growth rate depends on wavenumber.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyro.compressible_fv4.problems.rt2.init_data">
 <span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.problems.rt2.</span></span><span class="sig-name descname"><span class="pre">init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/problems/rt2.html#init_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.problems.rt2.init_data" title="Link to this definition">#</a></dt>
+<dd><p>initialize the rt problem</p>
+</dd></dl>
+
+</section>
+<section id="module-pyro.compressible_fv4.problems.rt_multimode">
+<span id="pyro-compressible-fv4-problems-rt-multimode-module"></span><h2>pyro.compressible_fv4.problems.rt_multimode module<a class="headerlink" href="#module-pyro.compressible_fv4.problems.rt_multimode" title="Link to this heading">#</a></h2>
+<p>A multi-mode Rayleigh-Taylor instability.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.compressible_fv4.problems.rt_multimode.finalize">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.problems.rt_multimode.</span></span><span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/problems/rt_multimode.html#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.problems.rt_multimode.finalize" title="Link to this definition">#</a></dt>
+<dd><p>print out any information to the user at the end of the run</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyro.compressible_fv4.problems.rt_multimode.init_data">
+<span class="sig-prename descclassname"><span class="pre">pyro.compressible_fv4.problems.rt_multimode.</span></span><span class="sig-name descname"><span class="pre">init_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyro/compressible_fv4/problems/rt_multimode.html#init_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyro.compressible_fv4.problems.rt_multimode.init_data" title="Link to this definition">#</a></dt>
 <dd><p>initialize the rt problem</p>
 </dd></dl>
 
@@ -918,9 +1026,21 @@ Riemann solution.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.bubble.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.convection">pyro.compressible_fv4.problems.convection module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.convection.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.convection.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.convection.source_terms"><code class="docutils literal notranslate"><span class="pre">source_terms()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.gresho">pyro.compressible_fv4.problems.gresho module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.gresho.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.gresho.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.heating">pyro.compressible_fv4.problems.heating module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.heating.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.heating.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.heating.source_terms"><code class="docutils literal notranslate"><span class="pre">source_terms()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.hse">pyro.compressible_fv4.problems.hse module</a><ul class="nav section-nav flex-column">
@@ -936,6 +1056,12 @@ Riemann solution.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.logo">pyro.compressible_fv4.problems.logo module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.logo.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.logo.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.plume">pyro.compressible_fv4.problems.plume module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.plume.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.plume.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.plume.source_terms"><code class="docutils literal notranslate"><span class="pre">source_terms()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.quad">pyro.compressible_fv4.problems.quad module</a><ul class="nav section-nav flex-column">
@@ -956,6 +1082,11 @@ Riemann solution.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.rt2">pyro.compressible_fv4.problems.rt2 module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.rt2.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.rt2.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.rt_multimode">pyro.compressible_fv4.problems.rt_multimode module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.rt_multimode.finalize"><code class="docutils literal notranslate"><span class="pre">finalize()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyro.compressible_fv4.problems.rt_multimode.init_data"><code class="docutils literal notranslate"><span class="pre">init_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-pyro.compressible_fv4.problems.sedov">pyro.compressible_fv4.problems.sedov module</a><ul class="nav section-nav flex-column">

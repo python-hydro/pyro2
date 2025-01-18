@@ -16,11 +16,3 @@ pyro.lm\_atm.problems.bubble module
    :members:
    :undoc-members:
    :show-inheritance:
-
-pyro.lm\_atm.problems.gresho module
------------------------------------
-
-.. automodule:: pyro.lm_atm.problems.gresho
-   :members:
-   :undoc-members:
-   :show-inheritance:

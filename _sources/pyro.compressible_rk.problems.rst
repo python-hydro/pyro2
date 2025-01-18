@@ -33,10 +33,26 @@ pyro.compressible\_rk.problems.bubble module
    :undoc-members:
    :show-inheritance:
 
+pyro.compressible\_rk.problems.convection module
+------------------------------------------------
+
+.. automodule:: pyro.compressible_rk.problems.convection
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pyro.compressible\_rk.problems.gresho module
 --------------------------------------------
 
 .. automodule:: pyro.compressible_rk.problems.gresho
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyro.compressible\_rk.problems.heating module
+---------------------------------------------
+
+.. automodule:: pyro.compressible_rk.problems.heating
    :members:
    :undoc-members:
    :show-inheritance:
@@ -61,6 +77,14 @@ pyro.compressible\_rk.problems.logo module
 ------------------------------------------
 
 .. automodule:: pyro.compressible_rk.problems.logo
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyro.compressible\_rk.problems.plume module
+-------------------------------------------
+
+.. automodule:: pyro.compressible_rk.problems.plume
    :members:
    :undoc-members:
    :show-inheritance:
@@ -93,6 +117,14 @@ pyro.compressible\_rk.problems.rt2 module
 -----------------------------------------
 
 .. automodule:: pyro.compressible_rk.problems.rt2
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyro.compressible\_rk.problems.rt\_multimode module
+---------------------------------------------------
+
+.. automodule:: pyro.compressible_rk.problems.rt_multimode
    :members:
    :undoc-members:
    :show-inheritance:
