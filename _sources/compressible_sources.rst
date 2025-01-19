@@ -79,7 +79,7 @@ where
                                                   1 & \rho < \rho_\mathrm{full} \end{array} \right .
 
   where $\rho_\mathrm{begin}$ is the density where the sponge turns on
-  (set by ``sponge.sponge_rho_begin``) and \rho_\mathrm{full}$ is the
+  (set by ``sponge.sponge_rho_begin``) and $\rho_\mathrm{full}$ is the
   density where the sponge is fully enabled (set by
   ``sponge.sponge_rho_begin``), with $\rho_\mathrm{begin} >
   \rho_\mathrm{full}$.
