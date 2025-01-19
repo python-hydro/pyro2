@@ -18,6 +18,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
+import re
 import sys
 from importlib.metadata import version as importlib_version
 
@@ -114,6 +115,18 @@ mathjax3_config["tex"] = {
     "displayMath": [["\\[", "\\]"]],
   }
 
+mathjax3_config["tex"]["macros"] = {}
+
+with open('mathsymbols.tex', 'r') as f:
+    for line in f:
+        macros = re.findall(r'\\newcommand{\\(.*?)}(\[(\d)\])?{(.+)}', line)
+        for macro in macros:
+            if len(macro[1]) == 0:
+                mathjax3_config['tex']['macros'][macro[0]
+                                                 ] = "{"+macro[3]+"}"
+            else:
+                mathjax3_config['tex']['macros'][macro[0]] = [
+                    "{"+macro[3]+"}", int(macro[2])]
 
 # -- Options for HTML output ----------------------------------------------
 
