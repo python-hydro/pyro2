@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyro.advection_rk package &#8212; pyro 4.4.0.post20+g51fbff10 documentation</title>
+    <title>pyro.advection_rk package &#8212; pyro 4.4.0.post21+gc5327389 documentation</title>
   
   
   
@@ -42,14 +42,14 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=7e622d37"></script>
+    <script src="_static/documentation_options.js?v=d14b57f7"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "processEscapes": true, "displayMath": [["\\[", "\\]"]]}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "processEscapes": true, "displayMath": [["\\[", "\\]"]], "macros": {"rhozero": "{\\rho_0}", "pizero": "{\\pi_0}", "pizeroone": "{\\pi_0^{(1)}}", "pizerotwo": "{\\pi_0^{(2)}}", "gammabar": "{\\overline{\\Gamma}_1}", "ptl": "{{\\partial}}", "eb": "{{\\bf e}}", "fb": "{{\\bf f}}", "ib": "{{\\bf i}}", "Ub": "{{\\bf U}}", "Vb": "{{\\bf V}}", "xb": "{{\\bf x}}", "ut": "{\\tilde{u}}", "vt": "{\\tilde{v}}", "wt": "{\\tilde{w}}", "Ubt": "{\\widetilde{\\Ub}}", "edge": "{\\rm EDGE}", "mac": "{\\rm MAC}", "trans": "{\\rm TRANS}", "nablab": "{\\mathbf{\\nabla}}", "cdotb": "{\\mathbf{\\cdot}}", "half": "{\\frac{1}{2}}", "myhalf": "{\\frac{1}{2}}", "nph": "{{n + \\myhalf}}", "nmh": "{{n - \\myhalf}}", "Hext": "{{H_{\\rm ext}}}", "Hnuc": "{{H_{\\rm nuc}}}", "kth": "{k_{\\rm th}}", "pred": "{{\\rm pred}}", "Sbar": "{\\overline{S}}", "inp": "{\\mathrm{in}}", "initp": "{\\mathrm{init}}", "outp": "{\\mathrm{out}}", "uadv": "{\\widetilde{\\mathbf{U}}^{\\mathrm{ADV}}}", "uadvone": "{\\widetilde{\\mathbf{U}}^{\\mathrm{ADV},\\star}}", "uadvonedag": "{\\Ubt^{\\mathrm{ADV},\\dagger,\\star}}", "uadvtwo": "{\\widetilde{\\mathbf{U}}^{\\mathrm{ADV}}}", "uadvtwodag": "{\\Ubt^{\\mathrm{ADV},\\dagger}}", "uadvsdcstar": "{\\mathbf{U}^{\\mathrm{ADV},\\star}}", "uadvsdcpred": "{\\mathbf{U}^{\\mathrm{ADV},\\mathrm{pred}}}", "uadvsdc": "{\\mathbf{U}^{\\mathrm{ADV}}}", "dt": "{\\Delta t}", "dr": "{\\Delta r}", "etarho": "{\\eta_{\\rho}}", "etarhoec": "{\\etarho^{\\rm ec}}", "etarhocc": "{\\etarho^{\\rm cc}}", "etarhoflux": "{\\etarho^{\\rm flux}}", "divetarho": "{\\nabla\\cdot(\\etarho\\eb_r)}", "ow": "{\\overline{w}_0}", "dw": "{\\delta w_0}", "thalf": "{\\sfrac{3}{2}}", "rhop": "{{\\rho^{\\prime}}}", "omegadot": "{\\dot{\\omega}}", "er": "{\\mathbf{e}_r}", "ex": "{\\mathbf{e}_x}", "ey": "{\\mathbf{e}_y}", "ez": "{\\mathbf{e}_z}", "Omegab": "{{\\bf \\Omega}}", "rb": "{{\\bf r}}", "isotm": ["{{}^{#2}\\mathrm{#1}}", 2], "edot": "{{{\\dot{e}_\\mathrm{nuc}}}}", "enuc": "{{{{e}_\\mathrm{nuc}}}}", "edotnu": "{{{\\dot{e}_\\nu}}}", "rt": "{\\tilde{r}_0}", "rhob": "{\\ensuremath{\\rho_\\mathrm{base}}}", "Tb": "{\\ensuremath{T_\\mathrm{base}}}", "gcc": "{\\mathrm{g~cm^{-3} }}", "pb": "{p_\\mathrm{base}}", "qburn": "{q_\\mathrm{burn}}", "Uc": "{{\\boldsymbol{\\mathcal{U}}}}", "Fb": "{\\mathbf{F}}", "Sc": "{\\mathbf{S}}", "Shydro": "{{{\\bf S}^{\\mathrm{hydro}}}}", "Rb": "{{\\bf R}}", "Rbs": ["{{\\bf R} \\left ( #1 \\right )}", 1], "Rq": "{{\\bf R}}", "Adv": ["{{\\left [\\boldsymbol{\\mathcal{A}} \\left(#1\\right)\\right]}}", 1], "Advs": ["{{\\boldsymbol{\\mathcal{A}} \\left(#1\\right)}}", 1], "Sdot": "{\\dot{S}}"}}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'pyro.advection_rk';</script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -181,7 +181,12 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="burgers_basics.html">Burgers’ Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="compressible_basics.html">Compressible hydrodynamics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="compressible_problems.html">Compressible example problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_sources.html">Compressible source terms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_exercises.html">Compressible exercises</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics</a></li>

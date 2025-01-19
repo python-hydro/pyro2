@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Compressible hydrodynamics &#8212; pyro 4.4.0.post20+g51fbff10 documentation</title>
+    <title>Compressible hydrodynamics &#8212; pyro 4.4.0.post21+gc5327389 documentation</title>
   
   
   
@@ -42,19 +42,19 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=7e622d37"></script>
+    <script src="_static/documentation_options.js?v=d14b57f7"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "processEscapes": true, "displayMath": [["\\[", "\\]"]]}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "processEscapes": true, "displayMath": [["\\[", "\\]"]], "macros": {"rhozero": "{\\rho_0}", "pizero": "{\\pi_0}", "pizeroone": "{\\pi_0^{(1)}}", "pizerotwo": "{\\pi_0^{(2)}}", "gammabar": "{\\overline{\\Gamma}_1}", "ptl": "{{\\partial}}", "eb": "{{\\bf e}}", "fb": "{{\\bf f}}", "ib": "{{\\bf i}}", "Ub": "{{\\bf U}}", "Vb": "{{\\bf V}}", "xb": "{{\\bf x}}", "ut": "{\\tilde{u}}", "vt": "{\\tilde{v}}", "wt": "{\\tilde{w}}", "Ubt": "{\\widetilde{\\Ub}}", "edge": "{\\rm EDGE}", "mac": "{\\rm MAC}", "trans": "{\\rm TRANS}", "nablab": "{\\mathbf{\\nabla}}", "cdotb": "{\\mathbf{\\cdot}}", "half": "{\\frac{1}{2}}", "myhalf": "{\\frac{1}{2}}", "nph": "{{n + \\myhalf}}", "nmh": "{{n - \\myhalf}}", "Hext": "{{H_{\\rm ext}}}", "Hnuc": "{{H_{\\rm nuc}}}", "kth": "{k_{\\rm th}}", "pred": "{{\\rm pred}}", "Sbar": "{\\overline{S}}", "inp": "{\\mathrm{in}}", "initp": "{\\mathrm{init}}", "outp": "{\\mathrm{out}}", "uadv": "{\\widetilde{\\mathbf{U}}^{\\mathrm{ADV}}}", "uadvone": "{\\widetilde{\\mathbf{U}}^{\\mathrm{ADV},\\star}}", "uadvonedag": "{\\Ubt^{\\mathrm{ADV},\\dagger,\\star}}", "uadvtwo": "{\\widetilde{\\mathbf{U}}^{\\mathrm{ADV}}}", "uadvtwodag": "{\\Ubt^{\\mathrm{ADV},\\dagger}}", "uadvsdcstar": "{\\mathbf{U}^{\\mathrm{ADV},\\star}}", "uadvsdcpred": "{\\mathbf{U}^{\\mathrm{ADV},\\mathrm{pred}}}", "uadvsdc": "{\\mathbf{U}^{\\mathrm{ADV}}}", "dt": "{\\Delta t}", "dr": "{\\Delta r}", "etarho": "{\\eta_{\\rho}}", "etarhoec": "{\\etarho^{\\rm ec}}", "etarhocc": "{\\etarho^{\\rm cc}}", "etarhoflux": "{\\etarho^{\\rm flux}}", "divetarho": "{\\nabla\\cdot(\\etarho\\eb_r)}", "ow": "{\\overline{w}_0}", "dw": "{\\delta w_0}", "thalf": "{\\sfrac{3}{2}}", "rhop": "{{\\rho^{\\prime}}}", "omegadot": "{\\dot{\\omega}}", "er": "{\\mathbf{e}_r}", "ex": "{\\mathbf{e}_x}", "ey": "{\\mathbf{e}_y}", "ez": "{\\mathbf{e}_z}", "Omegab": "{{\\bf \\Omega}}", "rb": "{{\\bf r}}", "isotm": ["{{}^{#2}\\mathrm{#1}}", 2], "edot": "{{{\\dot{e}_\\mathrm{nuc}}}}", "enuc": "{{{{e}_\\mathrm{nuc}}}}", "edotnu": "{{{\\dot{e}_\\nu}}}", "rt": "{\\tilde{r}_0}", "rhob": "{\\ensuremath{\\rho_\\mathrm{base}}}", "Tb": "{\\ensuremath{T_\\mathrm{base}}}", "gcc": "{\\mathrm{g~cm^{-3} }}", "pb": "{p_\\mathrm{base}}", "qburn": "{q_\\mathrm{burn}}", "Uc": "{{\\boldsymbol{\\mathcal{U}}}}", "Fb": "{\\mathbf{F}}", "Sc": "{\\mathbf{S}}", "Shydro": "{{{\\bf S}^{\\mathrm{hydro}}}}", "Rb": "{{\\bf R}}", "Rbs": ["{{\\bf R} \\left ( #1 \\right )}", 1], "Rq": "{{\\bf R}}", "Adv": ["{{\\left [\\boldsymbol{\\mathcal{A}} \\left(#1\\right)\\right]}}", 1], "Advs": ["{{\\boldsymbol{\\mathcal{A}} \\left(#1\\right)}}", 1], "Sdot": "{\\dot{S}}"}}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'compressible_basics';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Diffusion" href="diffusion_basics.html" />
+    <link rel="next" title="Compressible example problems" href="compressible_problems.html" />
     <link rel="prev" title="Burgers’ Equation" href="burgers_basics.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -181,7 +181,12 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="advection_basics.html">Advection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="burgers_basics.html">Burgers’ Equation</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Compressible hydrodynamics</a></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Compressible hydrodynamics</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="compressible_problems.html">Compressible example problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_sources.html">Compressible source terms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compressible_exercises.html">Compressible exercises</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion_basics.html">Diffusion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="incompressible_basics.html">Incompressible hydrodynamics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lowmach_basics.html">Low Mach number hydrodynamics</a></li>
@@ -556,19 +561,6 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">supported problems</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-problems">Example problems</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Sod</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Sedov</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">quad</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">rt</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">bubble</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explorations">Explorations</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extensions">Extensions</a></li>
-</ul>
-</li>
 </ul>
             </nav>
         </div>
@@ -582,14 +574,26 @@
                   
   <section id="compressible-hydrodynamics">
 <h1>Compressible hydrodynamics<a class="headerlink" href="#compressible-hydrodynamics" title="Link to this heading">#</a></h1>
-<p>The Euler equations of compressible hydrodynamics take the form:</p>
+<p>The Euler equations of compressible hydrodynamics express conservation of mass, momentum, and energy.
+For the conserved state, <span class="math notranslate nohighlight">\(\Uc = (\rho, \rho \Ub, \rho E)^\intercal\)</span>, the conserved system can be written
+as:</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho U) &amp;= 0 \\
-\frac{\partial (\rho U)}{\partial t} + \nabla \cdot (\rho U U) + \nabla p &amp;= \rho g \\
-\frac{\partial (\rho E)}{\partial t} + \nabla \cdot [(\rho E + p ) U] &amp;= \rho U \cdot g\end{split}\]</div>
-<p>with <span class="math notranslate nohighlight">\(\rho E = \rho e + \frac{1}{2} \rho |U|^2\)</span> and <span class="math notranslate nohighlight">\(p =
-p(\rho, e)\)</span>.  Note these do not include any dissipation terms, since
+\[\Uc_t + \nabla \cdot {\bf F}(\Uc) = {\bf S}\]</div>
+<p>where <span class="math notranslate nohighlight">\({\bf F}\)</span> are the fluxes and <span class="math notranslate nohighlight">\({\bf S}\)</span> are any source terms.  In terms of components,
+they take the form (with a gravity source term):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \Ub) &amp;= 0 \\
+\frac{\partial (\rho \Ub)}{\partial t} + \nabla \cdot (\rho \Ub \Ub) + \nabla p &amp;= \rho {\bf g} \\
+\frac{\partial (\rho E)}{\partial t} + \nabla \cdot [(\rho E + p ) \Ub] &amp;= \rho \Ub \cdot {\bf g}\end{split}\]</div>
+<p>with <span class="math notranslate nohighlight">\(\rho E = \rho e + \frac{1}{2} \rho |\Ub|^2\)</span>.  The system is closed with an equation
+of state of the form:</p>
+<div class="math notranslate nohighlight">
+\[p = p(\rho, e)\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Euler equations do not include any dissipation terms, since
 they are usually negligible in astrophysics.</p>
+</div>
 <p>pyro has several compressible solvers to solve this equation set.
 The implementations here have flattening at shocks, artificial
 viscosity, a simple gamma-law equation of state, and (in some cases) a
@@ -1534,129 +1538,8 @@ how the time-integration is handled.</p>
 <section id="id5">
 <h3>supported problems<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">compressible_sdc</span></code> uses the problems defined by <code class="docutils literal notranslate"><span class="pre">compressible</span></code>.</p>
-</section>
-</section>
-<section id="example-problems">
-<h2>Example problems<a class="headerlink" href="#example-problems" title="Link to this heading">#</a></h2>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The 4th-order accurate solver (<a class="reference internal" href="pyro.compressible_fv4.html#module-pyro.compressible_fv4" title="pyro.compressible_fv4"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyro.compressible_fv4</span></code></a>) requires that
-the initialization create cell-averages accurate to 4th-order.  To
-allow for all the solvers to use the same problem setups, we assume
-that the initialization routines initialize cell-centers (which is
-fine for 2nd-order accuracy), and the
-<a class="reference internal" href="pyro.compressible_fv4.html#pyro.compressible_fv4.simulation.Simulation.preevolve" title="pyro.compressible_fv4.simulation.Simulation.preevolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">preevolve()</span></code></a> method will convert
-these to cell-averages automatically after initialization.</p>
+<div class="toctree-wrapper compound">
 </div>
-<section id="id6">
-<h3>Sod<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
-<p>The Sod problem is a standard hydrodynamics problem. It is a
-one-dimensional shock tube (two states separated by an interface),
-that exhibits all three hydrodynamic waves: a shock, contact, and
-rarefaction. Furthermore, there are exact solutions for a gamma-law
-equation of state, so we can check our solution against these exact
-solutions. See Toro’s book for details on this problem and the exact
-Riemann solver.</p>
-<p>Because it is one-dimensional, we run it in narrow domains in the x- or y-directions. It can be run as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><style type="text/css">
-span.prompt1:before {
-  content: "$ ";
-}
-</style><span class="prompt1">pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>sod<span class="w"> </span>inputs.sod.x</span>
-<span class="prompt1">pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>sod<span class="w"> </span>inputs.sod.y</span>
-</pre></div></div><p>A simple script, <code class="docutils literal notranslate"><span class="pre">sod_compare.py</span></code> in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code> will read a pyro output
-file and plot the solution over the exact Sod solution. Below we see
-the result for a Sod run with 128 points in the x-direction, gamma =
-1.4, and run until t = 0.2 s.</p>
-<img alt="_images/sod_compare.png" class="align-center" src="_images/sod_compare.png" />
-<p>We see excellent agreement for all quantities. The shock wave is very
-steep, as expected. The contact wave is smeared out over ~5 zones—this
-is discussed in the notes above, and can be improved in the PPM method
-with contact steepening.</p>
-</section>
-<section id="id7">
-<h3>Sedov<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
-<p>The Sedov blast wave problem is another standard test with an analytic
-solution (Sedov 1959). A lot of energy is point into a point in a
-uniform medium and a blast wave propagates outward. The Sedov problem
-is run as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>sedov<span class="w"> </span>inputs.sedov</span>
-</pre></div></div><p>The video below shows the output from a 128 x 128 grid with the energy
-put in a radius of 0.0125 surrounding the center of the domain. A
-gamma-law EOS with gamma = 1.4 is used, and we run until 0.1</p>
-<div style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
-    <iframe src="https://www.youtube.com/embed/1JO6By78p9E?rel=0" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-</div><br><p>We see some grid effects because it is hard to initialize a small
-circular explosion on a rectangular grid. To compare to the analytic
-solution, we need to radially bin the data. Since this is a 2-d
-explosion, the physical geometry it represents is a cylindrical blast
-wave, so we compare to Sedov’s cylindrical solution. The radial
-binning is done with the <code class="docutils literal notranslate"><span class="pre">sedov_compare.py</span></code> script in <code class="docutils literal notranslate"><span class="pre">analysis/</span></code></p>
-<img alt="_images/sedov_compare.png" class="align-center" src="_images/sedov_compare.png" />
-<p>This shows good agreement with the analytic solution.</p>
-</section>
-<section id="id8">
-<h3>quad<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
-<p>The quad problem sets up different states in four regions of the
-domain and watches the complex interfaces that develop as shocks
-interact. This problem has appeared in several places (and a <a class="reference external" href="http://planets.utsc.utoronto.ca/~pawel/Riemann.hydro.html">detailed
-investigation</a> is
-online by Pawel Artymowicz). It is run as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>quad<span class="w"> </span>inputs.quad</span>
-</pre></div></div><img alt="_images/quad.png" class="align-center" src="_images/quad.png" />
-</section>
-<section id="id9">
-<h3>rt<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
-<p>The Rayleigh-Taylor problem puts a dense fluid over a lighter one and
-perturbs the interface with a sinusoidal velocity. Hydrostatic
-boundary conditions are used to ensure any initial pressure waves can
-escape the domain. It is run as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>rt<span class="w"> </span>inputs.rt</span>
-</pre></div></div><div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
-    <iframe src="https://www.youtube.com/embed/P4zmObEYCOs?rel=0" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-</div><br></section>
-<section id="id10">
-<h3>bubble<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
-<p>The bubble problem initializes a hot spot in a stratified domain and
-watches it buoyantly rise and roll up. This is run as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span class="prompt1">pyro_sim.py<span class="w"> </span>compressible<span class="w"> </span>bubble<span class="w"> </span>inputs.bubble</span>
-</pre></div></div><img alt="_images/bubble.png" class="align-center" src="_images/bubble.png" />
-<p>The shock at the top of the domain is because we cut off the
-stratified atmosphere at some low density and the resulting material
-above that rains down on our atmosphere. Also note the acoustic signal
-propagating outward from the bubble (visible in the U and e panels).</p>
-</section>
-</section>
-<section id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
-<section id="explorations">
-<h3>Explorations<a class="headerlink" href="#explorations" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Measure the growth rate of the Rayleigh-Taylor instability for
-different wavenumbers.</p></li>
-<li><p>There are multiple Riemann solvers in the compressible
-algorithm. Run the same problem with the different Riemann solvers
-and look at the differences. Toro’s text is a good book to help
-understand what is happening.</p></li>
-<li><p>Run the problems with and without limiting—do you notice any overshoots?</p></li>
-</ul>
-</section>
-<section id="extensions">
-<h3>Extensions<a class="headerlink" href="#extensions" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Limit on the characteristic variables instead of the primitive
-variables. What changes do you see? (the notes show how to implement
-this change.)</p></li>
-<li><p>Add passively advected species to the solver.</p></li>
-<li><p>Add an external heating term to the equations.</p></li>
-<li><p>Add 2-d axisymmetric coordinates (r-z) to the solver. This is
-discussed in the notes. Run the Sedov problem with the explosion on
-the symmetric axis—now the solution will behave like the spherical
-sedov explosion instead of the cylindrical explosion.</p></li>
-<li><p>Swap the piecewise linear reconstruction for piecewise parabolic
-(PPM). The notes and the Miller and Colella paper provide a good basis
-for this.  Research the Roe Riemann solver and implement it in pyro.</p></li>
-</ul>
 </section>
 </section>
 </section>
@@ -1682,11 +1565,11 @@ for this.  Research the Roe Riemann solver and implement it in pyro.</p></li>
       </div>
     </a>
     <a class="right-next"
-       href="diffusion_basics.html"
+       href="compressible_problems.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Diffusion</p>
+        <p class="prev-next-title">Compressible example problems</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1741,19 +1624,6 @@ for this.  Research the Roe Riemann solver and implement it in pyro.</p></li>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compressible-sdc-solver"><code class="docutils literal notranslate"><span class="pre">compressible_sdc</span></code> solver</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">supported problems</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-problems">Example problems</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Sod</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Sedov</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">quad</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">rt</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">bubble</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explorations">Explorations</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extensions">Extensions</a></li>
 </ul>
 </li>
 </ul>
