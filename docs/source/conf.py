@@ -57,7 +57,7 @@ bibtex_bibfiles = ["refs.bib"]
 templates_path = ['_templates']
 
 # always execute notebooks
-#nbsphinx_execute = 'always'
+nbsphinx_execute = 'always'
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
