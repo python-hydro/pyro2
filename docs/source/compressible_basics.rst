@@ -2,17 +2,37 @@
 Compressible hydrodynamics
 **************************
 
-The Euler equations of compressible hydrodynamics take the form:
+
+
+The Euler equations of compressible hydrodynamics express conservation of mass, momentum, and energy.
+For the conserved state, $\Uc = (\rho, \rho \Ub, \rho E)^\intercal$, the conserved system can be written
+as:
 
 .. math::
 
-   \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho U) &= 0 \\
-   \frac{\partial (\rho U)}{\partial t} + \nabla \cdot (\rho U U) + \nabla p &= \rho g \\
-   \frac{\partial (\rho E)}{\partial t} + \nabla \cdot [(\rho E + p ) U] &= \rho U \cdot g
+   \Uc_t + \nabla \cdot {\bf F}(\Uc) = {\bf S}
 
-with :math:`\rho E = \rho e + \frac{1}{2} \rho |U|^2` and :math:`p =
-p(\rho, e)`.  Note these do not include any dissipation terms, since
-they are usually negligible in astrophysics.
+where ${\bf F}$ are the fluxes and ${\bf S}$ are any source terms.  In terms of components,
+they take the form (with a gravity source term):
+
+.. math::
+
+   \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \Ub) &= 0 \\
+   \frac{\partial (\rho \Ub)}{\partial t} + \nabla \cdot (\rho \Ub \Ub) + \nabla p &= \rho {\bf g} \\
+   \frac{\partial (\rho E)}{\partial t} + \nabla \cdot [(\rho E + p ) \Ub] &= \rho \Ub \cdot {\bf g}
+
+with :math:`\rho E = \rho e + \frac{1}{2} \rho |\Ub|^2`.  The system is closed with an equation
+of state of the form:
+
+.. math::
+
+   p = p(\rho, e)
+
+
+.. note::
+
+   The Euler equations do not include any dissipation terms, since
+   they are usually negligible in astrophysics.
 
 pyro has several compressible solvers to solve this equation set.
 The implementations here have flattening at shocks, artificial
