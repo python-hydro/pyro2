@@ -25,14 +25,6 @@ pyro.compressible.BC module
    :undoc-members:
    :show-inheritance:
 
-pyro.compressible.cgf module
-----------------------------
-
-.. automodule:: pyro.compressible.cgf
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 pyro.compressible.derives module
 --------------------------------
 
@@ -53,14 +45,6 @@ pyro.compressible.interface module
 ----------------------------------
 
 .. automodule:: pyro.compressible.interface
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pyro.compressible.prim module
------------------------------
-
-.. automodule:: pyro.compressible.prim
    :members:
    :undoc-members:
    :show-inheritance:
