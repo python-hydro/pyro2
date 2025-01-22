@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Contributing and getting help &#8212; pyro 4.4.0.post22+g48d283cd documentation</title>
+    <title>Contributing and getting help &#8212; pyro 4.4.0.post23+g9089e921 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=a4a43889"></script>
+    <script src="_static/documentation_options.js?v=a3e93c39"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -526,6 +526,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contributing">Contributing</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#issues">Issues</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pull-requests">Pull Requests</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-docs">Building Docs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discussions">Discussions</a></li>
 </ul>
             </nav>
@@ -570,6 +571,18 @@ if needed, suggest modifications prior to merging the PR.</p>
 to squash commits upon merge to have a clean history.  <em>Please ensure
 that your PR title and first post are descriptive, since these will be
 used for a squashed commit message.</em></p>
+</section>
+<section id="building-docs">
+<h2>Building Docs<a class="headerlink" href="#building-docs" title="Link to this heading">#</a></h2>
+<p>The source for the documentation is in <cite>pyro/docs</cite> and can be built via:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">make</span> <span class="pre">html</span>
+<span class="pre">`</span></code></p>
+<p>By default, this will execute all of the notebooks that are used in the docs,
+which can take time.  To skip the execution, you can build as:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">make</span> <span class="pre">SKIP_EXECUTE=TRUE</span> <span class="pre">html</span>
+<span class="pre">`</span></code></p>
 </section>
 <section id="discussions">
 <h2>Discussions<a class="headerlink" href="#discussions" title="Link to this heading">#</a></h2>
@@ -629,6 +642,7 @@ to ask questions.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contributing">Contributing</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#issues">Issues</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pull-requests">Pull Requests</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-docs">Building Docs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discussions">Discussions</a></li>
 </ul>
   </nav></div>
