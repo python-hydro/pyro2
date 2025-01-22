@@ -42,6 +42,9 @@ def init_data(my_data, rp):
     ymom[:, :] = 0.0
     dens[:, :] = dens_cutoff
 
+    # create a seeded random number generator
+    rng = np.random.default_rng(12345)
+
     # set the density to be stratified in the y-direction
     myg = my_data.grid
 
@@ -75,7 +78,7 @@ def init_data(my_data, rp):
     ener[:, :] = p[:, :]/(gamma - 1.0)
 
     # pairs of random numbers between [-1, 1]
-    vel_pert = 2.0 * np.random.random_sample((myg.qx, myg.qy, 2)) - 1
+    vel_pert = 2.0 * rng.random(size=(myg.qx, myg.qy, 2)) - 1
 
     cs = np.sqrt(gamma * p / dens)
 

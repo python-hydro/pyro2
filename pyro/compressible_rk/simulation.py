@@ -33,6 +33,13 @@ class Simulation(compressible.Simulation):
                (flux_x.v(n=n) - flux_x.ip(1, n=n))/myg.dx + \
                (flux_y.v(n=n) - flux_y.jp(1, n=n))/myg.dy + S.v(n=n)
 
+        # finally, add the sponge source, if desired
+        if self.rp.get_param("sponge.do_sponge"):
+            kappa_f = compressible.get_sponge_factor(myd.data, self.ivars, self.rp, myg)
+
+            k.v(n=self.ivars.ixmom)[:, :] -= kappa_f.v() * myd.data.v(n=self.ivars.ixmom)
+            k.v(n=self.ivars.iymom)[:, :] -= kappa_f.v() * myd.data.v(n=self.ivars.iymom)
+
         return k
 
     def method_compute_timestep(self):
