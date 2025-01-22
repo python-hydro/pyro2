@@ -57,7 +57,12 @@ bibtex_bibfiles = ["refs.bib"]
 templates_path = ['_templates']
 
 # always execute notebooks
-nbsphinx_execute = 'always'
+env_skip_execute = os.getenv("SKIP_EXECUTE")
+
+if not env_skip_execute:
+    nbsphinx_execute = 'always'
+else:
+    nb_execution_mode = "never"
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
