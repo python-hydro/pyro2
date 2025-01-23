@@ -26,3 +26,9 @@ riemann = HLLC            ; HLLC or CGF
 well_balanced = 0         ; use a well-balanced scheme to keep the model in hydrostatic equilibrium
 
 
+[sponge]
+do_sponge = 0             ; do we include a sponge source term
+
+sponge_rho_begin = 1.e-2         ; density below which to begin the sponge
+sponge_rho_full = 1.e-3          ; density below which the sponge is fully enabled
+sponge_timescale = 1.e-2         ; the timescale over which the sponge should act
