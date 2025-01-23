@@ -25,6 +25,14 @@ pyro.mesh.boundary module
    :undoc-members:
    :show-inheritance:
 
+pyro.mesh.fourth\_order module
+------------------------------
+
+.. automodule:: pyro.mesh.fourth_order
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pyro.mesh.fv module
 -------------------
 

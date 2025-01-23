@@ -40,6 +40,22 @@ to squash commits upon merge to have a clean history.  *Please ensure
 that your PR title and first post are descriptive, since these will be
 used for a squashed commit message.*
 
+Building Docs
+-------------
+
+The source for the documentation is in `pyro/docs` and can be built via:
+
+```
+make html
+```
+
+By default, this will execute all of the notebooks that are used in the docs,
+which can take time.  To skip the execution, you can build as:
+
+```
+make SKIP_EXECUTE=TRUE html
+```
+
 Discussions
 -----------
 
