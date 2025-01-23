@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.util.io_pyro &#8212; pyro 4.4.0.post23+g9089e921 documentation</title>
+    <title>pyro.util.io_pyro &#8212; pyro 4.4.0.post24+g95681a82 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=a3e93c39"></script>
+    <script src="../../../_static/documentation_options.js?v=d73e7d42"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -577,13 +577,20 @@
 
             <span class="n">sim</span><span class="o">.</span><span class="n">read_extras</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
-        <span class="c1"># check if there are derived variables</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">derives</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pyro.</span><span class="si">{</span><span class="n">solver_name</span><span class="si">}</span><span class="s2">.derives&quot;</span><span class="p">)</span>
-            <span class="n">sim</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">add_derived</span><span class="p">(</span><span class="n">derives</span><span class="o">.</span><span class="n">derive_primitives</span><span class="p">)</span>
+            <span class="c1"># check if there are derived variables -- since we do a lot of</span>
+            <span class="c1"># inheritance, we want to start with the deepest class and</span>
+            <span class="c1"># work backwards through the inheritance until we find a derives</span>
+            <span class="c1"># module</span>
+            <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__module__</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="nb">type</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span><span class="o">.</span><span class="vm">__mro__</span> <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">object</span><span class="p">]:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">derives</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mod</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;simulation&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;derives&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">sim</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">add_derived</span><span class="p">(</span><span class="n">derives</span><span class="o">.</span><span class="n">derive_primitives</span><span class="p">)</span>
 
-        <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
-            <span class="k">pass</span>
+                <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">break</span>
 
     <span class="k">if</span> <span class="n">solver_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">sim</span>
