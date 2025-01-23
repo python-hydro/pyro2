@@ -1,4 +1,5 @@
 import h5py
+import numpy as np
 
 import pyro.mesh.boundary as bnd
 import pyro.util.profile_pyro as profile
@@ -52,6 +53,19 @@ def grid_setup(rp, ng=1):
                           ymin=ymin, ymax=ymax,
                           ng=ng)
 
+    # Make sure y-boundary condition is reflect when
+    # ymin = 0 and ymax = pi
+
+    if grid_type == "SphericalPolar":
+        if ymin <= 0.05:
+            rp.set_param("mesh.ylboundary", "reflect")
+            msg.warning("With SphericalPolar grid," +
+                        " mesh.ylboundary auto set to reflect when ymin ~ 0")
+        if abs(np.pi - ymax) <= 0.05:
+            rp.set_param("mesh.yrboundary", "reflect")
+            msg.warning("With SphericalPolar grid," +
+                        " mesh.yrboundary auto set to reflect when ymax ~ pi")
+
     return my_grid
 
 
@@ -101,7 +115,7 @@ def bc_setup(rp):
 class NullSimulation:
 
     def __init__(self, solver_name, problem_name, problem_func, rp, *,
-                 problem_finalize_func=None,
+                 problem_finalize_func=None, problem_source_func=None,
                  timers=None, data_class=patch.CellCenterData2d):
         """
         Initialize the Simulation object
@@ -119,6 +133,9 @@ class NullSimulation:
         problem_finalize_func : function
             An (optional) function to call when the simulation is
             over.
+        problem_source_func : function
+            An (optional) function to call to get source terms
+            for the state.
         timers : TimerCollection object, optional
             The timers used for profiling this simulation.
         data_class : CellCenterData2d or FV2d
@@ -151,6 +168,7 @@ class NullSimulation:
         self.problem_name = problem_name
         self.problem_func = problem_func
         self.problem_finalize = problem_finalize_func
+        self.problem_source = problem_source_func
 
         if timers is None:
             self.tc = profile.TimerCollection()

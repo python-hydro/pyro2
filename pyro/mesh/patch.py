@@ -220,6 +220,13 @@ class Cartesian2d(Grid2d):
 
         self.Ay = self.Lx
 
+        # Spatial derivative of log(area). It's zero for Cartesian
+
+        self.dlogAx = ArrayIndexer(np.zeros_like(self.Ax),
+                                   grid=self)
+        self.dlogAy = ArrayIndexer(np.zeros_like(self.Ay),
+                                   grid=self)
+
         # Volume of the cell.
 
         self.V = ArrayIndexer(np.full((self.qx, self.qy), self.dx * self.dy),
@@ -235,7 +242,9 @@ class Cartesian2d(Grid2d):
 class SphericalPolar(Grid2d):
     """
     This class defines a spherical polar grid.
-    This is technically a 2D geometry but assumes azimuthal symmetry.
+    This is technically a 3D geometry but assumes azimuthal symmetry,
+    and zero velocity in phi-direction.
+    Hence 2D.
 
     Define:
     r = x
@@ -245,14 +254,14 @@ class SphericalPolar(Grid2d):
     def __init__(self, nx, ny, *, ng=1,
                  xmin=0.2, xmax=1.0, ymin=0.0, ymax=1.0):
 
+        super().__init__(nx, ny, ng=ng, xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+
         # Make sure theta is within [0, PI]
         assert ymin >= 0.0 and ymax <= np.pi, "y or \u03b8 should be within [0, \u03c0]."
 
         # Make sure the ghost cells doesn't extend out negative x(r)
-        assert xmin - ng*(xmax-xmin)/nx >= 0.0, \
+        assert xmin - ng*self.dx >= 0.0, \
             "xmin (r-direction), must be large enough so ghost cell doesn't have negative x."
-
-        super().__init__(nx, ny, ng=ng, xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
 
         self.coord_type = 1
 
@@ -278,6 +287,12 @@ class SphericalPolar(Grid2d):
         # dAtheta_l = pi * sin(theta{i-1/2}) * (r{i+1/2}^2 - r{i-1/2}^2)
         self.Ay = np.abs(np.pi * np.sin(self.yl2d) *
                          (self.xr2d**2 - self.xl2d**2))
+
+        # dlogAx = 1 / r^2 d( r^2 ) / dr = 2 / r
+        self.dlogAx = 2.0 / self.x2d
+
+        # dlogAy = 1 / (r sin(theta)) d( sin(theta) )/dtheta = cot(theta) / r
+        self.dlogAy = 1.0 / (np.tan(self.y2d) * self.x2d)
 
         # Returns an array of the volume of each cell.
         # dV = dL_r * dL_theta * dL_phi

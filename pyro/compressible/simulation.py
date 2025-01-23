@@ -52,12 +52,21 @@ def cons_to_prim(U, gamma, ivars, myg):
     q = myg.scratch_array(nvar=ivars.nq)
 
     q[:, :, ivars.irho] = U[:, :, ivars.idens]
-    q[:, :, ivars.iu] = U[:, :, ivars.ixmom]/U[:, :, ivars.idens]
-    q[:, :, ivars.iv] = U[:, :, ivars.iymom]/U[:, :, ivars.idens]
+    q[:, :, ivars.iu] = np.divide(U[:, :, ivars.ixmom], U[:, :, ivars.idens],
+                                  out=np.zeros_like(U[:, :, ivars.ixmom]),
+                                  where=(U[:, :, ivars.idens] != 0.0))
+    q[:, :, ivars.iv] = np.divide(U[:, :, ivars.iymom], U[:, :, ivars.idens],
+                                  out=np.zeros_like(U[:, :, ivars.iymom]),
+                                  where=(U[:, :, ivars.idens] != 0.0))
 
-    e = (U[:, :, ivars.iener] -
-         0.5*q[:, :, ivars.irho]*(q[:, :, ivars.iu]**2 +
-                                  q[:, :, ivars.iv]**2))/q[:, :, ivars.irho]
+    e = np.divide(U[:, :, ivars.iener] - 0.5 * q[:, :, ivars.irho] *
+                  (q[:, :, ivars.iu]**2 + q[:, :, ivars.iv]**2),
+                  q[:, :, ivars.irho],
+                  out=np.zeros_like(U[:, :, ivars.iener]),
+                  where=(U[:, :, ivars.idens] != 0.0))
+
+    assert e.v().min() > 0.0
+    assert q.v(n=ivars.irho).min() > 0.0
 
     q[:, :, ivars.ip] = eos.pres(gamma, q[:, :, ivars.irho], e)
 
@@ -91,6 +100,88 @@ def prim_to_cons(q, gamma, ivars, myg):
     return U
 
 
+def get_external_sources(t, dt, U, ivars, rp, myg, *, U_old=None, problem_source=None):
+    """compute the external sources, including gravity"""
+
+    _ = t  # maybe unused
+
+    S = myg.scratch_array(nvar=ivars.nvar)
+
+    grav = rp.get_param("compressible.grav")
+
+    if U_old is None:
+        # we are just computing the sources from the current state U
+
+        if myg.coord_type == 1:
+            # gravity points in the radial direction for spherical
+            S[:, :, ivars.ixmom] = U[:, :, ivars.idens] * grav
+            S[:, :, ivars.iener] = U[:, :, ivars.ixmom] * grav
+
+            S[:, :, ivars.ixmom] += U[:, :, ivars.iymom]**2 / (U[:, :, ivars.idens] * myg.x2d)
+            S[:, :, ivars.iymom] += -U[:, :, ivars.ixmom] * U[:, :, ivars.iymom] / U[:, :, ivars.idens]
+
+        else:
+            # gravity points in the vertical (y) direction for Cartesian
+            S[:, :, ivars.iymom] = U[:, :, ivars.idens] * grav
+            S[:, :, ivars.iener] = U[:, :, ivars.iymom] * grav
+
+    else:
+        # we want to compute gravity using the time-updated momentum
+        # we assume that U is an approximation to U^{n+1}, which includes
+        # a full dt * S_old
+
+        if myg.coord_type == 1:
+            S[:, :, ivars.ixmom] = U[:, :, ivars.idens] * grav
+            S_old_xmom = U_old[:, :, ivars.idens] * grav
+
+            # we want the corrected xmom that has a time-centered source
+            xmom_new = U[:, :, ivars.ixmom] + 0.5 * dt * (S[:, :, ivars.ixmom] - S_old_xmom)
+
+            S[:, :, ivars.iener] = xmom_new * grav
+
+            S[:, :, ivars.ixmom] += U[:, :, ivars.iymom]**2 / (U[:, :, ivars.idens] * myg.x2d)
+            S[:, :, ivars.iymom] += -U[:, :, ivars.ixmom] * U[:, :, ivars.iymom] / U[:, :, ivars.idens]
+
+        else:
+            S[:, :, ivars.iymom] = U[:, :, ivars.idens] * grav
+            S_old_ymom = U_old[:, :, ivars.idens] * grav
+
+            # we want the corrected ymom that has a time-centered source
+            ymom_new = U[:, :, ivars.iymom] + 0.5 * dt * (S[:, :, ivars.iymom] - S_old_ymom)
+
+            S[:, :, ivars.iener] = ymom_new * grav
+
+    # now add the heating
+    if problem_source:
+        S_heating = problem_source(myg, U, ivars, rp)
+        S[...] += S_heating
+
+    return S
+
+
+def get_sponge_factor(U, ivars, rp, myg):
+    """compute the sponge factor, f / tau, that goes into a
+    sponge damping term of the form S = - (f / tau) (rho U)"""
+
+    rho = U[:, :, ivars.idens]
+    rho_begin = rp.get_param("sponge.sponge_rho_begin")
+    rho_full = rp.get_param("sponge.sponge_rho_full")
+
+    assert rho_begin > rho_full
+
+    f = myg.scratch_array()
+
+    f[:, :] = np.where(rho > rho_begin,
+                       0.0,
+                       np.where(rho < rho_full,
+                                1.0,
+                                0.5 * (1.0 - np.cos(np.pi * (rho - rho_begin) /
+                                                    (rho_full - rho_begin)))))
+
+    tau = rp.get_param("sponge.sponge_timescale")
+    return f / tau
+
+
 class Simulation(NullSimulation):
     """The main simulation class for the corner transport upwind
     compressible hydrodynamics solver
@@ -117,6 +208,7 @@ class Simulation(NullSimulation):
 
         # define solver specific boundary condition routines
         bnd.define_bc("hse", BC.user, is_solid=False)
+        bnd.define_bc("ambient", BC.user, is_solid=False)
         bnd.define_bc("ramp", BC.user, is_solid=False)  # for double mach reflection problem
 
         bc, bc_xodd, bc_yodd = bc_setup(self.rp)
@@ -207,7 +299,6 @@ class Simulation(NullSimulation):
         ymom = self.cc_data.get_var("y-momentum")
         ener = self.cc_data.get_var("energy")
 
-        grav = self.rp.get_param("compressible.grav")
         gamma = self.rp.get_param("eos.gamma")
 
         myg = self.cc_data.grid
@@ -221,7 +312,8 @@ class Simulation(NullSimulation):
         # Only gravitional source for Cartesian2d
         U_xl, U_xr, U_yl, U_yr = flx.apply_source_terms(U_xl, U_xr, U_yl, U_yr,
                                                         self.cc_data, self.aux_data, self.rp,
-                                                        self.ivars, self.tc, self.dt)
+                                                        self.ivars, self.tc, self.dt,
+                                                        problem_source=self.problem_source)
 
         # Apply transverse corrections.
         U_xl, U_xr, U_yl, U_yr = flx.apply_transverse_flux(U_xl, U_xr, U_yl, U_yr,
@@ -268,9 +360,12 @@ class Simulation(NullSimulation):
                                                   self.cc_data, self.rp,
                                                   self.ivars)
 
-        old_dens = dens.copy()
-        old_xmom = xmom.copy()
-        old_ymom = ymom.copy()
+        # save the old state (without ghost cells)
+        U_old = myg.scratch_array(nvar=self.ivars.nvar)
+        U_old[:, :, self.ivars.idens] = dens[:, :]
+        U_old[:, :, self.ivars.ixmom] = xmom[:, :]
+        U_old[:, :, self.ivars.iymom] = ymom[:, :]
+        U_old[:, :, self.ivars.iener] = ener[:, :]
 
         # Conservative update
 
@@ -286,32 +381,50 @@ class Simulation(NullSimulation):
 
         # Now apply external sources
 
-        # For SphericalPolar (coord_type == 1):
-        # There are gravity (external) sources,
-        # geometric terms due to local unit vectors, and pressure gradient
-        # since we don't include pressure in xmom and ymom fluxes
-        # due to incompatible divergence and gradient in non-Cartesian geometry
-
-        # For Cartesian2d (coord_type == 0):
-        # There is only gravity sources.
+        # For SphericalPolar (coord_type == 1) there are pressure
+        # gradients since we don't include pressure in xmom and ymom
+        # fluxes
 
         if myg.coord_type == 1:
-            xmom.v()[:, :] += 0.5*self.dt * \
-                ((dens.v() + old_dens.v())*grav +
-                 (ymom.v()**2 / dens.v() +
-                  old_ymom.v()**2 / old_dens.v()) / myg.x2d.v()) - \
-                self.dt * (qx.ip(1, n=self.ivars.ip) - qx.v(n=self.ivars.ip)) / myg.Lx.v()
+            xmom.v()[:, :] -= self.dt * (qx.ip(1, n=self.ivars.ip) -
+                                         qx.v(n=self.ivars.ip)) / myg.Lx.v()
+            ymom.v()[:, :] -= self.dt * (qy.jp(1, n=self.ivars.ip) -
+                                         qy.v(n=self.ivars.ip)) / myg.Ly.v()
 
-            ymom.v()[:, :] += 0.5*self.dt * \
-                (-xmom.v()*ymom.v() / dens.v() -
-                 old_xmom.v()*old_ymom.v() / old_dens.v()) / myg.x2d.v() - \
-                self.dt * (qy.jp(1, n=self.ivars.ip) - qy.v(n=self.ivars.ip)) / myg.Ly.v()
+        # now the external sources (including gravity).  We are going
+        # to do a predictor-corrector here:
+        #
+        # * compute old sources using old state: S^n = S(U^n)
+        # * update state full dt using old sources: U^{n+1,*} += dt * S^n
+        # * compute new sources using this updated state: S^{n+1) = S(U^{n+1,*})
+        # * correct: U^{n+1} = U^{n+1,*} + dt/2 (S^{n+1} - S^n)
 
-            ener.v()[:, :] += 0.5*self.dt*(xmom.v() + old_xmom.v())*grav
+        S_old = get_external_sources(self.cc_data.t, self.dt, U_old,
+                                     self.ivars, self.rp, myg,
+                                     problem_source=self.problem_source)
 
-        else:
-            ymom.v()[:, :] += 0.5*self.dt*(dens.v() + old_dens.v())*grav
-            ener.v()[:, :] += 0.5*self.dt*(ymom.v() + old_ymom.v())*grav
+        for n in range(self.ivars.nvar):
+            var = self.cc_data.get_var_by_index(n)
+            var.v()[:, :] += self.dt * S_old.v(n=n)
+
+        # now get the new time source
+
+        S_new = get_external_sources(self.cc_data.t, self.dt, self.cc_data.data,
+                                     self.ivars, self.rp, myg, U_old=U_old,
+                                     problem_source=self.problem_source)
+
+        # and correct
+        for n in range(self.ivars.nvar):
+            var = self.cc_data.get_var_by_index(n)
+            var.v()[:, :] += 0.5 * self.dt * (S_new.v(n=n) - S_old.v(n=n))
+
+        # finally, do the sponge, if desired -- this is formulated as an
+        # implicit update to the velocity
+        if self.rp.get_param("sponge.do_sponge"):
+            kappa_f = get_sponge_factor(self.cc_data.data, self.ivars, self.rp, myg)
+
+            self.cc_data.data[:, :, self.ivars.ixmom] /= (1.0 + self.dt * kappa_f)
+            self.cc_data.data[:, :, self.ivars.iymom] /= (1.0 + self.dt * kappa_f)
 
         if self.particles is not None:
             self.particles.update_particles(self.dt)
@@ -417,3 +530,4 @@ class Simulation(NullSimulation):
 
         # the value here is the value of "is_solid"
         gb.create_dataset("hse", data=False)
+        gb.create_dataset("ambient", data=False)

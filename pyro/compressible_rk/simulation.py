@@ -16,17 +16,12 @@ class Simulation(compressible.Simulation):
         """
 
         myg = myd.grid
-        grav = self.rp.get_param("compressible.grav")
 
-        # compute the source terms
-        dens = myd.get_var("density")
-        ymom = myd.get_var("y-momentum")
-
-        ymom_src = myg.scratch_array()
-        ymom_src.v()[:, :] = dens.v()[:, :]*grav
-
-        E_src = myg.scratch_array()
-        E_src.v()[:, :] = ymom.v()[:, :]*grav
+        # source terms -- note: this dt is the entire dt, not the
+        # stage's dt
+        S = compressible.get_external_sources(myd.t, self.dt, myd.data,
+                                              self.ivars, self.rp, myg,
+                                              problem_source=self.problem_source)
 
         k = myg.scratch_array(nvar=self.ivars.nvar)
 
@@ -36,10 +31,14 @@ class Simulation(compressible.Simulation):
         for n in range(self.ivars.nvar):
             k.v(n=n)[:, :] = \
                (flux_x.v(n=n) - flux_x.ip(1, n=n))/myg.dx + \
-               (flux_y.v(n=n) - flux_y.jp(1, n=n))/myg.dy
+               (flux_y.v(n=n) - flux_y.jp(1, n=n))/myg.dy + S.v(n=n)
 
-        k.v(n=self.ivars.iymom)[:, :] += ymom_src.v()[:, :]
-        k.v(n=self.ivars.iener)[:, :] += E_src.v()[:, :]
+        # finally, add the sponge source, if desired
+        if self.rp.get_param("sponge.do_sponge"):
+            kappa_f = compressible.get_sponge_factor(myd.data, self.ivars, self.rp, myg)
+
+            k.v(n=self.ivars.ixmom)[:, :] -= kappa_f.v() * myd.data.v(n=self.ivars.ixmom)
+            k.v(n=self.ivars.iymom)[:, :] -= kappa_f.v() * myd.data.v(n=self.ivars.iymom)
 
         return k
 

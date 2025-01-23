@@ -243,7 +243,8 @@ def interface_states(my_data, rp, ivars, tc, dt):
 
 
 def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
-                       my_data, my_aux, rp, ivars, tc, dt):
+                       my_data, my_aux, rp, ivars, tc, dt, *,
+                       problem_source=None):
     """
     This function applies source terms including external (gravity),
     geometric terms, and pressure terms to the left and right
@@ -270,6 +271,8 @@ def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
         The timers we are using to profile
     dt : float
         The timestep we are advancing through.
+    problem_source : function (optional)
+        A problem-specific source function to call
 
     Returns
     -------
@@ -282,36 +285,18 @@ def apply_source_terms(U_xl, U_xr, U_yl, U_yr,
     tm_source.begin()
 
     myg = my_data.grid
-
-    dens = my_data.get_var("density")
-    xmom = my_data.get_var("x-momentum")
-    ymom = my_data.get_var("y-momentum")
-    pres = my_data.get_var("pressure")
-
     dens_src = my_aux.get_var("dens_src")
     xmom_src = my_aux.get_var("xmom_src")
     ymom_src = my_aux.get_var("ymom_src")
     E_src = my_aux.get_var("E_src")
 
-    grav = rp.get_param("compressible.grav")
+    U_src = comp.get_external_sources(my_data.t, dt, my_data.data, ivars, rp, myg,
+                                      problem_source=problem_source)
 
-    # Calculate external source (gravity), geometric, and pressure terms
-    if myg.coord_type == 1:
-        # assume gravity points in r-direction in spherical.
-        dens_src.v()[:, :] = 0.0
-        xmom_src.v()[:, :] = dens.v()*grav + \
-            ymom.v()**2 / (dens.v()*myg.x2d.v()) - \
-            (pres.ip(1) - pres.v()) / myg.Lx.v()
-        ymom_src.v()[:, :] = -(pres.jp(1) - pres.v()) / myg.Ly.v() - \
-            xmom.v()*ymom.v() / (dens.v()*myg.x2d.v())
-        E_src.v()[:, :] = xmom.v()*grav
-
-    else:
-        # assume gravity points in y-direction in cartesian
-        dens_src.v()[:, :] = 0.0
-        xmom_src.v()[:, :] = 0.0
-        ymom_src.v()[:, :] = dens.v()*grav
-        E_src.v()[:, :] = ymom.v()*grav
+    dens_src[:, :] = U_src[:, :, ivars.idens]
+    xmom_src[:, :] = U_src[:, :, ivars.ixmom]
+    ymom_src[:, :] = U_src[:, :, ivars.iymom]
+    E_src[:, :] = U_src[:, :, ivars.iener]
 
     my_aux.fill_BC("dens_src")
     my_aux.fill_BC("xmom_src")
@@ -417,25 +402,49 @@ def apply_transverse_flux(U_xl, U_xr, U_yl, U_yr,
         with source terms added.
     """
 
+    myg = my_data.grid
+
     # Use Riemann Solver to get interface flux using the left and right states
 
-    F_x = riemann.riemann_flux(1, U_xl, U_xr,
-                               my_data, rp, ivars,
-                               solid.xl, solid.xr, tc)
+    if myg.coord_type == 1:
+        # We need pressure from interface state for transverse update for
+        # SphericalPolar geometry. So we need interface conserved states.
+        F_x, U_x = riemann.riemann_flux(1, U_xl, U_xr,
+                                        my_data, rp, ivars,
+                                        solid.xl, solid.xr, tc,
+                                        return_cons=True)
 
-    F_y = riemann.riemann_flux(2, U_yl, U_yr,
-                               my_data, rp, ivars,
-                               solid.yl, solid.yr, tc)
+        F_y, U_y = riemann.riemann_flux(2, U_yl, U_yr,
+                                        my_data, rp, ivars,
+                                        solid.yl, solid.yr, tc,
+                                        return_cons=True)
+
+        gamma = rp.get_param("eos.gamma")
+
+        # Find primitive variable since we need pressure in transverse update.
+        qx = comp.cons_to_prim(U_x, gamma, ivars, myg)
+        qy = comp.cons_to_prim(U_y, gamma, ivars, myg)
+
+    else:
+        # Directly calculate the interface flux using Riemann Solver
+        F_x = riemann.riemann_flux(1, U_xl, U_xr,
+                                   my_data, rp, ivars,
+                                   solid.xl, solid.xr, tc,
+                                   return_cons=False)
+
+        F_y = riemann.riemann_flux(2, U_yl, U_yr,
+                                   my_data, rp, ivars,
+                                   solid.yl, solid.yr, tc,
+                                   return_cons=False)
 
     # Now we update the conserved states using the transverse fluxes.
-
-    myg = my_data.grid
 
     tm_transverse = tc.timer("transverse flux addition")
     tm_transverse.begin()
 
     b = (2, 1)
-    hdtV = 0.5*dt / myg.V
+    hdt = 0.5*dt
+    hdtV = hdt / myg.V
 
     for n in range(ivars.nvar):
 
@@ -458,6 +467,25 @@ def apply_transverse_flux(U_xl, U_xr, U_yl, U_yr,
         U_yr.v(buf=b, n=n)[:, :] += \
             - hdtV.v(buf=b)*(F_x.ip(1, buf=b, n=n)*myg.Ax.ip(1, buf=b) -
                              F_x.v(buf=b, n=n)*myg.Ax.v(buf=b))
+
+    # apply non-conservative pressure gradient for momentum in spherical geometry
+    # Note that we should only apply this pressure gradient
+    # to the momentum corresponding to the transverse direction.
+    # The momentum in the normal direction already updated pressure during reconstruction.
+
+    if myg.coord_type == 1:
+
+        U_xl.v(buf=b, n=ivars.iymom)[:, :] += - hdt * (qy.ip_jp(-1, 1, buf=b, n=ivars.ip) -
+                                                       qy.ip(-1, buf=b, n=ivars.ip)) / myg.Ly.v(buf=b)
+
+        U_xr.v(buf=b, n=ivars.iymom)[:, :] += - hdt * (qy.jp(1, buf=b, n=ivars.ip) -
+                                                       qy.v(buf=b, n=ivars.ip)) / myg.Ly.v(buf=b)
+
+        U_yl.v(buf=b, n=ivars.ixmom)[:, :] += - hdt * (qx.ip_jp(1, -1, buf=b, n=ivars.ip) -
+                                                       qx.jp(-1, buf=b, n=ivars.ip)) / myg.Lx.v(buf=b)
+
+        U_yr.v(buf=b, n=ivars.ixmom)[:, :] += - hdt * (qx.ip(1, buf=b, n=ivars.ip) -
+                                                       qx.v(buf=b, n=ivars.ip)) / myg.Lx.v(buf=b)
 
     tm_transverse.end()
 
