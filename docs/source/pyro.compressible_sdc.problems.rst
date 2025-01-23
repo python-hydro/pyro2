@@ -33,10 +33,26 @@ pyro.compressible\_sdc.problems.bubble module
    :undoc-members:
    :show-inheritance:
 
+pyro.compressible\_sdc.problems.convection module
+-------------------------------------------------
+
+.. automodule:: pyro.compressible_sdc.problems.convection
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pyro.compressible\_sdc.problems.gresho module
 ---------------------------------------------
 
 .. automodule:: pyro.compressible_sdc.problems.gresho
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyro.compressible\_sdc.problems.heating module
+----------------------------------------------
+
+.. automodule:: pyro.compressible_sdc.problems.heating
    :members:
    :undoc-members:
    :show-inheritance:
@@ -61,6 +77,14 @@ pyro.compressible\_sdc.problems.logo module
 -------------------------------------------
 
 .. automodule:: pyro.compressible_sdc.problems.logo
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyro.compressible\_sdc.problems.plume module
+--------------------------------------------
+
+.. automodule:: pyro.compressible_sdc.problems.plume
    :members:
    :undoc-members:
    :show-inheritance:
@@ -93,6 +117,14 @@ pyro.compressible\_sdc.problems.rt2 module
 ------------------------------------------
 
 .. automodule:: pyro.compressible_sdc.problems.rt2
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyro.compressible\_sdc.problems.rt\_multimode module
+----------------------------------------------------
+
+.. automodule:: pyro.compressible_sdc.problems.rt_multimode
    :members:
    :undoc-members:
    :show-inheritance:
