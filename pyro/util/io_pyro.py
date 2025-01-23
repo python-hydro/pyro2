@@ -127,13 +127,20 @@ def read(filename):
 
             sim.read_extras(f)
 
-        # check if there are derived variables
-        try:
-            derives = importlib.import_module(f"pyro.{solver_name}.derives")
-            sim.cc_data.add_derived(derives.derive_primitives)
+        # check if there are derived variables -- since we do a lot of
+        # inheritance, we want to start with the deepest class and
+        # work backwards through the inheritance until we find a derives
+        # module
+        for mod in [cls.__module__ for cls in type(sim).__mro__ if cls is not object]:
+            try:
+                derives = importlib.import_module(f"{mod.replace('simulation', 'derives')}")
+                sim.cc_data.add_derived(derives.derive_primitives)
 
-        except ModuleNotFoundError:
-            pass
+            except ModuleNotFoundError:
+                continue
+
+            else:
+                break
 
     if solver_name is not None:
         return sim
