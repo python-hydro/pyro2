@@ -47,6 +47,7 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx_copybutton',
     'sphinx_math_dollar',
     'sphinx-prompt',
+    'sphinx_mdinclude',
     'IPython.sphinxext.ipython_console_highlighting',
     'sphinx.ext.githubpages']
 
