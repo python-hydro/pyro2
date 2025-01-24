@@ -437,7 +437,6 @@ class Simulation(NullSimulation):
 
         tm_evolve.end()
 
-
     def dovis(self):
         """
         Do runtime visualization.

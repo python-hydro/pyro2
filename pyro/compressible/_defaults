@@ -5,7 +5,6 @@ cfl = 0.8
 [eos]
 gamma = 1.4    ; pres = rho ener (gamma - 1)
 
-
 [compressible]
 use_flattening = 1        ; apply flattening at shocks (1)
 
@@ -21,6 +20,8 @@ grav = 0.0                ; gravitational acceleration (in y-direction)
 
 riemann = HLLC            ; HLLC or CGF
 
+small_eint = -1.e200      ; minimum density allowed
+small_dens = -1.e200      ; minimum specific internal energy allowed
 
 [sponge]
 do_sponge = 0             ; do we include a sponge source term
