@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible_fv4.simulation &#8212; pyro 4.4.0.post29+gab26c9c8c documentation</title>
+    <title>pyro.compressible_fv4.simulation &#8212; pyro 4.4.0.post30+g6c55374f3 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=bc959b41"></script>
+    <script src="../../../_static/documentation_options.js?v=e0625a46"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -447,7 +447,7 @@
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyro.compressible_fv4.fluxes</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">flx</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyro</span><span class="w"> </span><span class="kn">import</span> <span class="n">compressible_rk</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyro.compressible</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_external_sources</span><span class="p">,</span> <span class="n">get_sponge_factor</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyro.mesh</span><span class="w"> </span><span class="kn">import</span> <span class="n">fv</span><span class="p">,</span> <span class="n">integration</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyro.mesh</span><span class="w"> </span><span class="kn">import</span> <span class="n">fv</span>
 
 
 <div class="viewcode-block" id="Simulation">
@@ -519,43 +519,6 @@
         <span class="c1"># we just initialized cell-centers, but we need to store averages</span>
         <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">from_centers</span><span class="p">(</span><span class="n">var</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="Simulation.evolve">
-<a class="viewcode-back" href="../../../pyro.compressible_fv4.html#pyro.compressible_fv4.simulation.Simulation.evolve">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Evolve the equations of compressible hydrodynamics through a</span>
-<span class="sd">        timestep dt.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">tm_evolve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tc</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="s2">&quot;evolve&quot;</span><span class="p">)</span>
-        <span class="n">tm_evolve</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span>
-
-        <span class="n">myd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span>
-
-        <span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;compressible.temporal_method&quot;</span><span class="p">)</span>
-
-        <span class="n">rk</span> <span class="o">=</span> <span class="n">integration</span><span class="o">.</span><span class="n">RKIntegrator</span><span class="p">(</span><span class="n">myd</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
-        <span class="n">rk</span><span class="o">.</span><span class="n">set_start</span><span class="p">(</span><span class="n">myd</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rk</span><span class="o">.</span><span class="n">nstages</span><span class="p">()):</span>
-            <span class="n">ytmp</span> <span class="o">=</span> <span class="n">rk</span><span class="o">.</span><span class="n">get_stage_start</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-            <span class="n">ytmp</span><span class="o">.</span><span class="n">fill_BC_all</span><span class="p">()</span>
-            <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">substep</span><span class="p">(</span><span class="n">ytmp</span><span class="p">)</span>
-            <span class="n">rk</span><span class="o">.</span><span class="n">store_increment</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
-
-        <span class="n">rk</span><span class="o">.</span><span class="n">compute_final_update</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">update_particles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
-
-        <span class="c1"># increment the time</span>
-        <span class="n">myd</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
-
-        <span class="n">tm_evolve</span><span class="o">.</span><span class="n">end</span><span class="p">()</span></div>
 </div>
 
 </pre></div>
