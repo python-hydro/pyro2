@@ -1,6 +1,7 @@
 import pyro.compressible_fv4.fluxes as flx
 from pyro import compressible_rk
 from pyro.compressible import get_external_sources, get_sponge_factor
+from pyro.mesh import fv
 
 
 class Simulation(compressible_rk.Simulation):
