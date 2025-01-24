@@ -435,6 +435,12 @@ class Simulation(NullSimulation):
 
         tm_evolve.end()
 
+    def clean_state(self, U):
+        """enforce mimimum density and eint on the conserved state U"""
+
+        U.v(n=self.ivars.idens)[:, :] = np.maximum(U.v(n=self.ivars.idens),
+                                                   self.rp.get_param("compressible.small_dens"))
+
     def dovis(self):
         """
         Do runtime visualization.
