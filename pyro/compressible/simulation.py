@@ -65,8 +65,10 @@ def cons_to_prim(U, gamma, ivars, myg):
                   out=np.zeros_like(U[:, :, ivars.iener]),
                   where=(U[:, :, ivars.idens] != 0.0))
 
-    assert e.v().min() > 0.0
-    assert q.v(n=ivars.irho).min() > 0.0
+    e_min = e.v().min()
+    rho_min = q.v(n=ivars.irho).min()
+
+    assert e_min > 0.0 and rho_min > 0.0, f"invalid state, min(rho) = {rho_min}, min(e) = {e_min}"
 
     q[:, :, ivars.ip] = eos.pres(gamma, q[:, :, ivars.irho], e)
 
@@ -434,6 +436,7 @@ class Simulation(NullSimulation):
         self.n += 1
 
         tm_evolve.end()
+
 
     def dovis(self):
         """
