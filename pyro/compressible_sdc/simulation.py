@@ -6,10 +6,23 @@ using SDC time integration
 from pyro import compressible_fv4
 from pyro.mesh import patch
 from pyro.util import msg
+from pyro.mesh import fv
 
 
 class Simulation(compressible_fv4.Simulation):
     """Drive the 4th-order compressible solver with SDC time integration"""
+
+    def __init__(self, solver_name, problem_name, problem_func, rp, *,
+                 problem_finalize_func=None, problem_source_func=None,
+                 timers=None, data_class=fv.FV2d):
+
+        super().__init__(solver_name, problem_name, problem_func, rp,
+                         problem_finalize_func=problem_finalize_func,
+                         problem_source_func=problem_source_func,
+                         timers=timers, data_class=data_class)
+
+        self.n_nodes = 3  # Gauss-Lobotto temporal nodes
+        self.n_iter = 4   # 4 SDC iterations for 4th order
 
     def sdc_integral(self, m_start, m_end, As):
         """Compute the integral over the sources from m to m+1 with a
@@ -70,10 +83,10 @@ class Simulation(compressible_fv4.Simulation):
             A_knew.append(adv.copy())
 
         # loop over iterations
-        for _ in range(4):
+        for _ in range(self.n_iter):
 
             # loop over the time nodes and update
-            for m in range(2):
+            for m in range(self.n_nodes):
 
                 # update m to m+1 for knew
 
@@ -82,20 +95,23 @@ class Simulation(compressible_fv4.Simulation):
                 if m > 0:
                     A_knew[m] = self.substep(U_knew[m])
 
-                # compute the integral over A at the old iteration
-                integral = self.sdc_integral(m, m+1, A_kold)
+                # only do an update if we are not at the last node
+                if m < self.n_nodes-1:
 
-                # and the final update
-                for n in range(self.ivars.nvar):
-                    U_knew[m+1].data.v(n=n)[:, :] = U_knew[m].data.v(n=n) + \
-                        0.5*self.dt * (A_knew[m].v(n=n) - A_kold[m].v(n=n)) + integral.v(n=n)
+                    # compute the integral over A at the old iteration
+                    integral = self.sdc_integral(m, m+1, A_kold)
 
-                # fill ghost cells
-                U_knew[m+1].fill_BC_all()
+                    # and the final update
+                    for n in range(self.ivars.nvar):
+                        U_knew[m+1].data.v(n=n)[:, :] = U_knew[m].data.v(n=n) + \
+                            0.5*self.dt * (A_knew[m].v(n=n) - A_kold[m].v(n=n)) + integral.v(n=n)
+
+                    # fill ghost cells
+                    U_knew[m+1].fill_BC_all()
 
             # store the current iteration as the old iteration
             # node m = 0 data doesn't change
-            for m in range(1, 3):
+            for m in range(1, self.n_nodes):
                 U_kold[m].data[:, :, :] = U_knew[m].data[:, :, :]
                 A_kold[m][:, :, :] = A_knew[m][:, :, :]
 
