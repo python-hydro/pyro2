@@ -15,6 +15,8 @@ class Simulation(compressible.Simulation):
         conservative state defined as part of myd
         """
 
+        self.clean_state(myd)
+
         myg = myd.grid
 
         # source terms -- note: this dt is the entire dt, not the

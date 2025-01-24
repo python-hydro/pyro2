@@ -19,6 +19,8 @@ class Simulation(compressible_rk.Simulation):
         compute the advective source term for the given state
         """
 
+        self.clean_state(myd)
+
         myg = myd.grid
 
         # compute the source terms -- we need to do this first
