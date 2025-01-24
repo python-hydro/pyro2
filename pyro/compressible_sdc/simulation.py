@@ -97,7 +97,7 @@ class Simulation(compressible_fv4.Simulation):
             # node m = 0 data doesn't change
             for m in range(1, 3):
                 U_kold[m].data[:, :, :] = U_knew[m].data[:, :, :]
-                A_kold[m][...] = A_knew[m][...]
+                A_kold[m][:, :, :] = A_knew[m][:, :, :]
 
         # store the new solution
         self.cc_data.data[:, :, :] = U_knew[-1].data[:, :, :]
