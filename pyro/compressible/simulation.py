@@ -291,7 +291,7 @@ class Simulation(NullSimulation):
         timestep dt.
         """
 
-        self.clean_state(self.cc_data)
+        self.clean_state(self.cc_data.data)
 
         tm_evolve = self.tc.timer("evolve")
         tm_evolve.begin()
