@@ -128,7 +128,7 @@ class Pyro:
             self.problem_source = None
 
         else:
-            problem = importlib.import_module("pyro.{}.problems.{}".format(self.solver_name, problem_name))
+            problem = importlib.import_module(f"pyro.{self.solver_name}.problems.{problem_name}")
             self.problem_name = problem_name
             self.problem_func = problem.init_data
             self.problem_params = problem.PROBLEM_PARAMS

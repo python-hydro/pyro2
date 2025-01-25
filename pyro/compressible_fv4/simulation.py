@@ -1,7 +1,7 @@
 import pyro.compressible_fv4.fluxes as flx
 from pyro import compressible_rk
 from pyro.compressible import get_external_sources, get_sponge_factor
-from pyro.mesh import fv, integration
+from pyro.mesh import fv
 
 
 class Simulation(compressible_rk.Simulation):
@@ -18,6 +18,8 @@ class Simulation(compressible_rk.Simulation):
         """
         compute the advective source term for the given state
         """
+
+        self.clean_state(myd.data)
 
         myg = myd.grid
 
@@ -66,37 +68,3 @@ class Simulation(compressible_rk.Simulation):
         # we just initialized cell-centers, but we need to store averages
         for var in self.cc_data.names:
             self.cc_data.from_centers(var)
-
-    def evolve(self):
-
-        """
-        Evolve the equations of compressible hydrodynamics through a
-        timestep dt.
-        """
-
-        tm_evolve = self.tc.timer("evolve")
-        tm_evolve.begin()
-
-        myd = self.cc_data
-
-        method = self.rp.get_param("compressible.temporal_method")
-
-        rk = integration.RKIntegrator(myd.t, self.dt, method=method)
-        rk.set_start(myd)
-
-        for s in range(rk.nstages()):
-            ytmp = rk.get_stage_start(s)
-            ytmp.fill_BC_all()
-            k = self.substep(ytmp)
-            rk.store_increment(s, k)
-
-        rk.compute_final_update()
-
-        if self.particles is not None:
-            self.particles.update_particles(self.dt)
-
-        # increment the time
-        myd.t += self.dt
-        self.n += 1
-
-        tm_evolve.end()

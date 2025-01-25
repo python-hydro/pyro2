@@ -90,7 +90,9 @@ new ideas.
    :hidden:
 
    help
+   history
    ack
+   citing
 
 .. toctree::
    :maxdepth: 1

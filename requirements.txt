@@ -14,6 +14,7 @@ sphinxcontrib-bibtex
 sphinx-math-dollar
 sphinx-copybutton
 sphinx-prompt
+sphinx-mdinclude
 importlib-metadata
 prettytable
 codespell

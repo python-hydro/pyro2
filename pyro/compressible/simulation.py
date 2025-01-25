@@ -65,8 +65,10 @@ def cons_to_prim(U, gamma, ivars, myg):
                   out=np.zeros_like(U[:, :, ivars.iener]),
                   where=(U[:, :, ivars.idens] != 0.0))
 
-    assert e.v().min() > 0.0
-    assert q.v(n=ivars.irho).min() > 0.0
+    e_min = e.v().min()
+    rho_min = q.v(n=ivars.irho).min()
+
+    assert e_min > 0.0 and rho_min > 0.0, f"invalid state, min(rho) = {rho_min}, min(e) = {e_min}"
 
     q[:, :, ivars.ip] = eos.pres(gamma, q[:, :, ivars.irho], e)
 
@@ -291,6 +293,8 @@ class Simulation(NullSimulation):
         timestep dt.
         """
 
+        self.clean_state(self.cc_data.data)
+
         tm_evolve = self.tc.timer("evolve")
         tm_evolve.begin()
 
@@ -434,6 +438,12 @@ class Simulation(NullSimulation):
         self.n += 1
 
         tm_evolve.end()
+
+    def clean_state(self, U):
+        """enforce minimum density and eint on the conserved state U"""
+
+        U.v(n=self.ivars.idens)[:, :] = np.maximum(U.v(n=self.ivars.idens),
+                                                   self.rp.get_param("compressible.small_dens"))
 
     def dovis(self):
         """
