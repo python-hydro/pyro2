@@ -47,6 +47,7 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx_copybutton',
     'sphinx_math_dollar',
     'sphinx-prompt',
+    'sphinx_mdinclude',
     'IPython.sphinxext.ipython_console_highlighting',
     'sphinx.ext.githubpages']
 
@@ -182,6 +183,9 @@ linkcheck_ignore = [r"https://ascelibrary.org",
                     r"https://doi.org/10.1061/(ASCE)0733-9429(1999)125:11(1210)",
                     r"https://pubs.aip.org/physicstoday/article/11/8/28/927415/Water-Waves"]
 
+linkcheck_retries = 3
+linkcheck_timeout = 100
+linkcheck_allow_unauthorized = True
 
 # -- Options for HTMLHelp output ------------------------------------------
 

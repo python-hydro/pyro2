@@ -57,6 +57,9 @@ def derive_primitives(myd, varnames):
         elif var == "soundspeed":
             derived_vars.append(np.sqrt(gamma*p/dens))
 
+        elif var == "machnumber":
+            derived_vars.append(np.sqrt(u**2 + v**2) / np.sqrt(gamma*p/dens))
+
         elif var == "vorticity":
             derived_vars.append(vort)
 
