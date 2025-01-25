@@ -20,7 +20,10 @@ from pyro.util import msg
 
 def user(bc_name, bc_edge, variable, ccdata):
     """
-    A hydrostatic boundary.  This integrates the equation of HSE into
+    Extra boundary condition types for compressible hydro.  This includes
+    a hydrostatic boundary, a ramp, and ambient.
+
+    For HSE, this integrates the equation of HSE into
     the ghost cells to get the pressure and density under the assumption
     that the specific internal energy is constant.
 
@@ -152,6 +155,16 @@ def user(bc_name, bc_edge, variable, ccdata):
 
         if bc_edge == "yrb":
 
+            # store the normal momentum -- skip this if we are filling
+            # the sources
+            dens_inside = None
+            mom_normal = None
+            normal_vel_inside = None
+            if "y-momentum" in ccdata.names:
+                mom_normal = ccdata.get_var("y-momentum")[:, myg.jhi]
+                dens_inside = ccdata.get_var("density")[:, myg.jhi]
+                normal_vel_inside = mom_normal / dens_inside
+
             # upper y boundary
 
             # by default, use a zero gradient
@@ -169,13 +182,17 @@ def user(bc_name, bc_edge, variable, ccdata):
 
             elif variable == "y-momentum":
                 rhov = ambient_rho * ambient_v
-                v[:, myg.jhi+1:myg.jhi+myg.ng+1] = rhov
+                # allow stuff to flow out, otherwise, reflect velocity
+                for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
+                    v[:, j] = np.where(mom_normal > 0, mom_normal, rhov)
 
             elif variable == "energy":
                 gamma = ccdata.get_aux("gamma")
-                ke = 0.5 * ambient_rho * (ambient_u**2 + ambient_v**2)
+                yvel = np.where(mom_normal > 0, mom_normal/dens_inside, ambient_v)
+                ke = 0.5 * ambient_rho * (ambient_u**2 + yvel**2)
                 rhoE = ambient_p / (gamma - 1.0) + ke
-                v[:, myg.jhi+1:myg.jhi+myg.ng+1] = rhoE
+                for j in range(myg.jhi+1, myg.jhi+myg.ng+1):
+                    v[:, j] = rhoE[:]
 
         else:
             msg.fail("error: ambient BC not supported for xlb, xrb, or ylb")
