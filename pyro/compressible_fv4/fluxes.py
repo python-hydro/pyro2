@@ -52,7 +52,6 @@ def fluxes(myd, rp, ivars):
     # convert U from cell-averages to cell-centers
     U_cc = np.zeros_like(U_avg)
 
-
     U_cc[:, :, ivars.idens] = myd.to_centers("density")
     U_cc[:, :, ivars.ixmom] = myd.to_centers("x-momentum")
     U_cc[:, :, ivars.iymom] = myd.to_centers("y-momentum")
