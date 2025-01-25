@@ -293,6 +293,8 @@ class Simulation(NullSimulation):
         timestep dt.
         """
 
+        self.clean_state(self.cc_data.data)
+
         tm_evolve = self.tc.timer("evolve")
         tm_evolve.begin()
 
@@ -436,6 +438,12 @@ class Simulation(NullSimulation):
         self.n += 1
 
         tm_evolve.end()
+
+    def clean_state(self, U):
+        """enforce minimum density and eint on the conserved state U"""
+
+        U.v(n=self.ivars.idens)[:, :] = np.maximum(U.v(n=self.ivars.idens),
+                                                   self.rp.get_param("compressible.small_dens"))
 
     def dovis(self):
         """
