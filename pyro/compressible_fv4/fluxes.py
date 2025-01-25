@@ -52,10 +52,26 @@ def fluxes(myd, rp, ivars):
     # convert U from cell-averages to cell-centers
     U_cc = np.zeros_like(U_avg)
 
-    U_cc[:, :, ivars.idens] = myd.to_centers("density", is_positive=True)
+
+    U_cc[:, :, ivars.idens] = myd.to_centers("density")
     U_cc[:, :, ivars.ixmom] = myd.to_centers("x-momentum")
     U_cc[:, :, ivars.iymom] = myd.to_centers("y-momentum")
-    U_cc[:, :, ivars.iener] = myd.to_centers("energy", is_positive=True)
+    U_cc[:, :, ivars.iener] = myd.to_centers("energy")
+
+    # the mask will be 1 in any zone where the density or energy
+    # is unphysical do to the conversion from averages to centers
+
+    rhoe = U_cc[..., ivars.iener] - 0.5 * (U_cc[..., ivars.ixmom]**2 +
+                                           U_cc[..., ivars.iymom]**2) / U_cc[..., ivars.idens]
+
+    mask = myg.scratch_array(dtype=np.uint8)
+    mask[:, :] = np.where(np.logical_or(U_cc[:, :, ivars.idens] < 0, rhoe < 0),
+                          1, 0)
+
+    U_cc[..., ivars.idens] = np.where(mask == 1, U_avg[..., ivars.idens], U_cc[..., ivars.idens])
+    U_cc[..., ivars.ixmom] = np.where(mask == 1, U_avg[..., ivars.ixmom], U_cc[..., ivars.ixmom])
+    U_cc[..., ivars.iymom] = np.where(mask == 1, U_avg[..., ivars.iymom], U_cc[..., ivars.iymom])
+    U_cc[..., ivars.iener] = np.where(mask == 1, U_avg[..., ivars.iener], U_cc[..., ivars.iener])
 
     # compute the primitive variables of both the cell-center and averages
     q_bar = comp.cons_to_prim(U_avg, gamma, ivars, myd.grid)
