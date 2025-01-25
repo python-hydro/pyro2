@@ -19,6 +19,7 @@ grav = 0.0                ; gravitational acceleration (in y-direction)
 
 riemann = CGF
 
+small_dens = -1.e200      ; minimum allowed density
 
 [sponge]
 do_sponge = 0             ; do we include a sponge source term
