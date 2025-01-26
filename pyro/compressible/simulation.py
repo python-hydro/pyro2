@@ -68,6 +68,13 @@ def cons_to_prim(U, gamma, ivars, myg):
     e_min = e.v().min()
     rho_min = q.v(n=ivars.irho).min()
 
+    if e_min < 0:
+        eidx = np.asarray(e < 0).nonzero()
+        i_idx = eidx[0]
+        j_jdx = eidx[1]
+        for i, j in zip(i_idx, j_jdx):
+            print(f" e < 0: {i}, {j}, {e[i, j]}")
+
     assert e_min > 0.0 and rho_min > 0.0, f"invalid state, min(rho) = {rho_min}, min(e) = {e_min}"
 
     q[:, :, ivars.ip] = eos.pres(gamma, q[:, :, ivars.irho], e)
@@ -452,8 +459,19 @@ class Simulation(NullSimulation):
     def clean_state(self, U):
         """enforce minimum density and eint on the conserved state U"""
 
-        U.v(n=self.ivars.idens)[:, :] = np.maximum(U.v(n=self.ivars.idens),
-                                                   self.rp.get_param("compressible.small_dens"))
+        U[..., self.ivars.idens] = np.maximum(U[..., self.ivars.idens],
+                                              self.rp.get_param("compressible.small_dens"))
+
+        if self.small_eint > 0:
+
+            ekin = 0.5 * (U[..., self.ivars.ixmom]**2 +
+                          U[..., self.ivars.iymom]**2) / U[..., self.ivars.idens]
+
+            rhoe = U[..., self.ivars.iener] - ekin
+
+            U[..., self.ivars.iener] = np.where(rhoe < self.small_eint,
+                                                U[..., self.ivars.idens] * self.small_eint + ekin,
+                                                U[..., self.ivars.iener])
 
     def dovis(self):
         """
