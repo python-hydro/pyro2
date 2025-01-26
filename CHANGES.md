@@ -1,6 +1,9 @@
 # 4.5.0
 
-  * updated the citation information (#324)
+  * implement a "clean state" routine for the compressible solvers
+    that can enforce a density floor (#329)
+
+  * updated the citation information (#324) and the zenodo file (#325)
 
   * code cleaning (#323)
 
@@ -17,7 +20,7 @@
 
   * remove unused APIs from docs (#318) and fix autodoc issues (#316)
 
-  * implement a sponge term in the compressible solvers (#313)
+  * implement a sponge term in the compressible solvers (#313, #336)
 
   * add some asserts to the compressible solver to catch unphysical
     mass and energy (#312)
