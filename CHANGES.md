@@ -1,5 +1,9 @@
 # 4.5.0
 
+  * add protection against negative density/energy in the 4th order
+    compressible method when converting from averages to centers
+    (#309)
+
   * implement a "clean state" routine for the compressible solvers
     that can enforce a density floor (#329)
 
@@ -25,7 +29,8 @@
   * add some asserts to the compressible solver to catch unphysical
     mass and energy (#312)
 
-  * add the compressible convection problem (#293, #310, #315, #337)
+  * add the compressible convection problem (#293, #310, #315, #337,
+    #338)
 
   * add a multimode Rayleigh-Taylor problem to the compressible
     solvers (#307)
