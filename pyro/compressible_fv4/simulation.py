@@ -54,8 +54,13 @@ class Simulation(compressible_rk.Simulation):
         if self.rp.get_param("sponge.do_sponge"):
             kappa_f = get_sponge_factor(myd.data, self.ivars, self.rp, myg)
 
+            # momentum
             k.v(n=self.ivars.ixmom)[:, :] -= kappa_f.v() * myd.data.v(n=self.ivars.ixmom)
             k.v(n=self.ivars.iymom)[:, :] -= kappa_f.v() * myd.data.v(n=self.ivars.iymom)
+
+            # total energy
+            k.v(n=self.ivars.iener)[:, :] -= kappa_f.v() * (myd.data.v(n=self.ivars.ixmom)**2 / myd.data.v(n=self.ivars.idens) +
+                                                            myd.data.v(n=self.ivars.iymom)**2 / myd.data.v(n=self.ivars.idens))
 
         return k
 
