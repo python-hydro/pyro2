@@ -12,9 +12,9 @@ dt_out = 0.5
 
 
 [mesh]
-nx = 128
+nx = 256
 ny = 384
-xmax = 4.0
+xmax = 8.0
 ymax = 12.0
 
 xlboundary = periodic
