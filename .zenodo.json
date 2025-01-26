@@ -12,20 +12,30 @@
             "name": "Chen, Zhi",
             "orcid": "0000-0002-2839-107X"
         },
+	{
+	    "affiliation": "McGill University",
+	    "name": "Guichandut, Simon",
+	    "orcid": "0000-0002-5211-2122"
+	},
         {
             "affiliation": "University of Southampton",
             "name": "Hawke, Ian",
             "orcid": "0000-0003-4805-0309"
         },
         {
-            "affiliation": "Department of Physics and Astronomy, Stony Brook University",
             "name": "Harpole, Alice",
             "orcid": "0000-0002-1530-781X"
         },
-        {   "affiliation": "Department of Physics and Astronomy, Stony Brook University",
+        {
+	    "affiliation": "Department of Physics and Astronomy, Stony Brook University",
             "name": "Johnson, Eric",
             "orcid": "0000-0003-3603-6868"
         },
+	{
+	    "affiliation": "Department of Physics and Astronomy, Stony Brook University",
+	    "name": "Smith Clark, Alexander",
+	    "orcid": "0000-0001-5961-1680"
+	},
         {
             "affiliation": "Department of Physics and Astronomy, Stony Brook University",
             "name": "Zingale, Michael",

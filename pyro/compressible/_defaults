@@ -21,6 +21,8 @@ grav = 0.0                ; gravitational acceleration (in y-direction)
 
 riemann = HLLC            ; HLLC or CGF
 
+small_dens = -1.e200      ; minimum allowed density
+small_eint = -1.e200      ; minimum allowed specific internal energy
 
 [sponge]
 do_sponge = 0             ; do we include a sponge source term

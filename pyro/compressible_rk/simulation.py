@@ -15,6 +15,8 @@ class Simulation(compressible.Simulation):
         conservative state defined as part of myd
         """
 
+        self.clean_state(myd.data)
+
         myg = myd.grid
 
         # source terms -- note: this dt is the entire dt, not the
@@ -37,8 +39,13 @@ class Simulation(compressible.Simulation):
         if self.rp.get_param("sponge.do_sponge"):
             kappa_f = compressible.get_sponge_factor(myd.data, self.ivars, self.rp, myg)
 
+            # momentum
             k.v(n=self.ivars.ixmom)[:, :] -= kappa_f.v() * myd.data.v(n=self.ivars.ixmom)
             k.v(n=self.ivars.iymom)[:, :] -= kappa_f.v() * myd.data.v(n=self.ivars.iymom)
+
+            # total energy
+            k.v(n=self.ivars.iener)[:, :] -= kappa_f.v() * (myd.data.v(n=self.ivars.ixmom)**2 / myd.data.v(n=self.ivars.idens) +
+                                                            myd.data.v(n=self.ivars.iymom)**2 / myd.data.v(n=self.ivars.idens))
 
         return k
 
