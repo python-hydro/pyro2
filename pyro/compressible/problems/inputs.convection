@@ -7,7 +7,8 @@ tmax = 10.0
 
 [io]
 basename = convection_
-n_out = 100
+n_out = 100000000
+dt_out = 0.5
 
 
 [mesh]

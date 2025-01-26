@@ -18,4 +18,5 @@ help:
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
 	./document_problems.py
+	curl -L -H 'Accept: application/x-bibtex' https://zenodo.org/api/records/2575564 > source/zenodo.bibtex.txt
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
