@@ -427,8 +427,18 @@ class Simulation(NullSimulation):
         if self.rp.get_param("sponge.do_sponge"):
             kappa_f = get_sponge_factor(self.cc_data.data, self.ivars, self.rp, myg)
 
+            U_old = self.cc_data.data.copy()
+
             self.cc_data.data[:, :, self.ivars.ixmom] /= (1.0 + self.dt * kappa_f)
             self.cc_data.data[:, :, self.ivars.iymom] /= (1.0 + self.dt * kappa_f)
+
+            # for energy, there is no change in density from the sponge, so we
+            # can just apply the change in kinetic energy from the velocity update
+            dke = 0.5 * ((self.cc_data.data[..., self.ivars.ixmom]**2 +
+                          self.cc_data.data[..., self.ivars.iymom]**2) -
+                         (U_old[..., self.ivars.ixmom]**2 +
+                          U_old[..., self.ivars.iymom]**2)) / self.cc_data.data[..., self.ivars.idens]
+            self.cc_data.data[..., self.ivars.iener] += dke
 
         if self.particles is not None:
             self.particles.update_particles(self.dt)
