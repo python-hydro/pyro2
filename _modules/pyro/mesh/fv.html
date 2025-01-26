@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.mesh.fv &#8212; pyro 4.4.0.post37+g0c9668412 documentation</title>
+    <title>pyro.mesh.fv &#8212; pyro 4.4.0.post38+g888a86ace documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=c377e098"></script>
+    <script src="../../../_static/documentation_options.js?v=aded2158"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -449,6 +449,8 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyro.mesh.patch</span><span class="w"> </span><span class="kn">import</span> <span class="n">CellCenterData2d</span>
 
 
@@ -463,7 +465,7 @@
 
 <div class="viewcode-block" id="FV2d.to_centers">
 <a class="viewcode-back" href="../../../pyro.mesh.html#pyro.mesh.fv.FV2d.to_centers">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">to_centers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_centers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">is_positive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; convert variable name from an average to cell-centers &quot;&quot;&quot;</span>
 
         <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_var</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
@@ -471,6 +473,10 @@
         <span class="n">ng</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">ng</span>
         <span class="n">c</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[:,</span> <span class="p">:]</span>
         <span class="n">c</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">ng</span><span class="o">-</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">ng</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">lap</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">ng</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">24.0</span>
+
+        <span class="k">if</span> <span class="n">is_positive</span><span class="p">:</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">ng</span><span class="o">-</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">ng</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">ng</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">a</span><span class="o">.</span><span class="n">v</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="n">ng</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
         <span class="k">return</span> <span class="n">c</span></div>
 
 
