@@ -25,7 +25,7 @@
   * add some asserts to the compressible solver to catch unphysical
     mass and energy (#312)
 
-  * add the compressible convection problem (#293, #310, #315)
+  * add the compressible convection problem (#293, #310, #315, #337)
 
   * add a multimode Rayleigh-Taylor problem to the compressible
     solvers (#307)
