@@ -1,7 +1,7 @@
 # simple inputs files for the four-corner problem.
 
 [driver]
-max_steps = 10000
+max_steps = 100000
 tmax = 25.0
 
 
