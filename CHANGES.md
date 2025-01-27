@@ -30,14 +30,14 @@
     mass and energy (#312)
 
   * add the compressible convection problem (#293, #310, #315, #337,
-    #338)
+    #338, #339)
 
   * add a multimode Rayleigh-Taylor problem to the compressible
     solvers (#307)
 
   * improve the documentation on working with data (#304, #305)
 
-  * spherical compressible solver fixes (#295, #296, #298, #300)
+  * spherical compressible solver fixes (#295, #296, #298, #299, #300)
 
   * move the 4th order reconstruction into mesh (#302)
 
