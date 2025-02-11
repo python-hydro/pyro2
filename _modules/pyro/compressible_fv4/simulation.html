@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.compressible_fv4.simulation &#8212; pyro 4.5.0 documentation</title>
+    <title>pyro.compressible_fv4.simulation &#8212; pyro 4.5.0.post1+g227609376 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=1898be9e"></script>
+    <script src="../../../_static/documentation_options.js?v=b1b1a2cf"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -444,7 +444,9 @@
                 <article class="bd-article">
                   
   <h1>Source code for pyro.compressible_fv4.simulation</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyro.compressible_fv4.fluxes</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">flx</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyro.compressible_fv4.fluxes</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">flx</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyro</span><span class="w"> </span><span class="kn">import</span> <span class="n">compressible_rk</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyro.compressible</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_external_sources</span><span class="p">,</span> <span class="n">get_sponge_factor</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyro.mesh</span><span class="w"> </span><span class="kn">import</span> <span class="n">fv</span>
@@ -522,6 +524,9 @@
 <span class="sd">        initialized with accurate zone-averages, so the preevolve for</span>
 <span class="sd">        this solver assumes that the initialization was done to</span>
 <span class="sd">        cell-centers and converts it to cell-averages.&quot;&quot;&quot;</span>
+
+        <span class="c1"># this should only work for dx == dy</span>
+        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">dx</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">dy</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1.e-12</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="s2">&quot;grid cells need to be square&quot;</span>
 
         <span class="c1"># we just initialized cell-centers, but we need to store averages</span>
         <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_data</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
