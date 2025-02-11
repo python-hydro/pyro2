@@ -73,7 +73,7 @@ class Simulation(compressible_rk.Simulation):
         cell-centers and converts it to cell-averages."""
 
         # this should only work for dx == dy
-        assert np.abs(self.cc_data.grid.nx - self.cc_data.grid.ny) < 1.e-12, "grid cells need to be square"
+        assert np.abs(self.cc_data.grid.nx - self.cc_data.grid.ny) < 1.e-12 * self.cc_data.grid.nx, "grid cells need to be square"
 
         # we just initialized cell-centers, but we need to store averages
         for var in self.cc_data.names:
