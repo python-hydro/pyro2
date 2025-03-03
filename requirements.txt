@@ -10,7 +10,7 @@ pytest-cov>=2.6.0
 
 flake8>=3.5.0
 
-sphinx<8.2.0
+sphinx<8.3.0
 sphinx_book_theme
 sphinxcontrib-bibtex
 sphinx-math-dollar
