@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.simulation_null &#8212; pyro 4.5.0.post3+g91aed7ba2 documentation</title>
+    <title>pyro.simulation_null &#8212; pyro 4.5.0.post4+ga3da1f17f documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=bb606fa1"></script>
+    <script src="../../_static/documentation_options.js?v=0ecd3bb3"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -652,6 +652,12 @@ document.write(`
 
         <span class="c1"># plotting</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cm</span> <span class="o">=</span> <span class="s2">&quot;viridis&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ostr</span> <span class="o">=</span> <span class="s2">&quot;pyro Simulation:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">ostr</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;  solver: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">solver_name</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">ostr</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;  problem: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">problem_name</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">ostr</span>
 
 <div class="viewcode-block" id="NullSimulation.finished">
 <a class="viewcode-back" href="../../pyro.html#pyro.simulation_null.NullSimulation.finished">[docs]</a>
