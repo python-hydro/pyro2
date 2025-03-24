@@ -1,3 +1,52 @@
+# 4.5.0
+
+  * add protection against negative density/energy in the 4th order
+    compressible method when converting from averages to centers
+    (#309)
+
+  * implement a "clean state" routine for the compressible solvers
+    that can enforce a density floor (#329)
+
+  * updated the citation information (#324) and the zenodo file (#325)
+
+  * code cleaning (#323)
+
+  * added python 3.13 support (#321)
+
+  * CI doc build fixes (#322) and added the ability to skip executing
+    notebooks when building docs (#319)
+
+  * fixed issues with how derived variables are recognized when
+    reading in an output file and add vorticity and machnumber
+    to compressible derives (#294, #320)
+
+  * expand the documentation on the compressible solvers (#317)
+
+  * remove unused APIs from docs (#318) and fix autodoc issues (#316)
+
+  * implement a sponge term in the compressible solvers (#313, #336)
+
+  * add some asserts to the compressible solver to catch unphysical
+    mass and energy (#312)
+
+  * add the compressible convection problem (#293, #310, #315, #337,
+    #338, #339)
+
+  * add a multimode Rayleigh-Taylor problem to the compressible
+    solvers (#307)
+
+  * improve the documentation on working with data (#304, #305)
+
+  * spherical compressible solver fixes (#295, #296, #298, #299, #300)
+
+  * move the 4th order reconstruction into mesh (#302)
+
+  * use a safer divide in compressible when density is zero (#297)
+
+  * add the ability to have a problem-dependent external source and
+    clean-up how the compressible sources are treated (#289, #290,
+    #292)
+
 # 4.4.0
 
   * the gresho problem (compressible) now takes Mach number as input

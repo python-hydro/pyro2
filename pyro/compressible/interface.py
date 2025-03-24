@@ -3,7 +3,7 @@ from numba import njit
 
 
 @njit(cache=True)
-def states(idir, ng, dx, dt,
+def states(idir, ng, dx, dloga, dt,
            irho, iu, iv, ip, ix, nspec,
            gamma, qv, dqv):
     r"""
@@ -211,6 +211,27 @@ def states(idir, ng, dx, dt,
                 else:
                     q_l[i, j + 1, m] = q_l[i, j + 1, m] + sum_l
                     q_r[i, j,  m] = q_r[i, j,  m] + sum_r
+
+            # Geometric Source term from converting conserved-variable to primitive
+            # It's only there for non Cartesian coord.
+
+            if idir == 1:
+                rho_source = -0.5 * dt * dloga[i, j] * q[irho] * q[iu]
+
+                q_l[i + 1, j, irho] += rho_source
+                q_r[i, j, irho] += rho_source
+
+                q_l[i + 1, j, ip] += rho_source * cs * cs
+                q_r[i, j, ip] += rho_source * cs * cs
+
+            else:
+                rho_source = -0.5 * dt * dloga[i, j] * q[irho] * q[iv]
+
+                q_l[i, j + 1, irho] += rho_source
+                q_r[i, j, irho] += rho_source
+
+                q_l[i, j + 1, ip] += rho_source * cs * cs
+                q_r[i, j, ip] += rho_source * cs * cs
 
     return q_l, q_r
 
