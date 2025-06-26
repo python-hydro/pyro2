@@ -36,4 +36,4 @@ jobs:
         run: pip install .
 
       - name: Run tests with pytest
-        run: pytest -v --color=yes
+        run: pytest -v --nbval --color=yes
