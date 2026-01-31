@@ -200,11 +200,11 @@ def main():
                    help="only run the multigrid tests",
                    action="store_true")
 
-    p.add_argument("--reset_failures", "-r",
+    p.add_argument("--reset-failures", "-r",
                    help="if a test fails, reset the benchmark",
                    action="store_true")
 
-    p.add_argument("--store_all_benchmarks",
+    p.add_argument("--store-all-benchmarks",
                    help="rewrite all the benchmarks, regardless of pass / fail",
                    action="store_true")
 
