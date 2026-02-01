@@ -13,18 +13,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v6
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
-          python-version: '3.11'
+          python-version: '3.14'
           cache: "pip"
 
       - name: Install dependencies
         run: pip install -r ./requirements.txt
+
+      - name: Preprocess notebooks
+        run: for i in $(find . -name "*.ipynb"); do jupyter nbconvert --clear-output --inplace $i; done
 
       - name: Run codespell
         run: |

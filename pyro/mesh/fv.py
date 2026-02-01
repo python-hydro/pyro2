@@ -3,6 +3,8 @@ by adding support for converting between cell averages and centers.
 
 """
 
+import numpy as np
+
 from pyro.mesh.patch import CellCenterData2d
 
 
@@ -13,7 +15,7 @@ class FV2d(CellCenterData2d):
 
     """
 
-    def to_centers(self, name):
+    def to_centers(self, name, is_positive=False):
         """ convert variable name from an average to cell-centers """
 
         a = self.get_var(name)
@@ -21,6 +23,10 @@ class FV2d(CellCenterData2d):
         ng = self.grid.ng
         c[:, :] = a[:, :]
         c.v(buf=ng-1)[:, :] = a.v(buf=ng-1) - self.grid.dx**2*a.lap(buf=ng-1)/24.0
+
+        if is_positive:
+            c.v(buf=ng-1)[:, :] = np.where(c.v(buf=ng-1) >= 0.0, c.v(buf=ng-1), a.v(buf=ng-1))
+
         return c
 
     def from_centers(self, name):

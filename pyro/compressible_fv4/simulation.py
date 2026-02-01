@@ -1,3 +1,5 @@
+import numpy as np
+
 import pyro.compressible_fv4.fluxes as flx
 from pyro import compressible_rk
 from pyro.compressible import get_external_sources, get_sponge_factor
@@ -54,8 +56,13 @@ class Simulation(compressible_rk.Simulation):
         if self.rp.get_param("sponge.do_sponge"):
             kappa_f = get_sponge_factor(myd.data, self.ivars, self.rp, myg)
 
+            # momentum
             k.v(n=self.ivars.ixmom)[:, :] -= kappa_f.v() * myd.data.v(n=self.ivars.ixmom)
             k.v(n=self.ivars.iymom)[:, :] -= kappa_f.v() * myd.data.v(n=self.ivars.iymom)
+
+            # total energy
+            k.v(n=self.ivars.iener)[:, :] -= kappa_f.v() * (myd.data.v(n=self.ivars.ixmom)**2 / myd.data.v(n=self.ivars.idens) +
+                                                            myd.data.v(n=self.ivars.iymom)**2 / myd.data.v(n=self.ivars.idens))
 
         return k
 
@@ -64,6 +71,9 @@ class Simulation(compressible_rk.Simulation):
         initialized with accurate zone-averages, so the preevolve for
         this solver assumes that the initialization was done to
         cell-centers and converts it to cell-averages."""
+
+        # this should only work for dx == dy
+        assert np.abs(self.cc_data.grid.dx - self.cc_data.grid.dy) < 1.e-12 * self.cc_data.grid.dx, "grid cells need to be square"
 
         # we just initialized cell-centers, but we need to store averages
         for var in self.cc_data.names:

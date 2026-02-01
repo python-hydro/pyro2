@@ -185,6 +185,12 @@ class NullSimulation:
         # plotting
         self.cm = "viridis"
 
+    def __str__(self):
+        ostr = "pyro Simulation:\n"
+        ostr += f"  solver: {self.solver_name}\n"
+        ostr += f"  problem: {self.problem_name}\n"
+        return ostr
+
     def finished(self):
         """
         is the simulation finished based on time or the number of steps

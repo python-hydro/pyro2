@@ -107,6 +107,7 @@ ignore-words-list = "pres"
 
 [tool.isort]
 known_first_party = ["pyro"]
+skip = ["pyro/_version.py"]
 
 [tool.pytest.ini_options]
 # docs: symlinks to notebooks we're already testing

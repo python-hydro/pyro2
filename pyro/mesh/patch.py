@@ -146,15 +146,15 @@ class Grid2d:
         self.xr2d = ArrayIndexer(d=xr2d, grid=self)
         self.yr2d = ArrayIndexer(d=yr2d, grid=self)
 
-    def scratch_array(self, *, nvar=1):
+    def scratch_array(self, *, nvar=1, dtype=np.float64):
         """
         return a standard numpy array dimensioned to have the size
         and number of ghostcells as the parent grid
         """
         if nvar == 1:
-            _tmp = np.zeros((self.qx, self.qy), dtype=np.float64)
+            _tmp = np.zeros((self.qx, self.qy), dtype=dtype)
         else:
-            _tmp = np.zeros((self.qx, self.qy, nvar), dtype=np.float64)
+            _tmp = np.zeros((self.qx, self.qy, nvar), dtype=dtype)
         return ArrayIndexer(d=_tmp, grid=self)
 
     def coarse_like(self, N):
