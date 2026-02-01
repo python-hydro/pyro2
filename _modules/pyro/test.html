@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyro.test &#8212; pyro 4.5.0.post10+g0d853c7e0 documentation</title>
+    <title>pyro.test &#8212; pyro 4.5.0.post11+g7559c8e81 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=aa50abf8"></script>
+    <script src="../../_static/documentation_options.js?v=956e9295"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -556,6 +556,7 @@ document.write(`
 <a class="viewcode-back" href="../../pyro.html#pyro.test.do_tests">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">do_tests</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span>
              <span class="n">reset_fails</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_all_benchmarks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+             <span class="n">multigrid_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
              <span class="n">single</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">nproc</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 
     <span class="n">opts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;driver.verbose&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;vis.dovis&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;io.do_io&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;io.force_final_output&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
@@ -585,26 +586,28 @@ document.write(`
     <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;lm_atm&quot;</span><span class="p">,</span> <span class="s2">&quot;bubble&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.bubble&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
     <span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PyroTest</span><span class="p">(</span><span class="s2">&quot;swe&quot;</span><span class="p">,</span> <span class="s2">&quot;dam&quot;</span><span class="p">,</span> <span class="s2">&quot;inputs.dam.x&quot;</span><span class="p">,</span> <span class="n">opts</span><span class="p">))</span>
 
-    <span class="k">if</span> <span class="n">single</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">tests_to_run</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">tests</span> <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">==</span> <span class="n">single</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">solver</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">tests_to_run</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">tests</span> <span class="k">if</span> <span class="n">q</span><span class="o">.</span><span class="n">solver</span> <span class="o">==</span> <span class="n">solver</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">tests_to_run</span> <span class="o">=</span> <span class="n">tests</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">multigrid_only</span><span class="p">:</span>
 
-    <span class="k">if</span> <span class="n">nproc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">nproc</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
-    <span class="c1"># don&#39;t create more processes than needed</span>
-    <span class="n">nproc</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">nproc</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tests_to_run</span><span class="p">))</span>
-    <span class="k">with</span> <span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">nproc</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
-        <span class="n">tasks</span> <span class="o">=</span> <span class="p">((</span><span class="n">t</span><span class="p">,</span> <span class="n">reset_fails</span><span class="p">,</span> <span class="n">store_all_benchmarks</span><span class="p">,</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">nproc</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tests_to_run</span><span class="p">)</span>
-        <span class="n">imap_it</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">imap_unordered</span><span class="p">(</span><span class="n">run_test_star</span><span class="p">,</span> <span class="n">tasks</span><span class="p">)</span>
-        <span class="c1"># collect run results</span>
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">err</span> <span class="ow">in</span> <span class="n">imap_it</span><span class="p">:</span>
-            <span class="n">results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">err</span>
+        <span class="k">if</span> <span class="n">single</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tests_to_run</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">tests</span> <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">==</span> <span class="n">single</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">solver</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tests_to_run</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">tests</span> <span class="k">if</span> <span class="n">q</span><span class="o">.</span><span class="n">solver</span> <span class="o">==</span> <span class="n">solver</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tests_to_run</span> <span class="o">=</span> <span class="n">tests</span>
 
-    <span class="c1"># standalone tests</span>
-    <span class="k">if</span> <span class="n">single</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">solver</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">nproc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">nproc</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
+        <span class="c1"># don&#39;t create more processes than needed</span>
+        <span class="n">nproc</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">nproc</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tests_to_run</span><span class="p">))</span>
+        <span class="k">with</span> <span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">nproc</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+            <span class="n">tasks</span> <span class="o">=</span> <span class="p">((</span><span class="n">t</span><span class="p">,</span> <span class="n">reset_fails</span><span class="p">,</span> <span class="n">store_all_benchmarks</span><span class="p">,</span> <span class="n">rtol</span><span class="p">,</span> <span class="n">nproc</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tests_to_run</span><span class="p">)</span>
+            <span class="n">imap_it</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">imap_unordered</span><span class="p">(</span><span class="n">run_test_star</span><span class="p">,</span> <span class="n">tasks</span><span class="p">)</span>
+            <span class="c1"># collect run results</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">err</span> <span class="ow">in</span> <span class="n">imap_it</span><span class="p">:</span>
+                <span class="n">results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">err</span>
+
+    <span class="c1"># multigrid tests</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">single</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">solver</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="n">multigrid_only</span><span class="p">:</span>
         <span class="n">bench_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;/multigrid/tests/&quot;</span>
         <span class="n">err</span> <span class="o">=</span> <span class="n">mg_test_simple</span><span class="o">.</span><span class="n">test_poisson_dirichlet</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="n">comp_bench</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bench_dir</span><span class="o">=</span><span class="n">bench_dir</span><span class="p">,</span>
                                                     <span class="n">store_bench</span><span class="o">=</span><span class="n">store_all_benchmarks</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -670,11 +673,15 @@ document.write(`
                    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;only test the solver specified&quot;</span><span class="p">,</span>
                    <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
-    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--reset_failures&quot;</span><span class="p">,</span> <span class="s2">&quot;-r&quot;</span><span class="p">,</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--multigrid-only&quot;</span><span class="p">,</span>
+                   <span class="n">help</span><span class="o">=</span><span class="s2">&quot;only run the multigrid tests&quot;</span><span class="p">,</span>
+                   <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+
+    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--reset-failures&quot;</span><span class="p">,</span> <span class="s2">&quot;-r&quot;</span><span class="p">,</span>
                    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;if a test fails, reset the benchmark&quot;</span><span class="p">,</span>
                    <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
 
-    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--store_all_benchmarks&quot;</span><span class="p">,</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--store-all-benchmarks&quot;</span><span class="p">,</span>
                    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;rewrite all the benchmarks, regardless of pass / fail&quot;</span><span class="p">,</span>
                    <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
 
@@ -691,6 +698,7 @@ document.write(`
     <span class="n">failed</span> <span class="o">=</span> <span class="n">do_tests</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">outfile</span><span class="p">,</span>
                       <span class="n">reset_fails</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">reset_failures</span><span class="p">,</span>
                       <span class="n">store_all_benchmarks</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">store_all_benchmarks</span><span class="p">,</span>
+                      <span class="n">multigrid_only</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">multigrid_only</span><span class="p">,</span>
                       <span class="n">single</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">single</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">rtol</span><span class="p">,</span>
                       <span class="n">nproc</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">nproc</span><span class="p">)</span>
 
