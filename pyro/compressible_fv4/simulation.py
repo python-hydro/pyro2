@@ -2,7 +2,7 @@ import numpy as np
 
 import pyro.compressible_fv4.fluxes as flx
 from pyro import compressible_rk
-from pyro.compressible import get_external_sources, get_sponge_factor
+from pyro.compressible import cons_to_prim, get_external_sources, get_sponge_factor
 from pyro.mesh import fv
 
 
@@ -78,3 +78,12 @@ class Simulation(compressible_rk.Simulation):
         # we just initialized cell-centers, but we need to store averages
         for var in self.cc_data.names:
             self.cc_data.from_centers(var)
+
+        efac = self.rp.get_param("compressible.small_eint_factor")
+
+        print(type(self.cc_data))
+
+        q = cons_to_prim(self.cc_data.data, self.rp.get_param("eos.gamma"), self.ivars, self.cc_data.grid)
+
+        self.small_eint = efac * q.v(n=self.ivars.ip).min()
+        print("small_eint = ", self.small_eint)
