@@ -82,6 +82,7 @@ def run_test_star(args):
 
 def do_tests(out_file,
              reset_fails=False, store_all_benchmarks=False,
+             multigrid_only=False,
              single=None, solver=None, rtol=1e-12, nproc=1):
 
     opts = {"driver.verbose": 0, "vis.dovis": 0, "io.do_io": 0, "io.force_final_output": 1}
@@ -111,26 +112,28 @@ def do_tests(out_file,
     tests.append(PyroTest("lm_atm", "bubble", "inputs.bubble", opts))
     tests.append(PyroTest("swe", "dam", "inputs.dam.x", opts))
 
-    if single is not None:
-        tests_to_run = [q for q in tests if str(q) == single]
-    elif solver is not None:
-        tests_to_run = [q for q in tests if q.solver == solver]
-    else:
-        tests_to_run = tests
+    if not multigrid_only:
 
-    if nproc == 0:
-        nproc = os.cpu_count()
-    # don't create more processes than needed
-    nproc = min(nproc, len(tests_to_run))
-    with Pool(processes=nproc) as pool:
-        tasks = ((t, reset_fails, store_all_benchmarks, rtol, nproc) for t in tests_to_run)
-        imap_it = pool.imap_unordered(run_test_star, tasks)
-        # collect run results
-        for name, err in imap_it:
-            results[name] = err
+        if single is not None:
+            tests_to_run = [q for q in tests if str(q) == single]
+        elif solver is not None:
+            tests_to_run = [q for q in tests if q.solver == solver]
+        else:
+            tests_to_run = tests
 
-    # standalone tests
-    if single is None and solver is None:
+        if nproc == 0:
+            nproc = os.cpu_count()
+        # don't create more processes than needed
+        nproc = min(nproc, len(tests_to_run))
+        with Pool(processes=nproc) as pool:
+            tasks = ((t, reset_fails, store_all_benchmarks, rtol, nproc) for t in tests_to_run)
+            imap_it = pool.imap_unordered(run_test_star, tasks)
+            # collect run results
+            for name, err in imap_it:
+                results[name] = err
+
+    # multigrid tests
+    if (single is None and solver is None) or multigrid_only:
         bench_dir = os.path.dirname(os.path.realpath(__file__)) + "/multigrid/tests/"
         err = mg_test_simple.test_poisson_dirichlet(256, comp_bench=True, bench_dir=bench_dir,
                                                     store_bench=store_all_benchmarks, verbose=0)
@@ -193,11 +196,15 @@ def main():
                    help="only test the solver specified",
                    type=str, default=None)
 
-    p.add_argument("--reset_failures", "-r",
+    p.add_argument("--multigrid-only",
+                   help="only run the multigrid tests",
+                   action="store_true")
+
+    p.add_argument("--reset-failures", "-r",
                    help="if a test fails, reset the benchmark",
                    action="store_true")
 
-    p.add_argument("--store_all_benchmarks",
+    p.add_argument("--store-all-benchmarks",
                    help="rewrite all the benchmarks, regardless of pass / fail",
                    action="store_true")
 
@@ -214,6 +221,7 @@ def main():
     failed = do_tests(args.outfile,
                       reset_fails=args.reset_failures,
                       store_all_benchmarks=args.store_all_benchmarks,
+                      multigrid_only=args.multigrid_only,
                       single=args.single, solver=args.solver, rtol=args.rtol,
                       nproc=args.nproc)
 
