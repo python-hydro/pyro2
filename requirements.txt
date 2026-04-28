@@ -1,7 +1,7 @@
 numpy>=1.13.3
 matplotlib>=2.0.0
 h5py>=2.7
-scipy>=0.16
+scipy>=1.17.1
 numba
 
 pytest>=3.6
