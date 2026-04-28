@@ -1,6 +1,6 @@
 numpy>=1.13.3
 matplotlib>=2.0.0
-h5py>=2.7
+h5py>=3.16.0
 scipy>=0.16
 numba
 
