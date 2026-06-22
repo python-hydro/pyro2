@@ -18,7 +18,7 @@ sphinx-copybutton
 sphinx-prompt
 sphinx-mdinclude
 numpydoc
-nbsphinx>=0.3.1
+nbsphinx>=0.9.8
 
 importlib-metadata
 prettytable
