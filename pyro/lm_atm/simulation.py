@@ -643,7 +643,7 @@ class Simulation(NullSimulation):
 
         vort.v()[:, :] = dv - du
 
-        _, axes = plt.subplots(nrows=2, ncols=2, num=1)
+        _, axes = plt.subplots(nrows=2, ncols=2, num=1, clear=True)
         plt.subplots_adjust(hspace=0.25)
 
         fields = [rho, magvel, vort, rhoprime]
