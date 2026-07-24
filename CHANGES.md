@@ -1,3 +1,23 @@
+# 4.5.1
+
+  * fix a matplotlib duplicate figure error with latest matplotlib
+    (#378)
+
+  * documentation: fix navbar sphinx formatting (#377), unpin sphinx
+    version (#341, #376), fix `sphinx_prompt` (#349)
+
+  * github actions: update setup-python (#352, #374), update checkout
+    (#351, #354, #366), test python 3.14 (#353), run codespell on
+    notebooks (#347), test MacOS (#350)
+
+  * testing: add multigrid-only option to `test.py` (#357)
+
+  * add `__str__` to `Simulation (#344)
+
+  * fix isort (#343)
+
+  * assert that the 4th-order solvers only work with square cells (#340)
+
 # 4.5.0
 
   * add protection against negative density/energy in the 4th order
