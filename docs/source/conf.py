@@ -157,7 +157,8 @@ html_theme_options = {
         "text": f"pyro {version}",
         "image_light": "logo.gif",
         "image_dark": "logo.gif",
-    }
+    },
+    "disable_search": True,
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
