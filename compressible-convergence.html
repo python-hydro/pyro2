@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Convergence of the compressible solvers &#8212; pyro 4.5.0.post15+gb220cf91f documentation</title>
+    <title>Convergence of the compressible solvers &#8212; pyro 4.5.0.post16+gd3bfddad3 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="_static/documentation_options.js?v=69ac756a"></script>
+    <script src="_static/documentation_options.js?v=a31ac56e"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -82,24 +82,6 @@
   
   
   
-  <dialog id="pst-search-dialog">
-    
-<form class="bd-search d-flex align-items-center"
-      action="search.html"
-      method="get">
-  <i class="fa-solid fa-magnifying-glass"></i>
-  <input type="search"
-         class="form-control"
-         name="q"
-         placeholder="Search..."
-         aria-label="Search..."
-         autocomplete="off"
-         autocorrect="off"
-         autocapitalize="off"
-         spellcheck="false"/>
-  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -107,50 +89,6 @@
 
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
-<div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
-    <span class="fa-solid fa-bars"></span>
-  </button>
-  
-  
-  <div class="col-lg-9 navbar-header-items">
-    
-    
-    <div class="navbar-header-items__end">
-      
-        <div class="navbar-item navbar-persistent--container">
-          
-
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button>
-        </div>
-      
-      
-    </div>
-    
-  </div>
-  
-  
-    <div class="navbar-persistent--mobile">
-
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button>
-    </div>
-  
-
-  
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
-      <span class="fa-solid fa-outdent"></span>
-    </button>
-  
-</div>
-
     </header>
   
 
@@ -668,9 +606,9 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
- 64 -&gt;  32 : 0.000267419594690041
-128 -&gt;  64 : 5.769640924122292e-05
-256 -&gt; 128 : 1.386026881482369e-05
+ 64 -&gt;  32 : 0.0002674195946900653
+128 -&gt;  64 : 5.7696409241208797e-05
+256 -&gt; 128 : 1.3860268814816614e-05
 </pre></div></div>
 </div>
 <p>We see that the error is dropping by a factor of ~4 each time, indicating 2nd order convergence.</p>
@@ -711,9 +649,9 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
- 64 -&gt;  32 : 6.519131423270478e-05
-128 -&gt;  64 : 4.825569192563109e-06
-256 -&gt; 128 : 3.0769222916973027e-07
+ 64 -&gt;  32 : 6.519131423273572e-05
+128 -&gt;  64 : 4.825569192556014e-06
+256 -&gt; 128 : 3.0769222917915304e-07
 </pre></div></div>
 </div>
 <p>Now we see that the convergence is close to 4th order, with the error decreasing close to a factor of 16.</p>
