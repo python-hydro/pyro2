@@ -21,6 +21,8 @@ riemann = CGF
 
 small_dens = -1.e200      ; minimum allowed density
 
+small_eint_factor = -1.e200  ; multiplicative factor on the initial minimum eint to use for limiting e
+
 [sponge]
 do_sponge = 0             ; do we include a sponge source term
 
