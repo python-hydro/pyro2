@@ -37,7 +37,7 @@ def flux_cons(ivars, idir, gamma, q):
     return flux
 
 
-def fluxes(myd, rp, ivars):
+def fluxes(myd, rp, ivars, solid):
 
     alpha = 0.3
     beta = 0.3
@@ -112,6 +112,15 @@ def fluxes(myd, rp, ivars):
         q_l = myg.scratch_array(nvar=ivars.nq)
         q_r = myg.scratch_array(nvar=ivars.nq)
 
+        lo_bc_symmetry = False
+        hi_bc_symmetry = False
+        if idir == 1:
+            lo_bc_symmetry = solid.xl
+            hi_bc_symmetry = solid.xr
+        elif idir == 2:
+            lo_bc_symmetry = solid.yl
+            hi_bc_symmetry = solid.yr
+
         if nolimit:
             for n in range(ivars.nq):
 
@@ -127,7 +136,18 @@ def fluxes(myd, rp, ivars):
 
         else:
             for n in range(ivars.nq):
-                q_l[:, :, n], q_r[:, :, n] = fourth_order.states(q_avg[:, :, n], myg.ng, idir)
+
+                # for symmetry BCs, we want to odd-reflect the interface state on velocity
+                is_normal_vel = False
+                if idir == 1 and n == ivars.iu:
+                    is_normal_vel = True
+                elif idir == 2 and n == ivars.iv:
+                    is_normal_vel = True
+
+                q_l[:, :, n], q_r[:, :, n] = fourth_order.states(q_avg[:, :, n], myg.ng, idir,
+                                                                 lo_bc_symmetry=lo_bc_symmetry,
+                                                                 hi_bc_symmetry=hi_bc_symmetry,
+                                                                 is_normal_vel=is_normal_vel)
 
             # apply flattening
             for n in range(ivars.nq):
@@ -145,8 +165,8 @@ def fluxes(myd, rp, ivars):
         # solve the Riemann problem to find the face-average q
         _q = riemann.riemann_prim(idir, myg.ng,
                                   ivars.irho, ivars.iu, ivars.iv, ivars.ip, ivars.ix, ivars.naux,
-                                   0, 0,
-                                   gamma, q_l, q_r)
+                                  0, 0,
+                                  gamma, q_l, q_r)
 
         q_int_avg = ai.ArrayIndexer(_q, grid=myg)
 
