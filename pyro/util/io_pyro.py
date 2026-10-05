@@ -40,7 +40,7 @@ def read(filename):
             solver_name = f.attrs["solver"]
             problem_name = f.attrs["problem"]
             t = f.attrs["time"]
-            n = f.attrs["nsteps"]
+            nsteps = f.attrs["nsteps"]
         except KeyError:
             # this was just a patch written out
             solver_name = None
@@ -120,7 +120,7 @@ def read(filename):
             solver = importlib.import_module(f"pyro.{solver_name}")
 
             sim = solver.Simulation(solver_name, problem_name, None, None)
-            sim.n = n
+            sim.n = nsteps
             sim.cc_data = myd
             sim.cc_data.t = t
             sim.particles = my_particles
